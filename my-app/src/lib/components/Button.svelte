@@ -2,7 +2,7 @@
     // primary | secondary
     export let style = "primary";
     // small, medium, large
-    export let size = "small";
+    export let size = "medium";
     export let disabled = false;
     export let type: "button" | "submit" | "reset" | undefined = undefined;
   
@@ -17,6 +17,7 @@
         align-items: center;
         min-width: 100px;
         cursor: pointer;
+        border: 1px solid #DDD8D8;
         border-radius: 40px;
         background: var(--bg-color);
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
