@@ -6,7 +6,7 @@
 
     let disabled = false;
     let style = "primary";
-    let size = "medium";
+    let size = "large";
     let content = "Button";
 </script>
 
