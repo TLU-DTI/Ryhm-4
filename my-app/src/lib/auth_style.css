@@ -1,0 +1,37 @@
+body {
+	min-height: 100vh;
+	margin: 0;
+	background-attachment: fixed;
+	background-color: #C4F1C0;
+	background-size: 100vw 100vh;
+    font-family: 'Merriweather', serif;
+}
+
+p {
+	font-weight: 400;
+	font-size: 20px;
+}
+
+p.light {
+	font-weight: 200;
+	font-size: 20px;
+}
+
+h1 {
+	font-weight: 400;
+	font-size: 48px;
+	text-align: center;
+}
+
+h2 {
+	font-weight: 400;
+	font-size: 36px;
+	text-align: center;
+}
+
+@media (min-width: 720px) {
+	h1 {
+		font-size: 2.4rem;
+	}
+}
+
