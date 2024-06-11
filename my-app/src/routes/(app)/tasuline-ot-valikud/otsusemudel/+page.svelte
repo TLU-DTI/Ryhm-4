@@ -16,22 +16,12 @@
     <div class="input-container">
         <p>Vali otsuse mudel</p>
             <br>
-        <div class="mudelid">
             <div class="AHP">
-                <Button>Analüütiline hierarhia mudel</Button>
+                <Button style="secondary">Analüütiline hierarhia mudel</Button>
                 <Button>?</Button>
             </div>
-            <div class="MC">
-                <Button>Mitme kriteeriumi analüüs</Button>
-                <Button>?</Button>
-            </div>
-            <div class="FC">
-                <Button>Forced choice mudel</Button>
-                <Button>?</Button>
-            </div>
-        </div>
             <div class="buttons">
-                    <Button>Tagasi</Button>
+                    <Button style="secondary">Tagasi</Button>
                     <Button>Jätka</Button>
             </div>
     </div>
@@ -63,15 +53,11 @@
     }
     .AHP{
         display: flex;
-        margin: 20px;
+        margin-top: 50px;
+        margin-bottom: 90px;
         justify-content: center;
-        gap: 50px;
-    }
-    .MC{
-        display: flex;
-        margin: 20px;
-        justify-content: center;
-        gap: 50px;  
+        gap: 20px;
+        
     }
 
 </style>

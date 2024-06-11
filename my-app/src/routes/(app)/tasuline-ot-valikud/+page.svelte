@@ -16,11 +16,11 @@
     <div class="input-container">
         <p>Anna oma otsusele nimi</p>
             <div class="input-name">
-                <Input placeholder=""></Input> 
+                <Input placeholder="Nimi"></Input> 
             </div>
             <br>
         <div class="buttons">
-                <Button style="second">Tagasi</Button>
+                <Button style="secondary">Tagasi</Button>
                 <Button>Jätka</Button>
         </div>
     </div>

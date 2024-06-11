@@ -13,7 +13,7 @@
 </svelte:head>
 <section class="container">
     <div class="input-container">
-        <p>Sisesta objektid, mille vahel soovid valida</p>
+        <h2>Sisesta objektid, mille vahel soovid valida:</h2>
         <div class="input-group">
             <div class="inputs">
                 <div class="valik1">
@@ -23,6 +23,10 @@
                 <div class="valik2">
                     <p>2. Valik:</p>
                     <Input placeholder=""></Input> 
+                </div>
+                <div class="lisavalik">
+                    <p>Lisa veel valikuid</p>
+                    <Button size="small">+</Button>
                 </div>
         </div>
         </div>
@@ -72,6 +76,7 @@
     .inputs{
         display: flex;
         flex-direction: column;
+        margin: 30px;
     }
     .valik1{
         margin-bottom: 10px;
@@ -82,5 +87,10 @@
         display: flex;
         flex-direction: row;
         margin-top: 10px;
+    }
+    .lisavalik{
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
     }
 </style>
