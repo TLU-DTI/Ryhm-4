@@ -2,8 +2,32 @@
 	import '$lib/styles.css';
 
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
-  
+	import { writable, derived } from 'svelte/store';
+
 	const form = useForm();
+	const password = writable('');
+	const confirmPassword = writable('');
+
+	const passwordsMatch = derived(
+		[password, confirmPassword],
+		([$password, $confirmPassword]) => $password === $confirmPassword
+	);
+
+	const showPasswordMismatch = derived(
+		[passwordsMatch],
+		([$passwordsMatch], set) => {
+			if ($passwordsMatch) {
+				set(false);
+			} else {
+				const timeoutId = setTimeout(() => {
+					set(true);
+				}, 3000);
+
+				return () => clearTimeout(timeoutId);
+			}
+		},
+		false
+	);
 
 	async function handleSubmit(event: SubmitEvent) {
 		event.preventDefault();
@@ -14,6 +38,10 @@
 			email: formData.get('email') as string,
 			password: formData.get('password') as string
 		};
+
+		console.log('Username:', data.username);
+		console.log('Email:', data.email);
+		console.log('Password:', data.password);
 
 		try {
 			const response = await fetch('/api/register', {
@@ -48,13 +76,17 @@
 	  <Hint on="email" hideWhenRequired>Email is not valid</Hint>
 	</HintGroup>
   
-	<input type="password" name="password" placeholder="Password" use:validators={[required]} />
+	<input type="password" name="password" placeholder="Password" use:validators={[required]} bind:value={$password} />
 	<Hint for="password" on="required">This is a mandatory field</Hint>
 
-	<input type="password" name="confirm_password" placeholder="Confirm Password" use:validators={[required]} />
+	<input type="password" name="confirm_password" placeholder="Confirm Password" use:validators={[required]} bind:value={$confirmPassword} />
 	<Hint for="confirm_password" on="required">This is a mandatory field</Hint>
+
+	{#if $showPasswordMismatch}
+		<p style="color: red;">Passwords do not match</p>
+	{/if}
   
-	<button disabled={!$form.valid}>Register</button>
+	<button disabled={!$form.valid || !$passwordsMatch}>Register</button>
 </form>
 
 <pre>
