@@ -32,7 +32,7 @@
         </div>
 
             <div class="buttons">
-                <Button>Tagasi</Button>
+                <Button style="secondary" size="large">Tagasi</Button>
                 <br>
                 <Button>Jätka</Button>
             </div>
