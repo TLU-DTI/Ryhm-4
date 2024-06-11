@@ -2,8 +2,7 @@
 <script>
     import { supabase } from '$lib/supabaseClient';
   
-    let first_name = '';
-    let last_name = '';
+    let name = '';
     let email = '';
     let password = '';
   
@@ -16,7 +15,7 @@
       const { data, error } = await supabase
         .from('users')
         .insert([
-          { first_name, last_name, email, pw_hash: passwordHash }
+          { name, email, pw_hash: passwordHash }
         ]);
   
       if (error) {
@@ -50,8 +49,7 @@
   </style>
   
   <form on:submit|preventDefault={createAccount}>
-    <input type="text" bind:value={first_name} placeholder="First name" required />
-    <input type="text" bind:value={last_name} placeholder="Last name" required />
+    <input type="text" bind:value={name} placeholder="Your name" required />
     <input type="email" bind:value={email} placeholder="Email" required />
     <input type="password" bind:value={password} placeholder="Password" required />
     <button type="submit">Create Account</button>
