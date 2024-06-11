@@ -1,42 +1,36 @@
 <script>
     import Button from "$lib/components/Button.svelte";
-    import Input from "$lib/components/Input.svelte";
     import { page } from "$app/stores";
 
     let code = $page.url.searchParams.get("code");
-
-
 </script>
-<svelte:head>
-    <title>Home</title>
-    <meta name="description" content="Svelte demo app" />
-</svelte:head>
+
 <section class="container">
     <div class="button-container">
-            <h2>Millist valikut sa eelistad, kui kriteeriumiks on:</h2>
+        <p>Millist valikut sa eelistad, kui kriteeriumiks on:</p>
         <div class="all-container">
             <div class="container2">
                 {#if code === "0"}
-                <div class="text"><h3>Mugavus</h3></div>
+                    <div class="text">Mugavus</div>
                 {:else}
                     {#if code === "1"}
                         <div class="text"><h3>Värv</h3></div>
                     {/if}
                     {#if code === "2"}
-                    <div class="text"><h3> Hind</h3></div>
+                        <div class="text">Hind</div>
                     {/if}
                     {#if code === ""}
-                    <div class="error-alert">Error!</div>
+                        <div class="error-alert">Error!</div>
                     {/if}
                 {/if}
             </div>
-                <br>
-                <div class="obj-button">
-                    <Button>1. Valik</Button>
-                    <Button>2. Valik</Button>
-                </div>
+            <br>
+            <div class="obj-button">
+                <Button>1. Valik</Button>
+                <Button>2. Valik</Button>
+            </div>
         </div>
-    
+
             <div class="buttons">
                 <Button>Tagasi</Button>
                 <br>
@@ -44,6 +38,7 @@
             </div>
     </div>
 </section>
+
 <style>
     section.container {
         display: flex;
@@ -51,6 +46,7 @@
         align-items: center;
         flex: 0.7;
     }
+
     .button-container {
         width: 100%;
         display: flex;
@@ -61,6 +57,7 @@
         padding: 40px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
     }
+
     .buttons{
         width: 100%;
         margin-top: 20px;
@@ -83,35 +80,35 @@
         margin-bottom: 20px;
         font-weight: 800;
     }
-.obj-button{
-    width: 100%;
-    margin-top: 40px;
-    margin-bottom: 60px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
-}
-
-.error-alert {
-    text-align: center;
-    color: black;
-    font-size: 30px;
+    .obj-button{
+        width: 100%;
+        margin-top: 40px;
+        margin-bottom: 60px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
     }
 
-.all-container{
-    width: 400px;
-    height: 300px;
-    padding: 20px;
-    padding-bottom: 10px;
-    margin-bottom: 30px;
-    background: white;
-    border-radius: 40px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-}
-h3{
-    font-size: 26px;
-    text-align: center;
-    font-weight: 200;
-}
+    .error-alert {
+        text-align: center;
+        color: black;
+        font-size: 30px;
+        }
+
+    .all-container{
+        width: 400px;
+        height: 300px;
+        padding: 20px;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+        background: white;
+        border-radius: 40px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    }
+    h3{
+        font-size: 26px;
+        text-align: center;
+        font-weight: 200;
+    }
 </style>

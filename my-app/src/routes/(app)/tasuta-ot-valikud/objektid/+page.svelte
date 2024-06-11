@@ -1,16 +1,8 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
-    import choicesIcon from '$lib/images/choices.svg';
-    import resultsIcon from '$lib/images/results.svg';
-    import groupsIcon from '$lib/images/groups.svg';
-    import { onMount } from 'svelte';
-
 </script>
-<svelte:head>
-    <title>Home</title>
-    <meta name="description" content="Svelte demo app" />
-</svelte:head>
+
 <section class="container">
     <div class="input-container">
         <p>Sisesta objektid, mille vahel soovid valida</p>
@@ -24,16 +16,17 @@
                     <p>2. Valik:</p>
                     <Input placeholder=""></Input> 
                 </div>
-        </div>
-        </div>
-            <br>
-            <div class="buttons">
-                <Button style="secondary" size="large">Tagasi</Button>
-                <br>
-                <Button>Jätka</Button>
             </div>
+        </div>
+        <br>
+        <div class="buttons">
+            <Button style="secondary" size="large">Tagasi</Button>
+            <br>
+            <Button>Jätka</Button>
+        </div>
     </div>
 </section>
+
 <style>
     section.container {
         display: flex;
