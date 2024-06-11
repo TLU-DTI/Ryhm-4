@@ -6,7 +6,7 @@
 
     let disabled = false;
     let style = "primary";
-    let size = "small";
+    let size = "medium";
     let content = "Button";
 </script>
 
@@ -52,6 +52,7 @@
         <Button {disabled} {style} {size}>{content}</Button>
     </Hst.Variant>
     <Hst.Variant title="Button secondary">
-        <Button {disabled} {style} {size}>{content}</Button>
+        <Button style="secondary" size="small">{content}</Button>
     </Hst.Variant>
 </Hst.Story>
+ 
