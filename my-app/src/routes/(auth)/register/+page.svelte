@@ -1,6 +1,7 @@
+<!-- src/routes/Register.svelte -->
 <script lang="ts">
 	import '$lib/styles.css';
-
+	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
 	import { writable, derived } from 'svelte/store';
 
@@ -34,30 +35,35 @@
 		const formData = new FormData(event.target as HTMLFormElement);
 		
 		const data = {
-			username: formData.get('username') as string,
+			name: formData.get('username') as string,
 			email: formData.get('email') as string,
-			password: formData.get('password') as string
+			password: formData.get('password') as string,
+			premium: false
 		};
 
-		console.log('Username:', data.username);
-		console.log('Email:', data.email);
-		console.log('Password:', data.password);
-
 		try {
-			const response = await fetch('/api/register', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(data)
-			});
+			// Hash the password
+			const bcrypt = await import('bcryptjs');
+			const saltRounds = 10;
+			const passwordHash = await bcrypt.hash(data.password, saltRounds);
 
-			if (!response.ok) {
-				throw new Error('Registration failed');
+			// Send data to Supabase
+			const { data: supabaseData, error } = await supabase
+				.from('users')
+				.insert([
+					{
+						name: data.name,
+						email: data.email,
+						pw_hash: passwordHash,
+						premium: data.premium
+					}
+				]);
+
+			if (error) {
+				throw new Error(error.message);
 			}
 
-			const result = await response.json();
-			console.log('Registration successful:', result);
+			console.log('User created:', supabaseData);
 		} catch (error) {
 			console.error('Error:', error);
 		}

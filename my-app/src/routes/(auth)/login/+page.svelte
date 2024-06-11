@@ -1,18 +1,54 @@
-<script>
+<script lang="ts">
 	import '$lib/styles.css';
-
+	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
-  
+
 	const form = useForm();
+
+	async function handleLogin(event: SubmitEvent) {
+		event.preventDefault();
+		const formData = new FormData(event.target as HTMLFormElement);
+
+		const data = {
+			email: formData.get('email') as string,
+			password: formData.get('password') as string
+		};
+
+		try {
+			// Fetch user from database by email
+			const { data: user, error } = await supabase
+				.from('users')
+				.select('pw_hash')
+				.eq('email', data.email)
+				.single();
+
+			if (error || !user) {
+				throw new Error('Invalid email or password');
+			}
+
+			// Compare the provided password with the stored hashed password
+			const bcrypt = await import('bcryptjs');
+			const passwordMatch = await bcrypt.compare(data.password, user.pw_hash);
+
+
+			if (!passwordMatch) {
+				throw new Error('Invalid email or password');
+			}
+
+			console.log('Login successful');
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	}
 </script>
   
-<form use:form>
+<form use:form on:submit={handleLogin}>
 	<h1>Login</h1>
   
 	<input type="email" name="email" placeholder="Email" use:validators={[required, email]} />
 	<HintGroup for="email">
-	  <Hint on="required">This is a mandatory field</Hint>
-	  <Hint on="email" hideWhenRequired>Email is not valid</Hint>
+		<Hint on="required">This is a mandatory field</Hint>
+		<Hint on="email" hideWhenRequired>Email is not valid</Hint>
 	</HintGroup>
   
 	<input type="password" name="password" placeholder="Password" use:validators={[required]} />
@@ -20,13 +56,14 @@
   
 	<button disabled={!$form.valid}>Login</button>
 </form>
+
 <pre>
-{JSON.stringify($form, null, " ")}
+	{JSON.stringify($form, null, " ")}
 </pre>
   
 <style>
-	  :global(.touched:invalid) {
-		  border-color: red;
-		  outline-color: red;
-	  }
+	:global(.touched:invalid) {
+		border-color: red;
+		outline-color: red;
+	}
 </style>
