@@ -6,35 +6,23 @@
     import groupsIcon from '$lib/images/groups.svg';
     import { onMount } from 'svelte';
     
-    let inputs = [{ id: 1 }, { id: 2 }]; //esialgsed inputi osad
-    const addInput = () => {
-        inputs = [...inputs, { id: inputs.length + 1 }]; //lisab uue inputi massiivi
-    };
-    const removeInput = () => {
-        if (inputs.length > 2) {
-            inputs = inputs.slice(0, -1); 
-        }
-    };
-</script>
 
+</script>
 <svelte:head>
     <title>Home</title>
     <meta name="description" content="Svelte demo app" />
 </svelte:head>
-
 <section class="container">
     <div class="input-container">
-        <p>Sisesta objektid, mille vahel soovid valida</p>
-        {#each inputs as input (input.id)}
-            <div class="input-group">
-                <p>Valik</p>
-                <Input></Input> 
+        <p>Anna oma otsusele nimi</p>
+            <div class="input-name">
+                <Input placeholder=""></Input> 
             </div>
             <br>
-        {/each}
-        <Button on:click={addInput}>Lisa valik</Button>
-        <br>
-        <Button on:click={removeInput}>Eemalda viimati lisatud valik</Button>
+        <div class="buttons">
+                <Button>Tagasi</Button>
+                <Button>Jätka</Button>
+        </div>
     </div>
 </section>
 <style>
@@ -47,15 +35,23 @@
     .input-container {
         background-color: white;
         border-radius: 20px;
-        padding: 20px;
+        padding: 50px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
     }
-    .input-group {
+
+    .input-container p{
+        text-align: center;
+        margin-right: 10px;
+        font-size: 25px;
+    }
+    .input-name {
         display: flex; /* sõna valik ja sisestusvälja jaoks */
         align-items: center; /* vertikaalne joondamine */
     }
-    .input-group p {
-        margin-right: 10px; /* lisab ruumi sõna valik ja sisestusvälja vahele */
-        font-size: medium;
+    .buttons{
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
     }
+
 </style>
