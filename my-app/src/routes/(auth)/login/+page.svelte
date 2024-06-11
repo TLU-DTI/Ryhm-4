@@ -83,10 +83,18 @@
 		font-size: 14px;
 	}
 
+	.forgot-password a:hover {
+        color: darkgreen;    
+    }
+
+	.forgot-password a:visited {
+        color: black;    
+    }
+
 	.reg-login {
 		display: flex;
 		justify-content: center;
-		gap: 230px;
+		gap: 210px;
 		margin-top: 50px;
 	}
 </style>
