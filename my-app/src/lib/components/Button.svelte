@@ -15,7 +15,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
+        min-width: 100px;
         cursor: pointer;
         border-radius: 40px;
         background: var(--bg-color);
