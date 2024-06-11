@@ -20,7 +20,7 @@
         </div>
         <br>
         <div class="buttons">
-            <Button style="secondary" size="large">Tagasi</Button>
+            <Button style="secondary">Tagasi</Button>
             <br>
             <Button>Jätka</Button>
         </div>
