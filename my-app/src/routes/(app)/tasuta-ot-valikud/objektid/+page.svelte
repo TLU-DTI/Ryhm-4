@@ -18,17 +18,17 @@
             <div class="inputs">
                 <div class="valik1">
                     <p>1. Valik:</p>
-                    <Input></Input> 
+                    <Input placeholder=""></Input> 
                 </div>
                 <div class="valik2">
                     <p>2. Valik:</p>
-                    <Input></Input> 
+                    <Input placeholder=""></Input> 
                 </div>
         </div>
         </div>
             <br>
             <div class="buttons">
-                <Button>Tagasi</Button>
+                <Button style="secondary" size="large">Tagasi</Button>
                 <br>
                 <Button>Jätka</Button>
             </div>
@@ -44,8 +44,11 @@
     .input-container {
         background-color: white;
         border-radius: 20px;
-        padding: 40px;
+         padding: 40px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
+        display: flex;
+        flex-direction: column
+        ;
     }
     .input-group {
         display: flex; /* sõna valik ja sisestusvälja jaoks */

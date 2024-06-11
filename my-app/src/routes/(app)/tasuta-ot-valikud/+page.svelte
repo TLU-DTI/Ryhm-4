@@ -16,7 +16,7 @@
     <div class="input-container">
         <p>Anna oma otsusele nimi</p>
             <div class="input-name">
-                <Input></Input> 
+                <Input placeholder=""></Input> 
             </div>
             <br>
         <div class="buttons">

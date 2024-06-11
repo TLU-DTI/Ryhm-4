@@ -13,17 +13,17 @@
 </svelte:head>
 <section class="container">
     <div class="button-container">
-            <p>Millist valikut sa eelistad, kui kriteeriumiks on:</p>
+            <h2>Millist valikut sa eelistad, kui kriteeriumiks on:</h2>
         <div class="all-container">
             <div class="container2">
                 {#if code === "0"}
-                <div class="text">Mugavus</div>
+                <div class="text"><h3>Mugavus</h3></div>
                 {:else}
                     {#if code === "1"}
-                        <div class="text">Värv</div>
+                        <div class="text"><h3>Värv</h3></div>
                     {/if}
                     {#if code === "2"}
-                    <div class="text">Hind</div>
+                    <div class="text"><h3> Hind</h3></div>
                     {/if}
                     {#if code === ""}
                     <div class="error-alert">Error!</div>
@@ -83,12 +83,6 @@
         margin-bottom: 20px;
         font-weight: 800;
     }
-
-.text {
-    text-align: center;
-    color: black;
-    font-size: 20px;
-}
 .obj-button{
     width: 100%;
     margin-top: 40px;
@@ -114,5 +108,10 @@
     background: white;
     border-radius: 40px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+h3{
+    font-size: 26px;
+    text-align: center;
+    font-weight: 200;
 }
 </style>
