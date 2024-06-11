@@ -1,18 +1,18 @@
 <script lang="ts">
-    export let disabled = false;  
+    export let type: "text" | "password" | "email" = "text";
+    export let disabled = false;
     export let value = "";
-
+    export let placeholder: string;
 </script>
 
 <style>
-    .input {
+    input {
         display: flex;
         position: relative;
         flex-direction: row;
         align-items: flex-start;
         justify-content: center;
-        
-
+    
         width: 400px;
         height: max-content;        
 
@@ -22,10 +22,6 @@
         background: #F8F8F8;
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
         padding: 20px;
-
-        font-family: 'Merriweather', serif;
-        font-weight: 400;
-	    font-size: 20px;
     }
     
     input::placeholder {
@@ -33,15 +29,14 @@
         font-weight: 300;
     }
 
-    input {
-        width: 100%;
-        background: #F8F8F8;
+    input:focus{
+        outline: none;
     }
- 
-    .input:hover {
+
+    input:hover {
         border: 2px solid #C4F1C0;    }
 
-    .input:disabled {
+    input:disabled {
         opacity: 0.5;
         pointer-events: none;
     }
@@ -49,6 +44,11 @@
 </style>
 
 
-<div class="input" class:disabled>
-    <input {disabled} bind:value type="text" />
-</div>
+
+{#if type === "password"}
+    <input {placeholder} {disabled} bind:value type="password" />
+{:else if type === "email"}
+    <input {placeholder} {disabled} bind:value type="email" />
+{:else}
+    <input {placeholder} {disabled} bind:value type="text" />
+{/if}

@@ -11,13 +11,11 @@
 
 <style>
     button {
-        display: flex;
-        width: 180px;
-        height: 56px;
+        display: inline-flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 57px;
+        min-width: 100px;
         cursor: pointer;
         border-radius: 40px;
         background: var(--bg-color);
@@ -51,21 +49,7 @@
         pointer-events: none;
     }
 
-    .size-small {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-
-    .size-medium {
-        font-size: 14px;
-        padding: 12px 20px;
-    }
-
-    .size-large {
-        font-size: 16px;
-        padding: 16px 20px;
-    }
-
+   
     @media screen and (min-width: 720px) {
         .size-small {
             font-size: 14px;

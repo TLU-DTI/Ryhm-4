@@ -15,6 +15,10 @@
     </svelte:fragment>
 
     <Hst.Variant title="Input">
-        <Input {disabled} {placeholder} />
+        <Input {disabled} placeholder="Type Something" />
     </Hst.Variant>
+    <Hst.Variant title="Input">
+        <Input {disabled} placeholder="Type Something" />
+    </Hst.Variant>
+
 </Hst.Story>
