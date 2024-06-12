@@ -7,7 +7,7 @@
 <section>
 	<div class="container">
 		<div class="rectangle-up"> 
-			<img src="..\src\lib\images\free-verified-badge-1-866240.webp" alt="Õnnestus!" width="256" height="256">
+			<img src="..\src\lib\images\free-verified-badge-1-866240.webp" alt="Õnnestus!" width="200" height="200">
 		</div>
 
 		<div class="rectangle-down"> 
@@ -37,8 +37,9 @@
     .rectangle-up {
         display: flex;
         justify-content: center;
-        width: 730px;
-        height: 450px;
+        align-items: center;
+        width: 500px;
+        height: 255px;
         background: #CFFFCB;
         border-top-left-radius: 38px;
         border-top-right-radius: 38px;
@@ -50,11 +51,19 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 730px;
-        height: 450px;
+        width: 500px;
+        height: 150px;
         background: white;
         border-bottom-left-radius: 38px;
         border-bottom-right-radius: 38px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     }
+
+	.success {
+		margin-top: -15px;
+	}
+
+	.success p:hover {
+        color: darkgreen;  
+	}
 </style>
