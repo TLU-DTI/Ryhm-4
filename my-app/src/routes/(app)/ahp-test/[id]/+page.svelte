@@ -11,22 +11,24 @@
     error?: string;
   } | null;
 
-  let criteria: string[] = [];
   let choices: string[] = [];
+  let criteria: string[] = [];
   let pairwiseMatrices: number[][][] = [];
+  let combinedMatrix: number[][] = [];
   let scores: number[] = [];
+  let percentages: number[] = [];
 
   $: if (data) {
     if (data.error) {
       console.error('Error:', data.error);
     } else {
       console.log('Data received as prop:', data);
-      criteria = Array.isArray(data.criteria) ? data.criteria : [];
       choices = Array.isArray(data.choices) ? data.choices : [];
-      pairwiseMatrices = criteria.map(() => {
-        let matrix: number[][] = Array(choices.length).fill(null).map(() => Array(choices.length).fill(1));
-        return matrix;
-      });
+      criteria = Array.isArray(data.criteria) ? data.criteria : [];
+      pairwiseMatrices = criteria.map(() =>
+        Array(choices.length).fill(null).map(() => Array(choices.length).fill(3))
+      ); // Initialize with 3 for indifference
+      combinedMatrix = Array(choices.length).fill(null).map(() => Array(choices.length).fill(3));
       calculateScores();
     }
   } else {
@@ -34,26 +36,44 @@
   }
 
   function updateMatrix(criteriaIndex: number, i: number, j: number, value: number): void {
-    pairwiseMatrices[criteriaIndex][i][j] = value;
-    pairwiseMatrices[criteriaIndex][j][i] = 1 / value;
+    pairwiseMatrices[criteriaIndex][i][j] = 6 - value;
+    pairwiseMatrices[criteriaIndex][j][i] = value; // Correct reciprocal logic
     calculateScores();
   }
 
   function calculateScores(): void {
     if (criteria.length && choices.length) {
       let criteriaScores = criteria.map((_, criteriaIndex) => {
-        let matrix = pairwiseMatrices[criteriaIndex];
-        let sumCols = matrix[0].map((_, colIndex) => matrix.reduce((sum, row) => sum + row[colIndex], 0));
-        let normalizedMatrix = matrix.map(row => row.map((cell, colIndex) => cell / sumCols[colIndex]));
-        let priorityVector = normalizedMatrix.map(row => row.reduce((sum, cell) => sum + cell, 0) / row.length);
-        return priorityVector;
+        let sumCols = pairwiseMatrices[criteriaIndex][0].map((_, colIndex) =>
+          pairwiseMatrices[criteriaIndex].reduce((sum, row) => sum + row[colIndex], 0)
+        );
+        let normalizedMatrix = pairwiseMatrices[criteriaIndex].map(row =>
+          row.map((cell, colIndex) => cell / sumCols[colIndex])
+        );
+        return normalizedMatrix.map(row =>
+          row.reduce((sum, cell) => sum + cell, 0) / row.length
+        );
       });
 
       scores = choices.map((_, altIndex) => {
         return criteriaScores.reduce((sum, criteriaScore) => sum + criteriaScore[altIndex], 0) / criteria.length;
       });
+
+      // Calculate combined pairwise matrix
+      combinedMatrix = Array(choices.length).fill(null).map(() => Array(choices.length).fill(0));
+      for (let i = 0; i < choices.length; i++) {
+        for (let j = 0; j < choices.length; j++) {
+          combinedMatrix[i][j] = criteria.reduce((sum, _, criteriaIndex) => sum + pairwiseMatrices[criteriaIndex][i][j], 0) / criteria.length;
+        }
+      }
+
+      // Normalize scores to percentages
+      const totalScore = scores.reduce((sum, score) => sum + score, 0);
+      percentages = scores.map(score => (score / totalScore) * 100);
     } else {
       scores = [];
+      combinedMatrix = [];
+      percentages = [];
     }
   }
 
@@ -69,74 +89,82 @@
     padding: 20px;
   }
 
-  .criteria {
+  .comparison {
     margin-bottom: 20px;
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+  .radio-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  th, td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
+  .radio-group label {
+    margin: 0 5px;
   }
 </style>
 
 <div class="container">
-  <h1>AHP Car Selection</h1>
+  <h1>AHP Car Selection - Multiple Criteria</h1>
 
   {#if criteria.length && choices.length}
     {#each criteria as criterion, criteriaIndex}
-      <div class="criteria">
+      <div class="comparison">
         <h2>{criterion}</h2>
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              {#each choices as alt}
-                <th>{alt}</th>
+        {#each choices as alt1, i}
+          {#each choices.slice(i + 1) as alt2, j}
+            <div class="radio-group">
+              <span>{alt1}</span>
+              {#each [1, 2, 3, 4, 5] as value}
+                <label>
+                  <input type="radio" name={`${criteriaIndex}-${i}-${i + j + 1}`} value={value} on:change={(e) => updateMatrix(criteriaIndex, i, i + j + 1, parseFloat(e.target.value))} checked={pairwiseMatrices[criteriaIndex][i][i + j + 1] === 6 - value} />
+                  {value}
+                </label>
               {/each}
-            </tr>
-          </thead>
-          <tbody>
-            {#each choices as alt1, i}
-              <tr>
-                <td>{alt1}</td>
-                {#each choices as alt2, j}
-                  <td>
-                    {#if i === j}
-                      1
-                    {:else if i < j}
-                      <input type="number" min="1" max="5" bind:value={pairwiseMatrices[criteriaIndex][i][j]} on:input={(e) => updateMatrix(criteriaIndex, i, j, parseFloat(e.target.value))} />
-                    {:else}
-                      {pairwiseMatrices[criteriaIndex][i][j].toFixed(2)}
-                    {/if}
-                  </td>
-                {/each}
-              </tr>
-            {/each}
-          </tbody>
-        </table>
+              <span>{alt2}</span>
+            </div>
+          {/each}
+        {/each}
       </div>
     {/each}
+
+    <h2>Combined Pairwise Matrix</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          {#each choices as alt}
+            <th>{alt}</th>
+          {/each}
+        </tr>
+      </thead>
+      <tbody>
+        {#each choices as alt1, i}
+          <tr>
+            <td>{alt1}</td>
+            {#each choices as alt2, j}
+              <td>
+                {combinedMatrix[i][j].toFixed(2)}
+              </td>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+    </table>
 
     <h2>Results</h2>
     <table>
       <thead>
         <tr>
           <th>Alternative</th>
-          <th>Score</th>
+          <th>Score (%)</th>
         </tr>
       </thead>
       <tbody>
         {#each choices as alt, altIndex}
           <tr>
             <td>{alt}</td>
-            <td>{#if scores[altIndex] !== undefined}{scores[altIndex].toFixed(2)}{:else}N/A{/if}</td>
+            <td>{#if percentages[altIndex] !== undefined}{percentages[altIndex].toFixed(2)}%{:else}N/A{/if}</td>
           </tr>
         {/each}
       </tbody>
