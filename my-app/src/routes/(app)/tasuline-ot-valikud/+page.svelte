@@ -1,19 +1,20 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
+    import { goto } from "$app/navigation";
 </script>
 
 <section class="container">
     <div class="input-container">
         <h2>Anna oma otsusele nimi:</h2>
-            <div class="input-name">
-                <Input placeholder="Nimi"></Input> 
-            </div>
-            <br>
-            <div class="buttons">
-                    <Button style="secondary">Tagasi</Button>
-                    <Button>Jätka</Button>
-            </div>
+        <div class="input-name">
+            <Input placeholder="Nimi"></Input> 
+        </div>
+        <br>
+        <div class="buttons">
+            <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi</Button>
+            <Button on:click={() => goto("/tasuline-ot-valikud/otsusemudel")} on:keydown>Jätka</Button>
+        </div>
     </div>
 </section>
 

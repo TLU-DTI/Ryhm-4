@@ -9,7 +9,7 @@
         { title: "valik 3" }
     ];
 
-function getTooltipContent() {
+    function getTooltipContent() {
         return valikud.map(valik => valik.title).join(", ");
     }
 

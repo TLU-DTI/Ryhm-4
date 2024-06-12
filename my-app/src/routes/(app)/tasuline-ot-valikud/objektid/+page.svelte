@@ -6,28 +6,28 @@
 <section class="container">
     <div class="input-container">
         <h2>Sisesta objektid, mille vahel soovid valida:</h2>
-            <div class="input-group">
-                <div class="inputs">
-                    <div class="valik1">
-                        <p>1. Valik:</p>
-                        <Input placeholder=""></Input> 
-                    </div>
-                    <div class="valik2">
-                        <p>2. Valik:</p>
-                        <Input placeholder=""></Input> 
-                    </div>
-                    <div class="lisavalik">
-                        <p>Lisa veel valikuid</p>
-                        <Button size="mini">+</Button>
-                    </div>
+        <div class="input-group">
+            <div class="inputs">
+                <div class="valik1">
+                    <p>1. Valik:</p>
+                    <Input placeholder=""></Input> 
+                </div>
+                <div class="valik2">
+                    <p>2. Valik:</p>
+                    <Input placeholder=""></Input> 
+                </div>
+                <div class="lisavalik">
+                    <p>Lisa veel valikuid</p>
+                    <Button size="mini">+</Button>
                 </div>
             </div>
+        </div>
+        <br>
+        <div class="buttons">
+            <Button style="secondary">Tagasi</Button>
             <br>
-            <div class="buttons">
-                <Button style="secondary">Tagasi</Button>
-                <br>
-                <Button>Jätka</Button>
-            </div>
+            <Button>Jätka</Button>
+        </div>
     </div>
 </section>
 

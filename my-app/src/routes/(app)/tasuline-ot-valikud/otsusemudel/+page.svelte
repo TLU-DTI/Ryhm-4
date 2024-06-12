@@ -6,17 +6,17 @@
 <section class="container">
     <div class="input-container">
         <h2>Vali otsuse mudel:</h2>
-            <br>
-            <div class="AHP">
-                <Button style="secondary" size="large">Analüütiline hierarhia mudel</Button>
-                <Button size="mini">
-                    <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
-                </Button>
-            </div>
-            <div class="buttons">
-                <Button style="secondary">Tagasi</Button>
-                <Button>Jätka</Button>
-            </div>
+        <br>
+        <div class="AHP">
+            <Button style="secondary" size="large">Analüütiline hierarhia mudel</Button>
+            <Button size="mini">
+                <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
+            </Button>
+        </div>
+        <div class="buttons">
+            <Button style="secondary">Tagasi</Button>
+            <Button>Jätka</Button>
+        </div>
     </div>
 </section>
 

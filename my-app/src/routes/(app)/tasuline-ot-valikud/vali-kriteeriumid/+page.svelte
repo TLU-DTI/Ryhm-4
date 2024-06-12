@@ -5,26 +5,25 @@
     import { get } from 'svelte/store';
     let code: number | null = null
 
-onMount(() => {
-    const urlCode = get(page).url.searchParams.get("code");
-    if (urlCode) {
-        code = parseInt(urlCode, 10);
-    }
-});
+    onMount(() => {
+        const urlCode = get(page).url.searchParams.get("code");
+        if (urlCode) {
+            code = parseInt(urlCode, 10);
+        }
+    });
 
-let valikud: { title: string }[] = [
-    { title: "Võrdne eelistus" },
-    { title: "valik 1" },
-    { title: "valik 2" },
-    { title: "valik 3" }
-];
+    let valikud: { title: string }[] = [
+        { title: "Võrdne eelistus" },
+        { title: "valik 1" },
+        { title: "valik 2" },
+        { title: "valik 3" }
+    ];
 
-let kriteeriumid: { title: string, lk: number }[] = [
-    { title: "kriteerium1", lk: 1 },
-    { title: "kriteerium2", lk: 2 },
-    { title: "kriteerium3", lk: 3 }
-];
-
+    let kriteeriumid: { title: string, lk: number }[] = [
+        { title: "kriteerium1", lk: 1 },
+        { title: "kriteerium2", lk: 2 },
+        { title: "kriteerium3", lk: 3 }
+    ];
 </script>
 
 <section class="container">
@@ -120,7 +119,6 @@ let kriteeriumid: { title: string, lk: number }[] = [
         display: flex;
         flex-direction: column;
         gap: 10px;
-    
     }
 
     h2{
