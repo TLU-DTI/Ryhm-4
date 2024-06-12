@@ -41,6 +41,7 @@
 	"dependencies": {
 		"@supabase/supabase-js": "^2.43.4",
 		"bcrypt": "^5.1.1",
-		"bcryptjs": "^2.4.3"
+		"bcryptjs": "^2.4.3",
+		"svelte-forms-lib": "^2.0.1"
 	}
 }
