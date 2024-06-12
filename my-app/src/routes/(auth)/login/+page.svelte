@@ -1,5 +1,9 @@
 
 <script lang="ts">
+	import '$lib/auth_style.css';
+	import Input from "$lib/components/Input.svelte";
+	import Button from "$lib/components/Button.svelte";
+
 	import '$lib/styles.css';
 	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
@@ -48,35 +52,7 @@
 		}
 	}
 </script>
-  
-<form use:form on:submit={handleLogin}>
-	<h1>Login</h1>
-  
-	<input type="email" name="email" placeholder="Email" use:validators={[required, email]} />
-	<HintGroup for="email">
-		<Hint on="required">This is a mandatory field</Hint>
-		<Hint on="email" hideWhenRequired>Email is not valid</Hint>
-	</HintGroup>
-  
-	<input type="password" name="password" placeholder="Password" use:validators={[required]} />
-	<Hint for="password" on="required">This is a mandatory field</Hint>
-  
-	<button disabled={!$form.valid}>Login</button>
-</form>
 
-<pre>
-	{JSON.stringify($form, null, " ")}
-</pre>
-  
-<style>
-	:global(.touched:invalid) {
-		border-color: red;
-		outline-color: red;
-<script>
-	import '$lib/auth_style.css';
-	import Input from "$lib/components/Input.svelte";
-	import Button from "$lib/components/Button.svelte";
-</script>
 
 <section>
 	<div class="container">
@@ -84,21 +60,31 @@
 			<h1>Võta juhtimine enda kätte – <br><i>Decision Maker</i>.<br> Sinu teejuht paremate valikuteni!</h1>
 		</div>
 
+	<form use:form on:submit={handleLogin}>
 		<div class="rectangle-right"> 
 			<div class="login-input">
-				<Input placeholder="E-mail"></Input>
-				<Input placeholder="Parool"></Input>
+				<Input type="email" name="email" placeholder="Email"></Input>
+				<HintGroup for="email">
+					<Hint on="required">This is a mandatory field</Hint>
+					<Hint on="email" hideWhenRequired>Email is not valid</Hint>
+				</HintGroup>
+
+				<Input type="password" name="password" placeholder="Password"></Input>
+				<Hint for="password" on="required">This is a mandatory field</Hint>
+
 				<div class="forgot-password">
 					<p>Unustasid salasõna?</p>
 				</div>
+
 			</div>
 
 			<div class="reg-login">
 				<Button style="secondary">Loo kasutaja</Button>
-				<Button>Logi sisse</Button>
+				<Button disabled={!$form.valid}>Logi sisse</Button>
 			</div>
 
 		</div>
+	</form>
 	</div>
 
 </section>
@@ -166,3 +152,18 @@
 		margin-top: 50px;
 	}
 </style>
+
+<form use:form on:submit={handleLogin}>
+	<h1>Login</h1>
+  
+	<input type="email" name="email" placeholder="Email" use:validators={[required, email]} />
+	<HintGroup for="email">
+		<Hint on="required">This is a mandatory field</Hint>
+		<Hint on="email" hideWhenRequired>Email is not valid</Hint>
+	</HintGroup>
+  
+	<input type="password" name="password" placeholder="Password" use:validators={[required]} />
+	<Hint for="password" on="required">This is a mandatory field</Hint>
+  
+	<button disabled={!$form.valid}>Login</button>
+</form>
