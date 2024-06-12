@@ -62,8 +62,4 @@
 	.success {
 		margin-top: -15px;
 	}
-
-	.success p:hover {
-        color: darkgreen;  
-	}
 </style>

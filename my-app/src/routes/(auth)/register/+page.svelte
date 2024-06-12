@@ -71,4 +71,7 @@
 		font-size: 14px;
 		color: rgb(194, 192, 192);
 	}
+	.already-user p:hover {
+        color: darkgreen;  
+	}
 </style>
