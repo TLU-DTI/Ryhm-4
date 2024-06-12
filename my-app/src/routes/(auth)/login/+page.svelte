@@ -2,6 +2,10 @@
 	import '$lib/styles.css';
 	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
+	import { sat_user_id } from '../../../store.js';
+
+	console.log($sat_user_id);
+
 
 	const form = useForm();
 
@@ -18,7 +22,7 @@
 			// Fetch user from database by email
 			const { data: user, error } = await supabase
 				.from('users')
-				.select('pw_hash')
+				.select('pw_hash, id')
 				.eq('email', data.email)
 				.single();
 
@@ -35,7 +39,9 @@
 				throw new Error('Invalid email or password');
 			}
 
-			console.log('Login successful');
+			sat_user_id.set(user.id);
+			console.log('Login successful. The user: ' + user.id + ' logged in.');
+			window.location.href = "/";//Muuda seda!
 		} catch (error) {
 			console.error('Error:', error);
 		}

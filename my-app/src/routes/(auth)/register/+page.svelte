@@ -14,21 +14,13 @@
 		([$password, $confirmPassword]) => $password === $confirmPassword
 	);
 
-	const showPasswordMismatch = derived(
-		[passwordsMatch],
-		([$passwordsMatch], set) => {
-			if ($passwordsMatch) {
-				set(false);
-			} else {
-				const timeoutId = setTimeout(() => {
-					set(true);
-				}, 3000);
+	let showPasswordMismatch = writable(false);
 
-				return () => clearTimeout(timeoutId);
-			}
-		},
-		false
-	);
+	passwordsMatch.subscribe(value => {
+		showPasswordMismatch.set(!value);
+	});
+
+	let emailAlreadyUsed = writable(false);
 
 	async function handleSubmit(event: SubmitEvent) {
 		event.preventDefault();
@@ -42,6 +34,20 @@
 		};
 
 		try {
+			// Check if the email already exists
+			let { data: existingUser, error: existingUserError } = await supabase
+				.from('users')
+				.select('id')
+				.eq('email', data.email)
+				.single();
+
+			if (existingUser) {
+				emailAlreadyUsed.set(true);
+				return;
+			} else {
+				emailAlreadyUsed.set(false);
+			}
+
 			// Hash the password
 			const bcrypt = await import('bcryptjs');
 			const saltRounds = 10;
@@ -64,6 +70,7 @@
 			}
 
 			console.log('User created:', supabaseData);
+			window.location.href = "/";//Muuda seda!
 		} catch (error) {
 			console.error('Error:', error);
 		}
@@ -82,6 +89,10 @@
 	  <Hint on="email" hideWhenRequired>Email is not valid</Hint>
 	</HintGroup>
   
+	{#if $emailAlreadyUsed}
+		<p style="color: red;">Email is already used</p>
+	{/if}
+
 	<input type="password" name="password" placeholder="Password" use:validators={[required]} bind:value={$password} />
 	<Hint for="password" on="required">This is a mandatory field</Hint>
 

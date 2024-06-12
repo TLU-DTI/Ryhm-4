@@ -1,60 +1,47 @@
-<!-- src/routes/CreateGroup.svelte -->
 <script lang="ts">
-    import '$lib/styles.css';
     import { supabase } from '$lib/supabaseClient';
-    import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
-    import { writable } from 'svelte/store';
+    import { onMount } from 'svelte';
+    import { writable, get } from 'svelte/store';
+    import { sat_user_id } from '../../../store.js';
 
-    const form = useForm();
+    console.log($sat_user_id);
 
-    async function handleCreateGroup(event: SubmitEvent) {
-        event.preventDefault();
-        const formData = new FormData(event.target as HTMLFormElement);
-
-        const data = {
-            group_name: formData.get('group_name') as string,
-            group_code: 'abc123'  // Hardcoded group code for now
-        };
-
-        try {
-            const { data: supabaseData, error } = await supabase
-                .from('groups')
-                .insert([
-                    {
-                        group_name: data.group_name,
-                        group_code: data.group_code
-                    }
-                ]);
-
-            if (error) {
-                throw new Error(error.message);
-            }
-
-            console.log('Group created:', supabaseData);
-        } catch (error) {
-            console.error('Error:', error);
-        }
+    // Define the type for groupInfo
+    interface GroupInfo {
+        group_ID: string;
+        user_ID: string;
     }
+
+    const groupInfo = writable<GroupInfo[]>([]);
+
+    onMount(async () => {
+        const currentUserId = get(sat_user_id); // Get the current user ID from the store
+        if (currentUserId !== null) {
+            try {
+                const { data: group_info, error } = await supabase
+                    .from('users_groups')
+                    .select('group_ID, user_ID')
+                    .eq('user_ID', currentUserId);
+
+                if (error) {
+                    throw new Error(error.message);
+                }
+
+                groupInfo.set(group_info || []);
+
+            } catch (error) {
+                console.error('Error fetching user groups:', error);
+            }
+        } else {
+            console.error('User ID is null, cannot fetch user groups.');
+        }
+    });
 </script>
 
-<form use:form on:submit={handleCreateGroup}>
-    <h1>Your Groups</h1>
+<h1>Your Groups</h1>
 
-    <input type="text" name="group_name" placeholder="Group Name" use:validators={[required]} />
-    <Hint for="group_name" on="required">This is a mandatory field</Hint>
-
-    <input type="text" name="group_code" placeholder="Group Code" value="abc123" readonly />
-
-    <button disabled={!$form.valid}>Create Group</button>
-</form>
-
-<pre>
-{JSON.stringify($form, null, " ")}
-</pre>
-
-<style>
-    :global(.touched:invalid) {
-        border-color: red;
-        outline-color: red;
-    }
-</style>
+<ul>
+    {#each $groupInfo as info}
+        <li>Group ID: {info.group_ID}, User ID: {info.user_ID}</li>
+    {/each}
+</ul>
