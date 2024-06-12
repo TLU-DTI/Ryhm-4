@@ -1,0 +1,40 @@
+<script>
+    import Button from "$lib/components/Button.svelte";
+    import { goto } from "$app/navigation";
+</script>
+
+<section class="container">
+    <div class="input-container">
+        <h2>Teie makse on edukalt sooritatud!</h2>
+        <p>Saate alustada nüüd tasulise rakenduse kasutamist!</p>
+        <br>
+        <div class="buttons">
+            <Button on:click={() => goto("/")} on:keydown>Pealehele</Button>
+        </div>
+    </div>
+</section>
+
+<style>
+    section.container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 0.7;
+    }
+    
+    .input-container {
+        background-color: white;
+        border-radius: 20px;
+        padding: 50px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
+        width: 400px;
+        text-align: center;
+    }
+    
+    .buttons{
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+</style>
