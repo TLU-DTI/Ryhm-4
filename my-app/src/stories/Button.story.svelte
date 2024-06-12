@@ -54,5 +54,8 @@
     <Hst.Variant title="Button secondary">
         <Button style="secondary" size="small">{content}</Button>
     </Hst.Variant>
+    <Hst.Variant title="Button mini">
+        <Button style="secondary" size="mini">{content}</Button>
+    </Hst.Variant>
 </Hst.Story>
  
