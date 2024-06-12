@@ -3,8 +3,6 @@
 	import '$lib/auth_style.css';
 	import Input from "$lib/components/Input.svelte";
 	import Button from "$lib/components/Button.svelte";
-
-	import '$lib/styles.css';
 	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
 	import { sat_user_id } from '../../../store.js';
@@ -54,16 +52,16 @@
 </script>
 
 
-<section>
-	<div class="container">
-		<div class="rectangle-left"> 
-			<h1>Võta juhtimine enda kätte – <br><i>Decision Maker</i>.<br> Sinu teejuht paremate valikuteni!</h1>
-		</div>
-
-	<form use:form on:submit={handleLogin}>
-		<div class="rectangle-right"> 
+<section class="container">
+	<div class="rectangle-left"> 
+		<h1>Võta juhtimine enda kätte – <br><i>Decision Maker</i>.<br> Sinu teejuht paremate valikuteni!</h1>
+	</div>
+	
+	<div class="rectangle-right">
+		<form use:form on:submit={handleLogin}>
 			<div class="login-input">
-				<Input type="email" name="email" placeholder="Email"></Input>
+
+				<Input type="email" name="email" placeholder="E-mail"></Input>
 				<HintGroup for="email">
 					<Hint on="required">This is a mandatory field</Hint>
 					<Hint on="email" hideWhenRequired>Email is not valid</Hint>
@@ -71,20 +69,18 @@
 
 				<Input type="password" name="password" placeholder="Password"></Input>
 				<Hint for="password" on="required">This is a mandatory field</Hint>
-
-				<div class="forgot-password">
-					<p>Unustasid salasõna?</p>
-				</div>
-
 			</div>
+		</form>
 
-			<div class="reg-login">
-				<Button style="secondary">Loo kasutaja</Button>
-				<Button disabled={!$form.valid}>Logi sisse</Button>
-			</div>
-
+		<div class="forgot-password">
+			<p>Unustasid salasõna?</p>
 		</div>
-	</form>
+
+		<div class="reg-login">
+			<Button style="secondary">Loo kasutaja</Button>
+			<Button disabled={!$form.valid}>Logi sisse</Button>
+		</div>
+
 	</div>
 
 </section>
@@ -134,8 +130,8 @@
 		gap: 40px;
 	}
 
-	.forgot-password {
-		margin-top: -20px;
+	.forgot-password p {
+		margin-top: 20px;
 		text-decoration: underline;
 		font-size: 14px;
 		color: rgb(194, 192, 192); 
@@ -152,18 +148,3 @@
 		margin-top: 50px;
 	}
 </style>
-
-<form use:form on:submit={handleLogin}>
-	<h1>Login</h1>
-  
-	<input type="email" name="email" placeholder="Email" use:validators={[required, email]} />
-	<HintGroup for="email">
-		<Hint on="required">This is a mandatory field</Hint>
-		<Hint on="email" hideWhenRequired>Email is not valid</Hint>
-	</HintGroup>
-  
-	<input type="password" name="password" placeholder="Password" use:validators={[required]} />
-	<Hint for="password" on="required">This is a mandatory field</Hint>
-  
-	<button disabled={!$form.valid}>Login</button>
-</form>
