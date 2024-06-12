@@ -1,35 +1,27 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
-    import choicesIcon from '$lib/images/choices.svg';
-    import resultsIcon from '$lib/images/results.svg';
-    import groupsIcon from '$lib/images/groups.svg';
-    import { onMount } from 'svelte';
-
 </script>
-<svelte:head>
-    <title>Sisesta objektid</title>
-    <meta name="description" content="Svelte demo app" />
-</svelte:head>
+
 <section class="container">
     <div class="input-container">
         <h2>Sisesta objektid, mille vahel soovid valida:</h2>
-        <div class="input-group">
-            <div class="inputs">
-                <div class="valik1">
-                    <p>1. Valik:</p>
-                    <Input placeholder=""></Input> 
+            <div class="input-group">
+                <div class="inputs">
+                    <div class="valik1">
+                        <p>1. Valik:</p>
+                        <Input placeholder=""></Input> 
+                    </div>
+                    <div class="valik2">
+                        <p>2. Valik:</p>
+                        <Input placeholder=""></Input> 
+                    </div>
+                    <div class="lisavalik">
+                        <p>Lisa veel valikuid</p>
+                        <Button size="mini">+</Button>
+                    </div>
                 </div>
-                <div class="valik2">
-                    <p>2. Valik:</p>
-                    <Input placeholder=""></Input> 
-                </div>
-                <div class="lisavalik">
-                    <p>Lisa veel valikuid</p>
-                    <Button size="mini">+</Button>
-                </div>
-        </div>
-        </div>
+            </div>
             <br>
             <div class="buttons">
                 <Button style="secondary">Tagasi</Button>
@@ -38,6 +30,7 @@
             </div>
     </div>
 </section>
+
 <style>
     section.container {
         display: flex;
@@ -45,6 +38,7 @@
         align-items: center;
         flex: 0.7;
     }
+
     .input-container {
         background-color: white;
         border-radius: 20px;
@@ -54,51 +48,62 @@
         display: flex;
         flex-direction: column;
     }
+
     .input-group {
         display: flex; /* sõna valik ja sisestusvälja jaoks */
         align-items: center; /* vertikaalne joondamine */
     }
+
     .input-group p {
         margin-right: 10px; /* lisab ruumi sõna valik ja sisestusvälja vahele */
         font-size: medium;
     }
+
     .buttons{
         margin-top: 20px;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
     }
+
     .input-container p{
         text-align: center;
         margin-right: 10px;
         font-size: 20px;
     }
+
     .inputs{
         display: flex;
         flex-direction: column;
         margin: 30px;
     }
+
     .valik1{
         margin-bottom: 10px;
         display: flex;
         flex-direction: row;
     }
+
     .valik2{
         display: flex;
         flex-direction: row;
         margin-top: 10px;
     }
+
     .lisavalik{
         margin-top: 20px;
         display: flex;
         flex-direction: row;
     }
+
     h2{
         font-size: 30px;
     }
+
     .lisavalik p{
         font-size: 15px;
     }
+    
 </style>
 
 

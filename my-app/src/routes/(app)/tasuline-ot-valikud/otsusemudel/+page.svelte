@@ -1,18 +1,8 @@
 <script>
     import Button from "$lib/components/Button.svelte";
-    import Input from "$lib/components/Input.svelte";
-    import choicesIcon from '$lib/images/choices.svg';
-    import resultsIcon from '$lib/images/results.svg';
-    import groupsIcon from '$lib/images/groups.svg';
-    import { onMount } from 'svelte';
     import { tooltip } from "$lib/script/tooltip.js";
-    
-
 </script>
-<svelte:head>
-    <title>Otsusemudel Tasuline</title>
-    <meta name="description" content="Svelte demo app" />
-</svelte:head>
+
 <section class="container">
     <div class="input-container">
         <h2>Vali otsuse mudel:</h2>
@@ -21,14 +11,15 @@
                 <Button style="secondary" size="large">Analüütiline hierarhia mudel</Button>
                 <Button size="mini">
                     <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
-                  </Button>
+                </Button>
             </div>
             <div class="buttons">
-                    <Button style="secondary">Tagasi</Button>
-                    <Button>Jätka</Button>
+                <Button style="secondary">Tagasi</Button>
+                <Button>Jätka</Button>
             </div>
     </div>
 </section>
+
 <style>
     section.container {
         display: flex;
@@ -36,6 +27,7 @@
         align-items: center;
         flex: 0.7;
     }
+
     .input-container {
         width: 500px;
         background-color: white;
@@ -44,11 +36,13 @@
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
         height: auto;
     }
+
     .buttons{
         margin-top: 20px;
         display: flex;
         justify-content: space-between;
     }
+
     .AHP{
         display: flex;
         margin-top: 50px;
@@ -56,6 +50,7 @@
         justify-content: center;
         gap: 20px;
     }
+
     h2{
         font-size: 30px;
     }
@@ -65,7 +60,6 @@
         padding-top: 0.35rem;
         cursor: pointer;
 	}
-	
 	
 	:global(#tooltip) {
 		position: absolute;
@@ -91,4 +85,5 @@
 		background: inherit;
 		clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 	}
+    
 </style>

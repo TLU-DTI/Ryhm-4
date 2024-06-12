@@ -1,10 +1,6 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
-    import choicesIcon from '$lib/images/choices.svg';
-    import resultsIcon from '$lib/images/results.svg';
-    import groupsIcon from '$lib/images/groups.svg';
-    import { onMount } from 'svelte';
     import { tooltip } from "$lib/script/tooltip.js";
 
     let valikud: { title: string }[] = [
@@ -12,14 +8,13 @@
         { title: "valik 2" },
         { title: "valik 3" }
     ];
+
 function getTooltipContent() {
         return valikud.map(valik => valik.title).join(", ");
     }
+
 </script>
-<svelte:head>
-    <title>Sisesta kriteeriumid</title>
-    <meta name="description" content="Svelte demo app" />
-</svelte:head>
+
 <section class="container">
     <div class="input-container">
         <h2>Sisesta kriteeriumid, mida võrrelda:</h2>
@@ -35,12 +30,13 @@ function getTooltipContent() {
                 </div>
                 <div class="lisakriteerium">
                     <div class="lisakr"><p>Lisa kriteerium</p>
-                        <Button size="mini">+</Button></div> 
+                        <Button size="mini">+</Button>
+                    </div> 
                     <div class="lisaval">
                         <span use:tooltip="{getTooltipContent()}">Vaata lisatud valikuid</span>
                     </div>
-                    </div>
                 </div>
+            </div>
         </div>
         <br>
         <div class="buttons">
@@ -48,9 +44,10 @@ function getTooltipContent() {
             <br>
             <Button>Jätka</Button>
         </div>
-        </div>
+    </div>
           
 </section>
+
 <style>
     section.container {
         display: flex;
@@ -58,6 +55,7 @@ function getTooltipContent() {
         align-items: center;
         flex: 0.7;
     }
+
     .input-container {
         background-color: white;
         border-radius: 20px;
@@ -68,56 +66,68 @@ function getTooltipContent() {
         padding-bottom: 10px;
         height: auto;
     }
+
     .input-group {
         display: flex; /* sõna valik ja sisestusvälja jaoks */
         align-items: center; /* vertikaalne joondamine */
     }
+
     .input-group p {
         margin-right: 10px; /* lisab ruumi sõna valik ja sisestusvälja vahele */
         font-size: medium;
     }
+
     .buttons{
         margin-top: 20px;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
     }
+
     .input-container p{
         text-align: center;
         margin-right: 10px;
         font-size: 20px;
     }
+
     .inputs{
         display: flex;
         flex-direction: column;
         margin: 30px;
     }
+
     .kriteerium1{
         margin-bottom: 10px;
         display: flex;
         flex-direction: row;
     }
+
     .kriteerium2{
         display: flex;
         flex-direction: row;
         margin-top: 10px;
     }
+
     .lisakriteerium{
         margin-top: 20px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
     }
+
     h2{
         font-size: 30px;
     }
+
     .lisakriteerium p{
         font-size: 15px;
     }
+
     .lisakr{
         display: flex;
         gap: 10px;
     }
+    
     .lisaval{
         margin-right: 10px;
         color: rgb(194, 192, 192);
@@ -131,20 +141,19 @@ function getTooltipContent() {
 	}
 	
 	:global(#tooltip) {
-    position: absolute;
-    bottom: 100%;
-    right: 50%;
-    transform: translate(50%, 0);
-    color: black;
-    padding: 8px 12px;
-    background: #CFFFCB;
-    border-radius: 0.25rem;
-    filter: drop-shadow(0 1px 2px hsla(0, 0%, 0%, 0.2));
-    width: 150px;
-    text-align: center; /* Center align the text */
-}
+        position: absolute;
+        bottom: 100%;
+        right: 50%;
+        transform: translate(50%, 0);
+        color: black;
+        padding: 8px 12px;
+        background: #CFFFCB;
+        border-radius: 0.25rem;
+        filter: drop-shadow(0 1px 2px hsla(0, 0%, 0%, 0.2));
+        width: 150px;
+        text-align: center;
+    }
 
-	
 	:global(.tooltip:not(:focus) #tooltip::before) {
 		content: '';
 		position: absolute;
@@ -156,4 +165,5 @@ function getTooltipContent() {
 		background: inherit;
 		clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 	}
+    
 </style>
