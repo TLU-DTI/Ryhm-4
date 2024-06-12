@@ -12,10 +12,10 @@
 
 		<div class="rectangle-right"> 
 			<div class="login-input">
-				<Input placeholder="Email"></Input>
+				<Input placeholder="E-mail"></Input>
 				<Input placeholder="Parool"></Input>
 				<div class="forgot-password">
-					<a href="#">Unustasid salasõna?</a>
+					<p>Unustasid salasõna?</p>
 				</div>
 			</div>
 
@@ -76,20 +76,14 @@
 
 	.forgot-password {
 		margin-top: -20px;
-	}
-
-	.forgot-password a {
-		text-decoration: none;
+		text-decoration: underline;
 		font-size: 14px;
+		color: rgb(194, 192, 192); 
 	}
 
-	.forgot-password a:hover {
-        color: darkgreen;    
-    }
-
-	.forgot-password a:visited {
-        color: black;    
-    }
+	.forgot-password:hover {
+		color: darkgreen;  
+	}
 
 	.reg-login {
 		display: flex;
