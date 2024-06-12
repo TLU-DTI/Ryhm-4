@@ -37,10 +37,6 @@
         justify-content: space-between;
     }
 
-    button:hover {
-        transform: translate(-2px, -2px);
-    }
-
     button:active {
         transform: translate(2px, 2px);
     }
@@ -50,23 +46,29 @@
         pointer-events: none;
     }
 
-   
-    @media screen and (min-width: 720px) {
-        .size-small {
-            font-size: 14px;
-            padding: 8px 12px;
-        }
-
-        .size-medium {
-            font-size: 16px;
-            padding: 12px 20px;
-        }
-
-        .size-large {
-            font-size: 20px;
-            padding: 16px 20px;
-        }
+    .size-small {
+        font-size: 14px;
+        padding: 8px 12px;
     }
+
+    .size-medium {
+        font-size: 16px;
+        padding: 12px 20px;
+    }
+
+    .size-large {
+        font-size: 20px;
+        padding: 16px 20px;
+    }
+
+    .size-mini {
+        font-size: 14px;
+        padding: 8px;
+        min-width: 36px;
+        max-width: 40px;
+        min-height: 36px;
+    }
+
 </style>
 
 <button class="style-{style} size-{size}" {disabled} {type} on:click>
