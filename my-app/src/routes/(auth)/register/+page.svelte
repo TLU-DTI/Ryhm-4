@@ -7,13 +7,14 @@
 <section class="center-container">
 	<div class="rectangle"> 
 		<div class="reg-input">
+			<h1>Kasutaja registreerimine</h1>
 			<Input placeholder="Nimi"></Input>
 			<Input placeholder="E-mail"></Input>
 			<Input placeholder="Parool"></Input>
 			<Input placeholder="Korda parooli"></Input>
 
 			<div class="already-user">
-				<a href="#">Kasutaja juba olemas?</a>
+				<p>Kasutaja juba olemas?</p>
 			</div>
 		</div>
 
@@ -38,18 +39,18 @@
 		align-items: center;
 		justify-content: center;
 		width: 700px; 
-		height: 600px; 
+		height: 640px; 
 		background: white; 
 		box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
 		border-radius: 38px;
-		padding: 40px 20px; 
+		padding: 40px 10px; 
 		box-sizing: border-box; 
 	}
 
 	.reg-input {
 		display: flex;
 		flex-direction: column;
-		gap: 30px; 
+		gap: 25px; 
 		width: 100%; 
 		align-items: center; 
 	}
@@ -65,17 +66,9 @@
 		margin-top: -20px;
 	}
 
-	.already-user a {
-		text-decoration: none;
+	.already-user p {
+		text-decoration: underline;
 		font-size: 14px;
-		color: black;
+		color: rgb(194, 192, 192);
 	}
-
-	.already-user a:hover {
-        color: rgb(100, 0, 40);    
-    }
-
-	.already-user a:visited {
-        color: black;    
-    }
 </style>
