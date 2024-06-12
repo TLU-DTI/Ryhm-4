@@ -9,12 +9,12 @@
 
 </script>
 <svelte:head>
-    <title>Home</title>
+    <title>Otsusemudel Tasuline</title>
     <meta name="description" content="Svelte demo app" />
 </svelte:head>
 <section class="container">
     <div class="input-container">
-        <p>Vali otsuse mudel</p>
+        <h2>Vali otsuse mudel:</h2>
             <br>
             <div class="AHP">
                 <Button style="secondary">Analüütiline hierarhia mudel</Button>
@@ -57,7 +57,9 @@
         margin-bottom: 90px;
         justify-content: center;
         gap: 20px;
-        
+    }
+    h2{
+        font-size: 30px;
     }
 
 </style>

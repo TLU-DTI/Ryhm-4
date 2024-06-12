@@ -1,44 +1,41 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
-    import { page } from "$app/stores";
-
-    let code = $page.url.searchParams.get("code");
-
+    import choicesIcon from '$lib/images/choices.svg';
+    import resultsIcon from '$lib/images/results.svg';
+    import groupsIcon from '$lib/images/groups.svg';
+    import { onMount } from 'svelte';
 
 </script>
 <svelte:head>
-    <title>Home</title>
+    <title>Sisesta kriteeriumid</title>
     <meta name="description" content="Svelte demo app" />
 </svelte:head>
 <section class="container">
-    <div class="button-container">
-            <h2>Millist valikut sa eelistad, kui kriteeriumiks on:</h2>
-        <div class="all-container">
-            <div class="container2">
-                {#if code === "0"}
-                <div class="text"><h3>Mugavus</h3></div>
-                {:else}
-                    {#if code === "1"}
-                        <div class="text"><h3>Värv</h3></div>
-                    {/if}
-                    {#if code === "2"}
-                    <div class="text"><h3> Hind</h3></div>
-                    {/if}
-                    {#if code === ""}
-                    <div class="error-alert">Error!</div>
-                    {/if}
-                {/if}
-            </div>
-                <br>
-                <div class="obj-button">
-                    <Button>1. Valik</Button>
-                    <Button>2. Valik</Button>
+    <div class="input-container">
+        <h2>Sisesta kriteeriumid, mida võrrelda:</h2>
+        <div class="input-group">
+            <div class="inputs">
+                <div class="kriteerium1">
+                    <p>1. Kriteerium:</p>
+                    <Input placeholder=""></Input> 
+                </div>
+                <div class="kriteerium2">
+                    <p>2. kriteerium:</p>
+                    <Input placeholder=""></Input> 
+                </div>
+                <div class="lisakriteerium">
+                    <div class="lisakr"><p>Lisa kriteerium</p>
+                        <Button size="small">+</Button></div> 
+                    <div class="lisaval">
+                    <p>Vaata lisatud valikuid</p>
+                    </div>
                 </div>
         </div>
-    
+        </div>
+            <br>
             <div class="buttons">
-                <Button>Tagasi</Button>
+                <Button style="secondary">Tagasi</Button>
                 <br>
                 <Button>Jätka</Button>
             </div>
@@ -51,67 +48,70 @@
         align-items: center;
         flex: 0.7;
     }
-    .button-container {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .input-container {
         background-color: white;
         border-radius: 20px;
-        padding: 40px;
+         padding: 40px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
+        display: flex;
+        flex-direction: column
+        ;
+    }
+    .input-group {
+        display: flex; /* sõna valik ja sisestusvälja jaoks */
+        align-items: center; /* vertikaalne joondamine */
+    }
+    .input-group p {
+        margin-right: 10px; /* lisab ruumi sõna valik ja sisestusvälja vahele */
+        font-size: medium;
     }
     .buttons{
-        width: 100%;
         margin-top: 20px;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
-    }       
-
-    .container2 {
-        width: 180px;
-        height: 56px;
-        background: #F2F1E7;
-        border-radius: 40px;
+    }
+    .input-container p{
+        text-align: center;
+        margin-right: 10px;
+        font-size: 20px;
+    }
+    .inputs{
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-left: 100px;
+        margin: 30px;
+    }
+    .kriteerium1{
+        margin-bottom: 10px;
         display: flex;
-        margin-bottom: 20px;
-        font-weight: 800;
+        flex-direction: row;
     }
-.obj-button{
-    width: 100%;
-    margin-top: 40px;
-    margin-bottom: 60px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
-}
-
-.error-alert {
-    text-align: center;
-    color: black;
-    font-size: 30px;
+    .kriteerium2{
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+    }
+    .lisakriteerium{
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    h2{
+        font-size: 30px;
+    }
+    .lisakriteerium p{
+        font-size: 15px;
+    }
+    .lisakr{
+        display: flex;
+        gap: 10px;
+    }
+    .lisaval{
+        margin-right: 10px;
+        color: rgb(194, 192, 192);
+        text-decoration: underline;
     }
 
-.all-container{
-    width: 400px;
-    height: 300px;
-    padding: 20px;
-    padding-bottom: 10px;
-    margin-bottom: 30px;
-    background: white;
-    border-radius: 40px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-}
-h3{
-    font-size: 26px;
-    text-align: center;
-    font-weight: 200;
-}
+
 </style>

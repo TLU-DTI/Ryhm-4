@@ -8,7 +8,7 @@
 
 </script>
 <svelte:head>
-    <title>Home</title>
+    <title>Sisesta objektid</title>
     <meta name="description" content="Svelte demo app" />
 </svelte:head>
 <section class="container">
@@ -93,4 +93,15 @@
         display: flex;
         flex-direction: row;
     }
+    h2{
+        font-size: 30px;
+    }
+    .lisavalik p{
+        font-size: 15px;
+    }
 </style>
+
+
+
+
+   

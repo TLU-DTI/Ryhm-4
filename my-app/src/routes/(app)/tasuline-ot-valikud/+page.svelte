@@ -9,12 +9,12 @@
 
 </script>
 <svelte:head>
-    <title>Home</title>
+    <title>Otsuse Nimi Tasuline</title>
     <meta name="description" content="Svelte demo app" />
 </svelte:head>
 <section class="container">
     <div class="input-container">
-        <p>Anna oma otsusele nimi</p>
+        <h2>Anna oma otsusele nimi:</h2>
             <div class="input-name">
                 <Input placeholder="Nimi"></Input> 
             </div>
@@ -52,6 +52,9 @@
         margin-top: 20px;
         display: flex;
         justify-content: space-between;
+    }
+    h2{
+        font-size: 30px;
     }
 
 </style>

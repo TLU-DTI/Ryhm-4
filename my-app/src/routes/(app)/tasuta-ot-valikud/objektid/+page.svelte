@@ -5,7 +5,7 @@
 
 <section class="container">
     <div class="input-container">
-        <p>Sisesta objektid, mille vahel soovid valida</p>
+        <h2>Sisesta objektid, mille vahel soovid valida:</h2>
         <div class="input-group">
             <div class="inputs">
                 <div class="valik1">
@@ -75,5 +75,8 @@
         display: flex;
         flex-direction: row;
         margin-top: 10px;
+    }
+    h2{
+        font-size: 30px;
     }
 </style>

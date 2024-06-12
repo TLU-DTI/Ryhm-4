@@ -1,44 +1,54 @@
-<script>
+<script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
     import { page } from "$app/stores";
+    import { onMount } from 'svelte';
+    import { get } from 'svelte/store';
+    let code: number | null = null
 
-    let code = $page.url.searchParams.get("code");
+onMount(() => {
+    const urlCode = get(page).url.searchParams.get("code");
+    if (urlCode) {
+        code = parseInt(urlCode, 10);
+    }
+});
 
+let valikud: { title: string }[] = [
+    { title: "valik 1" },
+    { title: "valik 2" },
+    { title: "valik 3" }
+];
 
+let kriteeriumid: { title: string, lk: number }[] = [
+    { title: "kriteerium1", lk: 1 },
+    { title: "kriteerium2", lk: 2 },
+    { title: "kriteerium3", lk: 3 }
+];
 </script>
 <svelte:head>
-    <title>Home</title>
+    <title>Vali kriteeriumid</title>
     <meta name="description" content="Svelte demo app" />
 </svelte:head>
 <section class="container">
     <div class="button-container">
             <h2>Millist valikut sa eelistad, kui kriteeriumiks on:</h2>
+            <br>
         <div class="all-container">
             <div class="container2">
-                {#if code === "0"}
-                <div class="text"><h3>Mugavus</h3></div>
-                {:else}
-                    {#if code === "1"}
-                        <div class="text"><h3>Värv</h3></div>
+                {#each kriteeriumid as kriteerium }
+                    {#if code === kriteerium.lk}
+                        <div class="text"><h3>{kriteerium.title}</h3></div>
                     {/if}
-                    {#if code === "2"}
-                    <div class="text"><h3> Hind</h3></div>
-                    {/if}
-                    {#if code === ""}
-                    <div class="error-alert">Error!</div>
-                    {/if}
-                {/if}
-            </div>
+                {/each}
                 <br>
-                <div class="obj-button">
-                    <Button>1. Valik</Button>
-                    <Button>2. Valik</Button>
-                </div>
         </div>
-    
+        <div class="button-group">
+            {#each valikud as valik }
+            <Button>{valik.title}</Button>
+            {/each}
+        </div>
             <div class="buttons">
-                <Button>Tagasi</Button>
+                <Button style="secondary">Tagasi</Button>
                 <br>
                 <Button>Jätka</Button>
             </div>
@@ -83,27 +93,15 @@
         margin-bottom: 20px;
         font-weight: 800;
     }
-.obj-button{
-    width: 100%;
-    margin-top: 40px;
-    margin-bottom: 60px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
-}
-
-.error-alert {
-    text-align: center;
-    color: black;
-    font-size: 30px;
+    .container2{
+        padding-top: 20px;
     }
 
 .all-container{
     width: 400px;
     height: 300px;
     padding: 20px;
-    padding-bottom: 10px;
+    padding-bottom: 40px;
     margin-bottom: 30px;
     background: white;
     border-radius: 40px;
@@ -113,5 +111,12 @@ h3{
     font-size: 26px;
     text-align: center;
     font-weight: 200;
+}
+.button-group{
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
 }
 </style>
