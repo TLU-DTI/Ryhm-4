@@ -26,13 +26,13 @@
                 </div>
                 <div class="lisavalik">
                     <p>Lisa veel valikuid</p>
-                    <Button size="small">+</Button>
+                    <Button size="mini">+</Button>
                 </div>
         </div>
         </div>
             <br>
             <div class="buttons">
-                <Button style="secondary" size="large">Tagasi</Button>
+                <Button style="secondary">Tagasi</Button>
                 <br>
                 <Button>Jätka</Button>
             </div>
@@ -48,11 +48,11 @@
     .input-container {
         background-color: white;
         border-radius: 20px;
-         padding: 40px;
+        height: auto;
+        padding: 40px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
         display: flex;
-        flex-direction: column
-        ;
+        flex-direction: column;
     }
     .input-group {
         display: flex; /* sõna valik ja sisestusvälja jaoks */

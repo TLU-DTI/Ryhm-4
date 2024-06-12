@@ -36,13 +36,8 @@
         background-color: white;
         border-radius: 20px;
         padding: 50px;
+        height: auto;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
-    }
-
-    .input-container p{
-        text-align: center;
-        margin-right: 10px;
-        font-size: 25px;
     }
     .input-name {
         display: flex; /* sõna valik ja sisestusvälja jaoks */

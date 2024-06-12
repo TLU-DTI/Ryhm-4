@@ -14,6 +14,7 @@ onMount(() => {
 });
 
 let valikud: { title: string }[] = [
+    { title: "Võrdne eelistus" },
     { title: "valik 1" },
     { title: "valik 2" },
     { title: "valik 3" }
@@ -77,6 +78,7 @@ let kriteeriumid: { title: string, lk: number }[] = [
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
+        padding-top: 20px;
     }       
 
     .container2 {
@@ -90,25 +92,22 @@ let kriteeriumid: { title: string, lk: number }[] = [
         align-items: center;
         margin-left: 100px;
         display: flex;
-        margin-bottom: 20px;
-        font-weight: 800;
-    }
-    .container2{
-        padding-top: 20px;
+        padding-top: 18px;
     }
 
 .all-container{
     width: 400px;
-    height: 300px;
-    padding: 20px;
-    padding-bottom: 40px;
+    height: auto;
+    padding: 40px;
+    padding-bottom: 10px;
+    height: 100%;
     margin-bottom: 30px;
     background: white;
     border-radius: 40px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
 }
 h3{
-    font-size: 26px;
+    font-size: 20px;
     text-align: center;
     font-weight: 200;
 }
@@ -119,4 +118,7 @@ h3{
     gap: 10px;
     
 }
+h2{
+    font-size: 30px;
+    }
 </style>

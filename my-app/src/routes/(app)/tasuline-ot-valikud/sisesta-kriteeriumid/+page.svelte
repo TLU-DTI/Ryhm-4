@@ -1,11 +1,20 @@
-<script>
+<script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
     import choicesIcon from '$lib/images/choices.svg';
     import resultsIcon from '$lib/images/results.svg';
     import groupsIcon from '$lib/images/groups.svg';
     import { onMount } from 'svelte';
+    import { tooltip } from "$lib/script/tooltip.js";
 
+    let valikud: { title: string }[] = [
+        { title: "valik 1" },
+        { title: "valik 2" },
+        { title: "valik 3" }
+    ];
+function getTooltipContent() {
+        return valikud.map(valik => valik.title).join(", ");
+    }
 </script>
 <svelte:head>
     <title>Sisesta kriteeriumid</title>
@@ -17,7 +26,7 @@
         <div class="input-group">
             <div class="inputs">
                 <div class="kriteerium1">
-                    <p>1. Kriteerium:</p>
+                    <p>1. kriteerium:</p>
                     <Input placeholder=""></Input> 
                 </div>
                 <div class="kriteerium2">
@@ -26,20 +35,21 @@
                 </div>
                 <div class="lisakriteerium">
                     <div class="lisakr"><p>Lisa kriteerium</p>
-                        <Button size="small">+</Button></div> 
+                        <Button size="mini">+</Button></div> 
                     <div class="lisaval">
-                    <p>Vaata lisatud valikuid</p>
+                        <span use:tooltip="{getTooltipContent()}">Vaata lisatud valikuid</span>
+                    </div>
                     </div>
                 </div>
         </div>
-        </div>
+        <br>
+        <div class="buttons">
+            <Button style="secondary">Tagasi</Button>
             <br>
-            <div class="buttons">
-                <Button style="secondary">Tagasi</Button>
-                <br>
-                <Button>Jätka</Button>
-            </div>
-    </div>
+            <Button>Jätka</Button>
+        </div>
+        </div>
+          
 </section>
 <style>
     section.container {
@@ -51,11 +61,12 @@
     .input-container {
         background-color: white;
         border-radius: 20px;
-         padding: 40px;
+        padding: 50px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
         display: flex;
-        flex-direction: column
-        ;
+        flex-direction: column;
+        padding-bottom: 10px;
+        height: auto;
     }
     .input-group {
         display: flex; /* sõna valik ja sisestusvälja jaoks */
@@ -113,5 +124,36 @@
         text-decoration: underline;
     }
 
+    :global(.tooltip) {
+        position: relative;
+        padding-top: 0.35rem;
+        cursor: pointer;
+	}
+	
+	:global(#tooltip) {
+    position: absolute;
+    bottom: 100%;
+    right: 50%;
+    transform: translate(50%, 0);
+    color: black;
+    padding: 8px 12px;
+    background: #CFFFCB;
+    border-radius: 0.25rem;
+    filter: drop-shadow(0 1px 2px hsla(0, 0%, 0%, 0.2));
+    width: 150px;
+    text-align: center; /* Center align the text */
+}
 
+	
+	:global(.tooltip:not(:focus) #tooltip::before) {
+		content: '';
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 0.6em;
+		height: 0.25em;
+		background: inherit;
+		clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+	}
 </style>
