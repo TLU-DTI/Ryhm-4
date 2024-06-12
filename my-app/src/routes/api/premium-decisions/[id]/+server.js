@@ -2,21 +2,26 @@ import { supabase } from '$lib/supabaseClient';
 
 export async function GET({ params }) {
   const { id } = params;
-  let { data, error } = await supabase
+  console.log('Fetching data for ID:', id);  // Debug log
+
+  const { data, error } = await supabase
     .from('premium_decisions')
     .select('*')
     .eq('id', id)
     .single();
 
   if (error) {
-    return {
+    console.error('Error fetching data:', error.message);
+    return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
-      body: { error: error.message }
-    };
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
-  return {
+  console.log('Fetched data:', data);  // Debug log
+
+  return new Response(JSON.stringify(data), {
     status: 200,
-    body: data
-  };
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
