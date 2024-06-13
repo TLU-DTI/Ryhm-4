@@ -71,11 +71,13 @@
         flex-direction: column;
         padding-bottom: 10px;
         height: auto;
+        gap: 8px;
     }
 
     .input-group {
         display: flex; /* sõna valik ja sisestusvälja jaoks */
         align-items: center; /* vertikaalne joondamine */
+        gap: 20px;
     }
 
     .input-group p {
@@ -131,6 +133,7 @@
 		background: inherit;
 		clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 	}
+    
     .lisakriteerium{
         margin-top: 20px;
         display: flex;
