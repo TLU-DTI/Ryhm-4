@@ -1,8 +1,14 @@
 <script lang="ts">
+    import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
+
+
     export let type: "text" | "password" | "email" = "text";
     export let disabled = false;
     export let value = "";
+    export let name = "";
     export let placeholder: string;
+
+    
 </script>
 
 <style>
@@ -45,9 +51,11 @@
 </style>
 
 {#if type === "password"}
-    <input {placeholder} {disabled} bind:value type="password" />
+    <input {placeholder} {disabled} {name} use:validators={[required]} bind:value type="password" />
 {:else if type === "email"}
-    <input {placeholder} {disabled} bind:value type="email" />
-{:else}
-    <input {placeholder} {disabled} bind:value type="text" />
+    <input {placeholder} {disabled} {name} use:validators={[required, email]} bind:value type="email" />
+{:else if type === "password"}
+    <input {placeholder} {disabled} {name} use:validators={[required]} bind:value type="email" />
+{:else }
+    <input {placeholder} {disabled} {name} use:validators={[required]} bind:value type="text" />
 {/if}
