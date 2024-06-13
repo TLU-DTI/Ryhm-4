@@ -13,10 +13,12 @@
 
   let choices: string[] = [];
   let criteria: string[] = [];
+  let criteriaMatrix: number[][] = [];
+  let criteriaWeights: number[] = [];
   let pairwiseMatrices: number[][][] = [];
-  let combinedMatrix: number[][] = [];
   let scores: number[] = [];
   let percentages: number[] = [];
+  let criteriaPercentages: number[] = [];
 
   $: if (data) {
     if (data.error) {
@@ -25,14 +27,41 @@
       console.log('Data received as prop:', data);
       choices = Array.isArray(data.choices) ? data.choices : [];
       criteria = Array.isArray(data.criteria) ? data.criteria : [];
+      criteriaMatrix = Array(criteria.length).fill(null).map(() => Array(criteria.length).fill(3)); // Initialize with 3 for indifference
       pairwiseMatrices = criteria.map(() =>
         Array(choices.length).fill(null).map(() => Array(choices.length).fill(3))
       ); // Initialize with 3 for indifference
-      combinedMatrix = Array(choices.length).fill(null).map(() => Array(choices.length).fill(3));
-      calculateScores();
+      calculateCriteriaWeights();
     }
   } else {
     console.error('Data is null or undefined');
+  }
+
+  function updateCriteriaMatrix(i: number, j: number, value: number): void {
+    criteriaMatrix[i][j] = 6 - value;
+    criteriaMatrix[j][i] = value; // Correct reciprocal logic
+    calculateCriteriaWeights();
+  }
+
+  function calculateCriteriaWeights(): void {
+    if (criteria.length) {
+      let sumCols = criteriaMatrix[0].map((_, colIndex) =>
+        criteriaMatrix.reduce((sum, row) => sum + row[colIndex], 0)
+      );
+      let normalizedMatrix = criteriaMatrix.map(row =>
+        row.map((cell, colIndex) => cell / sumCols[colIndex])
+      );
+      criteriaWeights = normalizedMatrix.map(row =>
+        row.reduce((sum, cell) => sum + cell, 0) / row.length
+      );
+      // Normalize criteria weights to percentages
+      const totalCriteriaWeight = criteriaWeights.reduce((sum, weight) => sum + weight, 0);
+      criteriaPercentages = criteriaWeights.map(weight => (weight / totalCriteriaWeight) * 100);
+      calculateScores();
+    } else {
+      criteriaWeights = [];
+      criteriaPercentages = [];
+    }
   }
 
   function updateMatrix(criteriaIndex: number, i: number, j: number, value: number): void {
@@ -43,6 +72,7 @@
 
   function calculateScores(): void {
     if (criteria.length && choices.length) {
+      // Calculate scores for each criterion
       let criteriaScores = criteria.map((_, criteriaIndex) => {
         let sumCols = pairwiseMatrices[criteriaIndex][0].map((_, colIndex) =>
           pairwiseMatrices[criteriaIndex].reduce((sum, row) => sum + row[colIndex], 0)
@@ -55,30 +85,22 @@
         );
       });
 
+      // Calculate final scores by weighting each criterion score with the criteria weights
       scores = choices.map((_, altIndex) => {
-        return criteriaScores.reduce((sum, criteriaScore) => sum + criteriaScore[altIndex], 0) / criteria.length;
+        return criteriaScores.reduce((sum, criteriaScore, criteriaIndex) => sum + criteriaScore[altIndex] * criteriaWeights[criteriaIndex], 0);
       });
-
-      // Calculate combined pairwise matrix
-      combinedMatrix = Array(choices.length).fill(null).map(() => Array(choices.length).fill(0));
-      for (let i = 0; i < choices.length; i++) {
-        for (let j = 0; j < choices.length; j++) {
-          combinedMatrix[i][j] = criteria.reduce((sum, _, criteriaIndex) => sum + pairwiseMatrices[criteriaIndex][i][j], 0) / criteria.length;
-        }
-      }
 
       // Normalize scores to percentages
       const totalScore = scores.reduce((sum, score) => sum + score, 0);
       percentages = scores.map(score => (score / totalScore) * 100);
     } else {
       scores = [];
-      combinedMatrix = [];
       percentages = [];
     }
   }
 
   onMount(() => {
-    calculateScores();
+    calculateCriteriaWeights();
   });
 </script>
 
@@ -105,6 +127,29 @@
 </style>
 
 <div class="container">
+  <h1>AHP Car Selection - Criteria Comparison</h1>
+
+  {#if criteria.length}
+    <div class="comparison">
+      {#each criteria as crit1, i}
+        {#each criteria.slice(i + 1) as crit2, j}
+          <div class="radio-group">
+            <span>{crit1}</span>
+            {#each [1, 2, 3, 4, 5] as value}
+              <label>
+                <input type="radio" name={`criteria-${i}-${i + j + 1}`} value={value} on:change={(e) => updateCriteriaMatrix(i, i + j + 1, parseFloat(e.target.value))} checked={criteriaMatrix[i][i + j + 1] === 6 - value} />
+                {value}
+              </label>
+            {/each}
+            <span>{crit2}</span>
+          </div>
+        {/each}
+      {/each}
+    </div>
+  {:else}
+    <p>Loading criteria...</p>
+  {/if}
+
   <h1>AHP Car Selection - Multiple Criteria</h1>
 
   {#if criteria.length && choices.length}
@@ -128,30 +173,6 @@
       </div>
     {/each}
 
-    <h2>Combined Pairwise Matrix</h2>
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          {#each choices as alt}
-            <th>{alt}</th>
-          {/each}
-        </tr>
-      </thead>
-      <tbody>
-        {#each choices as alt1, i}
-          <tr>
-            <td>{alt1}</td>
-            {#each choices as alt2, j}
-              <td>
-                {combinedMatrix[i][j].toFixed(2)}
-              </td>
-            {/each}
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-
     <h2>Results</h2>
     <table>
       <thead>
@@ -172,4 +193,22 @@
   {:else}
     <p>Loading data or no criteria/choices available.</p>
   {/if}
+
+  <h2>Criteria Weights</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Criteria</th>
+        <th>Weight (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each criteria as crit, index}
+        <tr>
+          <td>{crit}</td>
+          <td>{#if criteriaPercentages[index] !== undefined}{criteriaPercentages[index].toFixed(2)}%{:else}N/A{/if}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
 </div>
