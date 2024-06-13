@@ -1,10 +1,7 @@
 <script>
     import Button from "$lib/components/Button.svelte";
-    import Input from "$lib/components/Input.svelte";
-    import choicesIcon from '$lib/images/choices.svg';
-    import resultsIcon from '$lib/images/results.svg';
-    import groupsIcon from '$lib/images/groups.svg';
-    import { onMount } from 'svelte';
+    import Input from "$lib/components/Input.svelte"    
+    import { goto } from "$app/navigation";
     
 
 </script>
@@ -20,8 +17,8 @@
             </div>
             <br>
         <div class="buttons">
-                <Button>Tagasi</Button>
-                <Button>Jätka</Button>
+            <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi</Button>
+            <Button on:click={() => goto("/tasuta-ot-valikud/valikud")} on:keydown>Jätka</Button>
         </div>
     </div>
 </section>

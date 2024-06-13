@@ -1,7 +1,7 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import { page } from "$app/stores";
-
+    import { goto } from "$app/navigation";
     let code = $page.url.searchParams.get("code");
 </script>
 
@@ -32,9 +32,8 @@
         </div>
 
             <div class="buttons">
-                <Button style="secondary">Tagasi</Button>
-                <br>
-                <Button>Jätka</Button>
+                <Button style="secondary" on:click={() => goto("/tasuta-ot-valikud/valikud")} on:keydown>Tagasi</Button>
+                <Button on:click={() => goto("/")} on:keydown>Jätka</Button>
             </div>
     </div>
 </section>

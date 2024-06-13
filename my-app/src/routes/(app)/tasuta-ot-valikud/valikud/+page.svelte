@@ -1,6 +1,7 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
+    import { goto } from "$app/navigation";
 </script>
 
 <section class="container">
@@ -20,9 +21,8 @@
         </div>
         <br>
         <div class="buttons">
-            <Button style="secondary">Tagasi</Button>
-            <br>
-            <Button>Jätka</Button>
+            <Button style="secondary" on:click={() => goto("/tasuta-ot-valikud")} on:keydown>Tagasi</Button>
+            <Button on:click={() => goto("/tasuta-ot-valikud/kriteeriumid")} on:keydown>Jätka</Button>
         </div>
     </div>
 </section>
