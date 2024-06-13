@@ -60,8 +60,7 @@
         background: #CFFFCB;
     }
 
-    .menu-item:hover,
-    .menu-item.active {
+    .menu-item:hover {
         background: #CFFFCB;
         cursor: pointer;
     }
@@ -79,10 +78,12 @@
 
     .toggle-button.closed{
         left: 20px;
+        position: fixed;
     }
 
     .toggle-button.open {
         left: 260px;
+        position: fixed;
     }
 </style>
 
