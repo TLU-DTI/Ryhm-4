@@ -7,8 +7,11 @@
     import premiumIcon from '$lib/images/premium.svg';
     import logoutIcon from '$lib/images/logout.svg';
 	import { sat_user_id } from '../../store.js';
+    import { onMount } from 'svelte';
 
     let isOpen = true;
+    let loading = true;  // State to track loading status
+    let currentUserId = null;
 
     function toggleMenu() {
         isOpen = !isOpen;
@@ -20,6 +23,17 @@
         // Redirect to the login page
         window.location.href = '/login';
     }
+
+    onMount(() => {
+        sat_user_id.subscribe(value => {
+            currentUserId = value;
+            if (currentUserId == null) {
+                window.location.href = "/login";
+            } else {
+                loading = false;  // Set loading to false if user is authenticated
+            }
+        });
+    });
 </script>
 
 <style>
@@ -94,41 +108,45 @@
     }
 </style>
 
-<div class="toggle-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu}>
-    {#if isOpen}
-        <span>&times;</span>
-    {:else}
-        <span>&#9776;</span>
-    {/if}
-</div>
+{#if loading}
+    <p></p>  <!-- Laeb -->
+{:else}
+    <div class="toggle-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu}>
+        {#if isOpen}
+            <span>&times;</span>
+        {:else}
+            <span>&#9776;</span>
+        {/if}
+    </div>
 
-<div class="container" class:open={isOpen}> 
-    <div class="logo">
-        <img src={logo} alt="logo"/>
-        <p>Desicion Maker</p>
+    <div class="container" class:open={isOpen}> 
+        <div class="logo">
+            <img src={logo} alt="logo"/>
+            <p>Decision Maker</p>
+        </div>
+        <div class="active-menu-item">
+            <img src={homeIcon} alt="Home icon" width="35px" height="35px"/>
+            <p>Peamenüü</p>
+        </div>
+        <div class="menu-item">
+            <img src={choicesIcon} alt="Choices icon" width="35px"/>
+            <p>Otsuste tegija</p>
+        </div>
+        <div class="menu-item">
+            <img src={resultsIcon} alt="Results icon" width="35px"/>
+            <p>Tulemused</p>
+        </div>
+        <div class="menu-item">
+            <img src={groupsIcon} alt="Groups icon" width="35px"/>
+            <p>Grupid</p>
+        </div>
+        <div class="menu-item">
+            <img src={premiumIcon} alt="Premium icon" width="35px"/>
+            <p>Osta tasuline</p>
+        </div>
+        <div class="menu-item" on:click={logout}>
+            <img src={logoutIcon} alt="Log Out" width="35px"/>
+            <p>Logi välja</p>
+        </div>
     </div>
-    <div class="active-menu-item">
-        <img src={homeIcon} alt="Home icon" width="35px" height="35px"/>
-        <p>Peamenüü</p>
-    </div>
-    <div class="menu-item">
-        <img src={choicesIcon} alt="Choices icon" width="35px"/>
-        <p>Otsuste tegija</p>
-    </div>
-    <div class="menu-item">
-        <img src={resultsIcon} alt="Results icon" width="35px"/>
-        <p>Tulemused</p>
-    </div>
-    <div class="menu-item">
-        <img src={groupsIcon} alt="Groups icon" width="35px"/>
-        <p>Grupid</p>
-    </div>
-    <div class="menu-item">
-        <img src={premiumIcon} alt="Premium icon" width="35px"/>
-        <p>Osta tasuline</p>
-    </div>
-    <div class="menu-item" on:click={logout}>
-        <img src={logoutIcon} alt="Log Out" width="35px"/>
-        <p>Logi välja</p>
-    </div>
-</div>
+{/if}

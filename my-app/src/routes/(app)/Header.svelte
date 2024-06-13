@@ -2,6 +2,8 @@
 	import { page } from '$app/stores';
 	import logo from '$lib/images/DMlogo.svg';
 	import github from '$lib/images/github.svg';
+	import { sat_user_id } from '../../store.js';
+    import { onMount } from 'svelte';
 
 	import { createEventDispatcher } from "svelte";
 
@@ -9,16 +11,34 @@
 
 	function openSideMenu() {
 		dispatch("toggleSideMenu");
-}
+	}
+
+	let loading = true;  // State to track loading status
+    let currentUserId = null;
+
+    onMount(() => {
+        sat_user_id.subscribe(value => {
+            currentUserId = value;
+            if (currentUserId == null) {
+                window.location.href = "/login";
+            } else {
+                loading = false;  // Set loading to false if user is authenticated
+            }
+        });
+    });
 </script>
 
-<header>
-	<div class="corner">
-		<a href="#sidemenu">
-			<img src={logo} alt="Logo"/>
-		</a>
-	</div>
-</header>
+{#if loading}
+    <p></p>  <!-- Laeb -->
+{:else}
+    <header>
+        <div class="corner">
+            <a href="#sidemenu">
+                <img src={logo} alt="Logo" />
+            </a>
+        </div>
+    </header>
+{/if}
 
 <style>
 	header {

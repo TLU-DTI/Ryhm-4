@@ -57,8 +57,8 @@
 			<h1>Võta juhtimine enda kätte – <br><i>Decision Maker</i>.<br> Sinu teejuht paremate valikuteni!</h1>
 		</div>
 
-	<form use:form on:submit={handleLogin}>
-		<div class="rectangle-right"> 
+	<form use:form on:submit={handleLogin} class="rectangle-right">
+		<div> 
 			<div class="login-input">
 				<Input type="email" name="email" placeholder="Email"></Input>
 				<HintGroup for="email">

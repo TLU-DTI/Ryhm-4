@@ -1,27 +1,86 @@
-<!-- src/routes/CreateGroup.svelte -->
 <script lang="ts">
     import '$lib/styles.css';
     import { supabase } from '$lib/supabaseClient';
     import { useForm, validators, HintGroup, Hint, required } from "svelte-use-form";
     import { writable } from 'svelte/store';
     import { sat_user_id } from '../../../store.js';
+    import { onMount } from 'svelte';
 
     const form = useForm();
-
-    console.log($sat_user_id);
+    let loading = true;
     let currentUserId: number | null;
-    sat_user_id.subscribe(value => {
-        currentUserId = value;
-    });  
+
+    function checkAuth() {
+        sat_user_id.subscribe(value => {
+            currentUserId = value;
+            if (currentUserId == null) {
+                window.location.href = "/login";
+            } else {
+                loading = false;
+            }
+        });
+    }
+
+    onMount(() => {
+        checkAuth();
+    });
+
+    function handleClick() {
+        window.location.href = "/otsuse-tegija";
+    }
+
+    function generateGroupCode(): string {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < 8; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
+    async function isGroupCodeUnique(code: string): Promise<boolean> {
+        const { data, error } = await supabase
+            .from('groups')
+            .select('id')
+            .eq('group_code', code)
+            .single();
+
+        if (error && error.code === 'PGRST116') {
+            // This means no data found, so the group code is unique
+            return true;
+        } else if (data) {
+            return false;
+        } else {
+            throw new Error(error.message);
+        }
+    }
+
+    type GroupData = {
+        group_name: string;
+        group_code: string;
+        leader: boolean;
+    };
 
     async function handleCreateGroup(event: SubmitEvent) {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
 
-        const data = {
+        const data: GroupData = {
             group_name: formData.get('group_name') as string,
-            group_code: 'abc123'  // Hardcoded group code for now
+            group_code: '',
+            leader: true
+            
         };
+
+        let groupCode: string;
+        while (true) {
+            groupCode = generateGroupCode();
+            if (await isGroupCodeUnique(groupCode)) {
+                break;
+            }
+        }
+
+        data.group_code = groupCode;
 
         try {
             const { data: groupData, error: groupError } = await supabase
@@ -46,7 +105,8 @@
                 .insert([
                     {
                         user_ID: currentUserId,
-                        group_ID: groupId
+                        group_ID: groupId,
+                        leader: data.leader
                     }
                 ]);
 
@@ -55,27 +115,29 @@
             }
 
             console.log('Group created and user added: ', groupData);
-            window.location.href = "/your-groups";//Muuda seda!
+            window.location.href = "/your-groups";
         } catch (error) {
             console.error('Error:', error);
         }
     }
 </script>
 
-<form use:form on:submit={handleCreateGroup}>
-    <h1>Create Group</h1>
+{#if loading}
+    <p></p>
+{:else}
+    <form use:form on:submit={handleCreateGroup}>
+        <h1>Create Group</h1>
 
-    <input type="text" name="group_name" placeholder="Group Name" use:validators={[required]} />
-    <Hint for="group_name" on="required">This is a mandatory field</Hint>
+        <input type="text" name="group_name" placeholder="Group Name" use:validators={[required]} />
+        <Hint for="group_name" on="required">This is a mandatory field</Hint>
 
-    <input type="text" name="group_code" placeholder="Group Code" value="abc123" readonly />
+        <button disabled={!$form.valid}>Create Group</button>
+    </form>
 
-    <button disabled={!$form.valid}>Create Group</button>
-</form>
-
-<pre>
-{JSON.stringify($form, null, " ")}
-</pre>
+    <pre>
+        {JSON.stringify($form, null, " ")}
+    </pre>
+{/if}
 
 <style>
     :global(.touched:invalid) {
