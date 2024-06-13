@@ -82,8 +82,6 @@
     function toggleMenu() {
         isOpen = !isOpen;
     }
-
-   
 </script>
 
 <style>
@@ -110,7 +108,6 @@
     .container.open {
         display: flex;
     }
-
 
     button {
         display: flex;
@@ -178,8 +175,6 @@
             <img src={logo} alt="logo"/>
             <p>Desicion Maker</p>
         </div>
-       
-        
 
         {#each buttons as button}
             <button class="menu-item {isActive(button.route) ? 'active' : ''} {clickedButtons[button.id] ? 'clicked' : ''}" on:click={() => handleClick(button.id, button.route)}>
