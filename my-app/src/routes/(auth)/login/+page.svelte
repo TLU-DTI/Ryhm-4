@@ -6,6 +6,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
 	import { sat_user_id } from '../../../store.js';
+	import { tooltip } from "$lib/script/tooltip.js";
 
 	console.log($sat_user_id);
 
@@ -60,16 +61,22 @@
 	<div class="rectangle-right">
 		<form use:form on:submit={handleLogin}>
 			<div class="login-input">
+				<div class="input-container mandatory">
+					<Input type="email" name="email" placeholder="E-mail"></Input>
+					<Hint for="email" on="required">*</Hint>
+					<HintGroup for="email">
+						<div class="email-hint">
+							<Hint on="email" hideWhenRequired><span use:tooltip={"E-mail ei ole korrektne!"}>*</span></Hint>
+						</div>
+					</HintGroup>
+				</div>
 
-				<Input type="email" name="email" placeholder="E-mail"></Input>
-				<HintGroup for="email">
-					<Hint on="required">This is a mandatory field</Hint>
-					<Hint on="email" hideWhenRequired>Email is not valid</Hint>
-				</HintGroup>
-
-				<Input type="password" name="password" placeholder="Password"></Input>
-				<Hint for="password" on="required">This is a mandatory field</Hint>
+				<div class="input-container mandatory">
+					<Input type="password" name="password" placeholder="Password"></Input>
+					<Hint for="password" on="required">*</Hint>
+				</div>
 			</div>
+			
 		</form>
 
 		<div class="forgot-password">
@@ -130,6 +137,18 @@
 		gap: 40px;
 	}
 
+	.input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 10px;
+	}
+
+	.mandatory {
+    color: red;
+    gap: 5px;
+	}
+
 	.forgot-password p {
 		margin-top: 20px;
 		text-decoration: underline;
@@ -137,7 +156,7 @@
 		color: rgb(194, 192, 192); 
 	}
 
-	.forgot-password:hover {
+	.forgot-password p:hover {
 		color: darkgreen;  
 	}
 
@@ -146,5 +165,37 @@
 		justify-content: center;
 		gap: 210px;
 		margin-top: 50px;
+	}
+
+	:global(.tooltip) {
+        white-space: nowrap;
+        position: relative;
+        padding-top: 0.35rem;
+        cursor: pointer;
+	}
+	
+	:global(#tooltip) {
+		position: absolute;
+		bottom: 100%;
+		right: 0.78rem;
+		transform: translate(50%, 0);
+		padding: 0.2rem 0.35rem;
+		background: #CFFFCB;
+		border-radius: 0.25rem;
+		filter: drop-shadow(0 1px 2px hsla(0, 0%, 0%, 0.2));
+		width: max-content;
+        padding: 8px 12px;
+	}
+	
+	:global(.tooltip:not(:focus) #tooltip::before) {
+		content: '';
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 0.6em;
+		height: 0.25em;
+		background: inherit;
+		clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 	}
 </style>
