@@ -1,10 +1,7 @@
-
 <script lang="ts">
 	import '$lib/auth_style.css';
 	import Input from "$lib/components/Input.svelte";
 	import Button from "$lib/components/Button.svelte";
-
-	import '$lib/styles.css';
 	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
 	import { sat_user_id } from '../../../store.js';
@@ -152,18 +149,3 @@
 		margin-top: 50px;
 	}
 </style>
-
-<form use:form on:submit={handleLogin}>
-	<h1>Login</h1>
-  
-	<input type="email" name="email" placeholder="Email" use:validators={[required, email]} />
-	<HintGroup for="email">
-		<Hint on="required">This is a mandatory field</Hint>
-		<Hint on="email" hideWhenRequired>Email is not valid</Hint>
-	</HintGroup>
-  
-	<input type="password" name="password" placeholder="Password" use:validators={[required]} />
-	<Hint for="password" on="required">This is a mandatory field</Hint>
-  
-	<button disabled={!$form.valid}>Login</button>
-</form>

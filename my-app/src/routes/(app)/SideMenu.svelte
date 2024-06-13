@@ -1,16 +1,24 @@
 <script>
-	import logo from '$lib/images/DMlogo.svg';
+    import logo from '$lib/images/DMlogo.svg';
     import homeIcon from '$lib/images/home.svg';
     import choicesIcon from '$lib/images/choices.svg';
     import resultsIcon from '$lib/images/results.svg';
     import groupsIcon from '$lib/images/groups.svg';
     import premiumIcon from '$lib/images/premium.svg';
     import logoutIcon from '$lib/images/logout.svg';
+	import { sat_user_id } from '../../store.js';
 
     let isOpen = true;
 
     function toggleMenu() {
         isOpen = !isOpen;
+    }
+
+    function logout() {
+        // Clear the user ID from the store and localStorage
+        sat_user_id.set(null);
+        // Redirect to the login page
+        window.location.href = '/login';
     }
 </script>
 
@@ -119,7 +127,7 @@
         <img src={premiumIcon} alt="Premium icon" width="35px"/>
         <p>Osta tasuline</p>
     </div>
-    <div class="menu-item">
+    <div class="menu-item" on:click={logout}>
         <img src={logoutIcon} alt="Log Out" width="35px"/>
         <p>Logi välja</p>
     </div>
