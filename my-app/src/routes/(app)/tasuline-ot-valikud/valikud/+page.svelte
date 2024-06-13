@@ -1,32 +1,37 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
+    import { goto } from "$app/navigation";
+
+    let inputs = [{ id: 1 }, { id: 2 }]; //esialgsed inputi osad
+    const addInput = () => {
+        inputs = [...inputs, { id: inputs.length + 1 }]; //lisab uue inputi massiivi
+    };
+    const removeInput = () => {
+        if (inputs.length > 2) {
+            inputs = inputs.slice(0, -1); 
+        }
+    };
 </script>
 
 <section class="container">
     <div class="input-container">
         <h2>Sisesta objektid, mille vahel soovid valida:</h2>
-        <div class="input-group">
-            <div class="inputs">
-                <div class="valik1">
-                    <p>1. Valik:</p>
-                    <Input placeholder=""></Input> 
-                </div>
-                <div class="valik2">
-                    <p>2. Valik:</p>
-                    <Input placeholder=""></Input> 
-                </div>
-                <div class="lisavalik">
-                    <p>Lisa veel valikuid</p>
-                    <Button size="mini">+</Button>
-                </div>
+        {#each inputs as input (input.id)}
+            <div class="input-group">
+                <p>valik:</p>
+                <Input placeholder="Lisa uus valik"></Input>  <Button size="mini" on:click={removeInput}>-</Button>
             </div>
-        </div>
+            <br>
+        {/each}
+            <div class="lisavalik">
+                <p>Lisa veel valikuid</p>
+                <Button size="mini" on:click={addInput}>+</Button>
+            </div>
         <br>
         <div class="buttons">
-            <Button style="secondary">Tagasi</Button>
-            <br>
-            <Button>Jätka</Button>
+            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/otsusemudel")} on:keydown>Tagasi</Button>
+            <Button on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Jätka</Button>
         </div>
     </div>
 </section>
@@ -52,6 +57,7 @@
     .input-group {
         display: flex; /* sõna valik ja sisestusvälja jaoks */
         align-items: center; /* vertikaalne joondamine */
+        gap: 20px;
     }
 
     .input-group p {
@@ -60,7 +66,8 @@
     }
 
     .buttons{
-        margin-top: 20px;
+
+        margin-top: 40px;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
@@ -70,24 +77,6 @@
         text-align: center;
         margin-right: 10px;
         font-size: 20px;
-    }
-
-    .inputs{
-        display: flex;
-        flex-direction: column;
-        margin: 30px;
-    }
-
-    .valik1{
-        margin-bottom: 10px;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .valik2{
-        display: flex;
-        flex-direction: row;
-        margin-top: 10px;
     }
 
     .lisavalik{
@@ -102,6 +91,7 @@
 
     .lisavalik p{
         font-size: 15px;
+
     }
     
 </style>
@@ -109,4 +99,3 @@
 
 
 
-   

@@ -12,7 +12,8 @@
         </div>
         <br>
         <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi</Button>
+            <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi
+            </Button>
             <Button on:click={() => goto("/tasuline-ot-valikud/otsusemudel")} on:keydown>Jätka</Button>
         </div>
     </div>

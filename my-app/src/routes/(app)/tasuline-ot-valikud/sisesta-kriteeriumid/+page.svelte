@@ -2,6 +2,7 @@
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
     import { tooltip } from "$lib/script/tooltip.js";
+    import { goto } from "$app/navigation";
 
     let valikud: { title: string }[] = [
         { title: "valik 1" },
@@ -13,37 +14,42 @@
         return valikud.map(valik => valik.title).join(", ");
     }
 
+    let inputs = [{ id: 1 }, { id: 2 }]; //esialgsed inputi osad
+    const addInput = () => {
+        inputs = [...inputs, { id: inputs.length + 1 }]; //lisab uue inputi massiivi
+    };
+    const removeInput = () => {
+        if (inputs.length > 2) {
+            inputs = inputs.slice(0, -1); 
+        }
+    };
+
 </script>
 
 <section class="container">
     <div class="input-container">
         <h2>Sisesta kriteeriumid, mida võrrelda:</h2>
-        <div class="input-group">
-            <div class="inputs">
-                <div class="kriteerium1">
-                    <p>1. kriteerium:</p>
-                    <Input placeholder=""></Input> 
-                </div>
-                <div class="kriteerium2">
-                    <p>2. kriteerium:</p>
-                    <Input placeholder=""></Input> 
-                </div>
-                <div class="lisakriteerium">
-                    <div class="lisakr"><p>Lisa kriteerium</p>
-                        <Button size="mini">+</Button>
-                    </div> 
-                    <div class="lisaval">
-                        <span use:tooltip="{getTooltipContent()}">Vaata lisatud valikuid</span>
-                    </div>
-                </div>
+        {#each inputs as input (input.id)}
+            <div class="input-group">
+                <p>kriteerium:</p>
+                <Input placeholder="Lisa uus kriteerium"></Input>  <Button size="mini" on:click={removeInput}>-</Button>
             </div>
-        </div>
-        <br>
-        <div class="buttons">
-            <Button style="secondary">Tagasi</Button>
             <br>
-            <Button>Jätka</Button>
-        </div>
+        {/each}
+            <div class="valkri">
+                <div class="lisakriteerium">
+                    <p>Lisa veel kriteeriume</p>
+                    <Button size="mini" on:click={addInput}>+</Button>
+                </div>
+                <div class="lisaval">
+                    <p><span use:tooltip={getTooltipContent()}>Vaata lisatud valikuid</span></p>
+                </div>            
+            </div>
+            <br>
+            <div class="buttons">
+                <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/valikud")} on:keydown>Tagasi</Button>
+                <Button on:click={() => goto("/tasuline-ot-valikud/vali-kriteeriumid")} on:keydown>Jätka</Button>
+            </div>
     </div>
           
 </section>
@@ -78,7 +84,7 @@
     }
 
     .buttons{
-        margin-top: 20px;
+        margin-top: 40px;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
@@ -90,48 +96,8 @@
         font-size: 20px;
     }
 
-    .inputs{
-        display: flex;
-        flex-direction: column;
-        margin: 30px;
-    }
-
-    .kriteerium1{
-        margin-bottom: 10px;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .kriteerium2{
-        display: flex;
-        flex-direction: row;
-        margin-top: 10px;
-    }
-
-    .lisakriteerium{
-        margin-top: 20px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
     h2{
         font-size: 30px;
-    }
-
-    .lisakriteerium p{
-        font-size: 15px;
-    }
-
-    .lisakr{
-        display: flex;
-        gap: 10px;
-    }
-    
-    .lisaval{
-        margin-right: 10px;
-        color: rgb(194, 192, 192);
-        text-decoration: underline;
     }
 
     :global(.tooltip) {
@@ -165,5 +131,31 @@
 		background: inherit;
 		clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 	}
+    .lisakriteerium{
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .lisakriteerium p{
+        font-size: 15px;
+    }
+
+    .lisaval{
+        margin-top: 20px;
+        margin-right:10px;
+	    color: rgb(194, 192, 192);
+	    text-decoration: underline;
+    }
+
+    .valkri{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .lisaval p{
+        font-size: 15px;
+    }
     
 </style>
