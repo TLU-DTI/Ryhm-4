@@ -44,7 +44,7 @@
             id: 4,
             label: 'Grupid',
             icon: groupsIcon,
-            route: '/grupid'
+            route: '/groups'
         },
         {
             id: 5,

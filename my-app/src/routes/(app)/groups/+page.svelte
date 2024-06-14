@@ -5,6 +5,7 @@
     import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
 </script>
+
 <section class="container">
     <div class="rectangle1">
         <div class="rectangle-up"> 
