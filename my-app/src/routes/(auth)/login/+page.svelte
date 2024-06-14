@@ -76,16 +76,16 @@
 				</div>
 			</div>
 			
+
+			<div class="forgot-password">
+				<p>Unustasid salasõna?</p>
+			</div>
+
+			<div class="reg-login">
+				<Button style="secondary">Loo kasutaja</Button>
+				<Button disabled={!$form.valid}>Logi sisse</Button>
+			</div>
 		</form>
-
-		<div class="forgot-password">
-			<p>Unustasid salasõna?</p>
-		</div>
-
-		<div class="reg-login">
-			<Button style="secondary">Loo kasutaja</Button>
-			<Button disabled={!$form.valid}>Logi sisse</Button>
-		</div>
 
 	</div>
 

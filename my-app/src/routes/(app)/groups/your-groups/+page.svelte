@@ -2,7 +2,7 @@
     import { supabase } from '$lib/supabaseClient';
     import { onMount } from 'svelte';
     import { writable, get } from 'svelte/store';
-    import { sat_user_id } from '../../../store.js';
+    import { sat_user_id } from '../../../../store.js';
 
     // Define the type for groupInfo
     interface GroupInfo {

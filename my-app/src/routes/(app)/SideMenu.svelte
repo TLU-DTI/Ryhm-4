@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import logo from '$lib/images/DMlogo.svg';
     import homeIcon from '$lib/images/home.svg';
     import choicesIcon from '$lib/images/choices.svg';
