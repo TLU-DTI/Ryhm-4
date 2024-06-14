@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { supabase } from '$lib/supabaseClient';
 
   export let data: {
     id: number;
@@ -19,6 +20,8 @@
   let scores: number[] = [];
   let percentages: number[] = [];
   let criteriaPercentages: number[] = [];
+  let user_id: number; // Add user_id
+  let is_group_decision: boolean = false; // Add group decision flag
 
   $: if (data) {
     if (data.error) {
@@ -99,10 +102,43 @@
     }
   }
 
+  async function saveResults() {
+    const resultData = {
+      premium_decision_id: data.id,
+      results: JSON.stringify({ scores, percentages }),
+      user_id, // Include user_id
+      is_group_decision // Include group decision flag
+    };
+
+    try {
+      const response = await fetch('/api/premium-decisions/results', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(resultData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error saving results:', errorData.error);
+        alert('Error saving results: ' + errorData.error);
+      } else {
+        const responseData = await response.json();
+        console.log('Results saved successfully:', responseData);
+        alert('Results saved successfully');
+      }
+    } catch (error) {
+      console.error('Error in saveResults function:', error);
+      alert('Error saving results: ' + error.message);
+    }
+  }
+
   onMount(() => {
     calculateCriteriaWeights();
   });
 </script>
+
 
 <style>
   .container {
@@ -193,6 +229,27 @@
   {:else}
     <p>Loading data or no criteria/choices available.</p>
   {/if}
+
+  <div class="container">
+    <h1>AHP Car Selection - Criteria Comparison</h1>
+  
+    <div>
+      <label>User ID:</label>
+      <input type="number" bind:value={user_id} />
+    </div>
+    
+    <div>
+      <label>
+        <input type="checkbox" bind:checked={is_group_decision} />
+        Is this a group decision?
+      </label>
+    </div>
+  
+    <!-- Rest of your existing Svelte template -->
+  
+    <button on:click={saveResults}>Save Results</button>
+  </div>
+  
 
   <h2>Criteria Weights</h2>
   <table>
