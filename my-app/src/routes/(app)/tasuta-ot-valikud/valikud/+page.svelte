@@ -1,11 +1,12 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
+    import { goto } from "$app/navigation";
 </script>
 
 <section class="container">
     <div class="input-container">
-        <p>Sisesta objektid, mille vahel soovid valida</p>
+        <h2>Sisesta objektid, mille vahel soovid valida:</h2>
         <div class="input-group">
             <div class="inputs">
                 <div class="valik1">
@@ -20,9 +21,8 @@
         </div>
         <br>
         <div class="buttons">
-            <Button style="secondary">Tagasi</Button>
-            <br>
-            <Button>Jätka</Button>
+            <Button style="secondary" on:click={() => goto("/tasuta-ot-valikud")} on:keydown>Tagasi</Button>
+            <Button on:click={() => goto("/tasuta-ot-valikud/kriteeriumid")} on:keydown>Jätka</Button>
         </div>
     </div>
 </section>
@@ -75,5 +75,8 @@
         display: flex;
         flex-direction: row;
         margin-top: 10px;
+    }
+    h2{
+        font-size: 30px;
     }
 </style>

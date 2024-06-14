@@ -1,40 +1,56 @@
-<script>
+<script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import { page } from "$app/stores";
+    import { onMount } from 'svelte';
+    import { get } from 'svelte/store';
     import { goto } from "$app/navigation";
-    let code = $page.url.searchParams.get("code");
+    let code: number | null = null
+
+    onMount(() => {
+        const urlCode = get(page).url.searchParams.get("code");
+        if (urlCode) {
+            code = parseInt(urlCode, 10);
+        }
+    });
+
+    let valikud: { title: string }[] = [
+        { title: "Võrdne eelistus" },
+        { title: "valik 1" },
+        { title: "valik 2" },
+        { title: "valik 3" }
+    ];
+
+    let kriteeriumid: { title: string, lk: number }[] = [
+        { title: "kriteerium1", lk: 1 },
+        { title: "kriteerium2", lk: 2 },
+        { title: "kriteerium3", lk: 3 }
+    ];
 </script>
 
 <section class="container">
     <div class="button-container">
         <h2>Millist valikut sa eelistad, kui kriteeriumiks on:</h2>
+        <br>
         <div class="all-container">
             <div class="container2">
-                {#if code === "0"}
-                    <div class="text"><h3>Mugavus</h3> </div>
-                {:else}
-                    {#if code === "1"}
-                        <div class="text"><h3>Värv</h3></div>
+                {#each kriteeriumid as kriteerium }
+                    {#if code === kriteerium.lk}
+                        <div class="text"><h3>{kriteerium.title}</h3>
+                        </div>
                     {/if}
-                    {#if code === "2"}
-                        <div class="text"><h3> Hind</h3></div>
-                    {/if}
-                    {#if code === ""}
-                        <div class="error-alert"><h3>Error!</h3> </div>
-                    {/if}
-                {/if}
+                {/each}
+                <br>
             </div>
-            <br>
-            <div class="obj-button">
-                <Button>1. Valik</Button>
-                <Button>2. Valik</Button>
+            <div class="button-group">
+                {#each valikud as valik }
+                    <Button>{valik.title}</Button>
+                {/each}
             </div>
-        </div>
-
             <div class="buttons">
-                <Button style="secondary" on:click={() => goto("/tasuta-ot-valikud/valikud")} on:keydown>Tagasi</Button>
+                <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/vali-kriteeriumid")} on:keydown>Tagasi</Button>
                 <Button on:click={() => goto("/")} on:keydown>Jätka</Button>
             </div>
+        </div>
     </div>
 </section>
 
@@ -63,6 +79,7 @@
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
+        padding-top: 20px;
     }       
 
     .container2 {
@@ -76,41 +93,36 @@
         align-items: center;
         margin-left: 100px;
         display: flex;
-        margin-bottom: 20px;
-        font-weight: 800;
+        padding-top: 18px;
     }
-    .obj-button{
-        width: 100%;
-        margin-top: 40px;
-        margin-bottom: 60px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        gap: 20px;
-    }
-
-    .error-alert {
-        text-align: center;
-        color: black;
-        font-size: 30px;
-        }
-
+    
     .all-container{
         width: 400px;
-        height: 300px;
-        padding: 20px;
+        height: auto;
+        padding: 40px;
         padding-bottom: 10px;
+        height: 100%;
         margin-bottom: 30px;
         background: white;
         border-radius: 40px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     }
+
     h3{
-        font-size: 26px;
+        font-size: 20px;
         text-align: center;
         font-weight: 200;
     }
+
+    .button-group{
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
     h2{
         font-size: 30px;
     }
+    
 </style>

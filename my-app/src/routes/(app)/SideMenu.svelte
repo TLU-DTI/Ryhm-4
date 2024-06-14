@@ -8,6 +8,75 @@
     import logoutIcon from '$lib/images/logout.svg';
 	import { sat_user_id } from '../../store.js';
     import { onMount } from 'svelte';
+    import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
+    import { get } from "svelte/store";
+    
+    // Define a type for the button configuration
+    type ButtonConfig = {
+        id: number;
+        label: string;
+        icon: string; // Assuming icons are paths to images or SVGs
+        route: string;
+    };
+
+    // Button configurations
+    const buttons: ButtonConfig[] = [
+        {
+            id: 1,
+            label: 'Peamenüü',
+            icon: homeIcon,
+            route: '/'
+        },
+        {
+            id: 2,
+            label: 'Otsuste tegija',
+            icon: choicesIcon,
+            route: '/tasuta-ot-valikud'
+        },
+        {
+            id: 3,
+            label: 'Tulemused',
+            icon: resultsIcon,
+            route: '/tulemused'
+        },
+        {
+            id: 4,
+            label: 'Grupid',
+            icon: groupsIcon,
+            route: '/grupid'
+        },
+        {
+            id: 5,
+            label: 'Osta tasuline',
+            icon: premiumIcon,
+            route: '/premium'
+        },
+        {
+            id: 6,
+            label: 'Logi välja',
+            icon: logoutIcon,
+            route: '/login'
+        }
+    ];
+
+   // Track clicked state for each button
+   let clickedButtons: Record<number, boolean> = {};
+
+    // Function to handle button click and navigation
+    function handleClick(buttonId: number, route: string): void {
+        // Update clicked state for the specific button
+        clickedButtons = { ...clickedButtons, [buttonId]: true };
+
+        // Navigate to the specified route
+        goto(route);
+    }
+
+     // Function to check if the button's route matches the current path
+     function isActive(route: string): boolean {
+        const currentPath = get(page).url.pathname;
+        return currentPath === route;
+    }
 
     let isOpen = true;
     let loading = true;  // State to track loading status
@@ -38,16 +107,16 @@
 
 <style>
     .container {
-        display: none;
+        display: fixed;
         flex-direction: column;
         background: #ffffff;
-        width: max-content;
+        width: 300px;
         border: 1px solid black;
         box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.24);
         border-radius: 0px 10px 10px 0px;
         padding: 20px;
     }
-
+  
     .logo {
         display: flex;
         gap: 20px;
@@ -61,92 +130,87 @@
         display: flex;
     }
 
-    .menu-item {
+    button {
         display: flex;
         gap: 20px;
         padding: 10px 30px;
         border-radius: 40px;
         height: max-content;
-        min-width: 200px;
         align-items: center;
+        min-width: 200px;
+        border: none;
+        font-family: 'Merriweather', serif;
+        background: white;
     }
 
-    .active-menu-item {
-        display: flex;
-        gap: 20px;
-        padding: 10px 30px;
-        border-radius: 40px;
-        height: max-content;
-        min-width: 200px;
-        align-items: center;
-        background: #CFFFCB;
-    }
-
-    .menu-item:hover,
-    .menu-item.active {
+    button:hover {
         background: #CFFFCB;
         cursor: pointer;
     }
 
-    .toggle-button {
-        position: fixed;
-        top: 20px;
+    .menu-item.active{
+        background: #CFFFCB;
+    }
+    
+    .close-button {
         padding: 10px;
         background: #ffffff;
         border: 1px solid rgb(0, 0, 0);
         border-radius: 10px;
         cursor: pointer;
-        transition: left 0.2s
+        transition: left 0.2s;
+        height: max-content;
+        width: max-content;
+        align-self: flex-end;
     }
 
-    .toggle-button.closed{
-        left: 20px;
+    .close-button.closed{
+        display: flex;
     }
 
-    .toggle-button.open {
-        left: 260px;
+    .open-button{
+        padding: 10px;
+        background: #ffffff;
+        border: 1px solid rgb(0, 0, 0);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: left 0.2s;
+        height: max-content;
+        width: max-content;
+        margin: 20px;
     }
+
+
+
+    
 </style>
 
-{#if loading}
-    <p></p>  <!-- Laeb -->
-{:else}
-    <div class="toggle-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu}>
-        {#if isOpen}
-            <span>&times;</span>
-        {:else}
-            <span>&#9776;</span>
-        {/if}
-    </div>
-
+{#if isOpen} 
     <div class="container" class:open={isOpen}> 
-        <div class="logo">
+         
+        <div class="close-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>
+            <span>&times;</span>
+        </div>
+        
+        <div class="logo"> 
             <img src={logo} alt="logo"/>
-            <p>Decision Maker</p>
+            <p>Desicion Maker</p>
         </div>
-        <div class="active-menu-item">
-            <img src={homeIcon} alt="Home icon" width="35px" height="35px"/>
-            <p>Peamenüü</p>
-        </div>
-        <div class="menu-item">
-            <img src={choicesIcon} alt="Choices icon" width="35px"/>
-            <p>Otsuste tegija</p>
-        </div>
-        <div class="menu-item">
-            <img src={resultsIcon} alt="Results icon" width="35px"/>
-            <p>Tulemused</p>
-        </div>
-        <div class="menu-item">
-            <img src={groupsIcon} alt="Groups icon" width="35px"/>
-            <p>Grupid</p>
-        </div>
-        <div class="menu-item">
-            <img src={premiumIcon} alt="Premium icon" width="35px"/>
-            <p>Osta tasuline</p>
-        </div>
+
+        {#each buttons as button}
+            <button class="menu-item {isActive(button.route) ? 'active' : ''} {clickedButtons[button.id] ? 'clicked' : ''}" on:click={() => handleClick(button.id, button.route)}>
+                <img src={button.icon} alt="{button.label} icon" width="35px" height="35px"/>
+                <p>{button.label}</p>
+            </button>
+        {/each}    
+
         <div class="menu-item" on:click={logout}>
             <img src={logoutIcon} alt="Log Out" width="35px"/>
             <p>Logi välja</p>
         </div>
     </div>
+{:else}
+<div class="open-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>
+    <span>&#9776;</span>
+</div >
 {/if}

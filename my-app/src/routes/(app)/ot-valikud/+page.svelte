@@ -28,7 +28,7 @@
         {#each inputs as input (input.id)}
             <div class="input-group">
                 <p>Valik</p>
-                <Input></Input> 
+                <Input placeholder=""></Input> 
             </div>
             <br>
         {/each}
