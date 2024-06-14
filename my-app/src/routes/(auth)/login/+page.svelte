@@ -1,14 +1,14 @@
-
 <script lang="ts">
 	import '$lib/auth_style.css';
 	import Input from "$lib/components/Input.svelte";
 	import Button from "$lib/components/Button.svelte";
 	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
-	import { sat_user_id } from '../../../store.js';
+	import { sat_user_id, sat_username } from '../../../store.js';
 	import { tooltip } from "$lib/script/tooltip.js";
 
 	console.log($sat_user_id);
+	console.log($sat_username);
 
 
 	const form = useForm();
@@ -26,7 +26,7 @@
 			// Fetch user from database by email
 			const { data: user, error } = await supabase
 				.from('users')
-				.select('pw_hash, id')
+				.select('pw_hash, id, name')
 				.eq('email', data.email)
 				.single();
 
@@ -44,6 +44,7 @@
 			}
 
 			sat_user_id.set(user.id);
+			sat_username.set(user.name);
 			console.log('Login successful. The user: ' + user.id + ' logged in.');
 			window.location.href = "/";//Muuda seda!
 		} catch (error) {
@@ -77,8 +78,6 @@
 				</div>
 			</div>
 			
-		</form>
-
 		<div class="forgot-password">
 			<p>Unustasid salasõna?</p>
 		</div>
@@ -87,6 +86,8 @@
 			<Button style="secondary">Loo kasutaja</Button>
 			<Button disabled={!$form.valid}>Logi sisse</Button>
 		</div>
+
+	</form>
 
 	</div>
 

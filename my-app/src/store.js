@@ -1,27 +1,47 @@
 import { writable } from 'svelte/store';
 
-// Utility function to get the value from localStorage and convert it to a number
+// Utility function to get the value from sessionStorage and convert it to a number
 function getStoredUserId() {
-    if (typeof localStorage !== 'undefined') {
-        const storedValue = localStorage.getItem('sat_user_id');
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_user_id');
         return storedValue !== null ? Number(storedValue) : null;
     }
     return null;
 }
 
-// Initialize the store with the value from localStorage if it exists
+function getStoredUsername() {
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_username');
+        return storedValue !== null ? String(storedValue) : null;
+    }
+    return null;
+}
+
+// Initialize the store with the value from sessionStorage if it exists
 const initialUserId = getStoredUserId();
+const initialUsername  = getStoredUsername();
 
 // Create a writable store and set its initial value
 export const sat_user_id = writable(initialUserId);
+export const sat_username = writable(initialUsername );
 
-// Subscribe to the store to update localStorage whenever the value changes
+// Subscribe to the store to update sessionStorage whenever the value changes
 sat_user_id.subscribe(value => {
-    if (typeof localStorage !== 'undefined') {
+    if (typeof sessionStorage !== 'undefined') {
         if (value === null) {
-            localStorage.removeItem('sat_user_id');
+            sessionStorage.removeItem('sat_user_id');
         } else {
-            localStorage.setItem('sat_user_id', String(value));
+            sessionStorage.setItem('sat_user_id', String(value));
+        }
+    }
+});
+
+sat_username.subscribe(value => {
+    if (typeof sessionStorage !== 'undefined') {
+        if (value === null) {
+            sessionStorage.removeItem('sat_username');
+        } else {
+            sessionStorage.setItem('sat_username', String(value));
         }
     }
 });

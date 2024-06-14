@@ -1,15 +1,18 @@
-
 <script lang="ts">
-	import logo from '$lib/images/DMlogo.svg';
+    import logo from '$lib/images/DMlogo.svg';
     import homeIcon from '$lib/images/home.svg';
     import choicesIcon from '$lib/images/choices.svg';
     import resultsIcon from '$lib/images/results.svg';
     import groupsIcon from '$lib/images/groups.svg';
     import premiumIcon from '$lib/images/premium.svg';
     import logoutIcon from '$lib/images/logout.svg';
+    import { onMount } from 'svelte';
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { get } from "svelte/store";
+
+    import { sat_user_id, sat_username } from '../../store.js';
+
     
     // Define a type for the button configuration
     type ButtonConfig = {
@@ -78,10 +81,34 @@
     }
 
     let isOpen = true;
+    let loading = true;  // State to track loading status
+    let currentUserId = null;
+    let currentUsername = "";
 
     function toggleMenu() {
         isOpen = !isOpen;
     }
+
+    function logout() {
+        // Clear the user ID from the store and localStorage
+        sat_user_id.set(null);
+        // Redirect to the login page
+        window.location.href = '/login';
+    }
+
+    onMount(() => {
+        sat_user_id.subscribe(value => {
+            currentUserId = value;
+            if (currentUserId == null) {
+                window.location.href = "/login";
+            } else {
+                loading = false;  // Set loading to false if user is authenticated
+            }
+        });
+        sat_username.subscribe(value => {
+            currentUsername = value || "";
+        });
+    });
 </script>
 
 <style>
@@ -94,6 +121,17 @@
         box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.24);
         border-radius: 0px 10px 10px 0px;
         padding: 20px;
+    }
+
+    .head {
+        display: grid;
+        grid-template-columns: 1fr max-content;
+        grid-row: 1fr 1fr 1fr;
+    }
+
+    .kasutaja {
+       padding-left: 20px;
+       grid-row: 1 / span 2;
     }
   
     .logo {
@@ -132,6 +170,9 @@
     }
     
     .close-button {
+        grid-row: 1;
+        grid-column: 2;
+        display: flex;
         padding: 10px;
         background: #ffffff;
         border: 1px solid rgb(0, 0, 0);
@@ -158,17 +199,19 @@
         width: max-content;
         margin: 20px;
     }
-
-
-
     
 </style>
 
 {#if isOpen} 
     <div class="container" class:open={isOpen}> 
-         
-        <div class="close-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>
-            <span>&times;</span>
+            
+        <div class="head">
+            <div class="kasutaja">
+                <p>Tere {currentUsername}!</p>
+            </div>
+            <div class="close-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>
+                <span>&times;</span>
+            </div>
         </div>
         
         <div class="logo"> 
@@ -177,14 +220,21 @@
         </div>
 
         {#each buttons as button}
-            <button class="menu-item {isActive(button.route) ? 'active' : ''} {clickedButtons[button.id] ? 'clicked' : ''}" on:click={() => handleClick(button.id, button.route)}>
-                <img src={button.icon} alt="{button.label} icon" width="35px" height="35px"/>
-                <p>{button.label}</p>
-            </button>
+            {#if button.id === 6} 
+                <button class="menu-item {isActive(button.route) ? 'active' : ''} {clickedButtons[button.id] ? 'clicked' : ''}" on:click={logout}>
+                    <img src={button.icon} alt="{button.label} icon" width="35px" height="35px"/>
+                    <p>{button.label}</p>
+                </button>
+            {:else}
+                <button class="menu-item {isActive(button.route) ? 'active' : ''} {clickedButtons[button.id] ? 'clicked' : ''}" on:click={() => handleClick(button.id, button.route)}>
+                    <img src={button.icon} alt="{button.label} icon" width="35px" height="35px"/>
+                    <p>{button.label}</p>
+                </button>
+            {/if}
         {/each}    
     </div>
 {:else}
-<div class="open-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>
-    <span>&#9776;</span>
-</div >
+    <div class="open-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>
+        <span>&#9776;</span>
+    </div >
 {/if}
