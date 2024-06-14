@@ -14,17 +14,17 @@
     });
 
     let valikud: { title: string, lk: number, per: number}[] = [
-        { title: "Valik 1",lk: 1,per:67.4 },
+        { title: "Valik 1",lk: 1, per: 67.4},
         { title: "valik 2",lk: 1, per: 15.2},
-        { title: "valik 3",lk: 1,per: 10.9 },
-        { title: "valik 4" ,lk: 1, per:6.6 }
+        { title: "valik 3",lk: 1, per: 10.9},
+        { title: "valik 4" ,lk: 1, per: 6.6}
     ];
 
     let kriteeriumid: { title: string, lk: number, per: number }[] = [
-        { title: "kriteerium1", lk: 1, per: 40.0 },
-        { title: "kriteerium2", lk: 1,per: 10.0  },
-        { title: "kriteerium3", lk: 1,per: 20.0  },
-        { title: "kriteerium4", lk: 1,per: 30.0  }
+        { title: "kriteerium1", lk: 1, per: 40.0},
+        { title: "kriteerium2", lk: 1, per: 10.0},
+        { title: "kriteerium3", lk: 1, per: 20.0},
+        { title: "kriteerium4", lk: 1, per: 30.0}
     ];
 </script>
 
@@ -56,6 +56,7 @@
             </div>
         </div>
         <br>
+        
         <div class="buttons">
             <Button size="large" on:click={() => goto("/")} on:keydown>Lõpeta
             </Button>
@@ -185,21 +186,21 @@
     }
 
     .tulem {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    border-radius: 30px;
-    background-color: white;
-    width: 90%; /* Adjust width as needed */
-    padding: 0 10px; /* Adds padding for better spacing */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(
-        to right,
-        #00ff00 calc(var(--percentage) * 1%),
-        white calc(var(--percentage) * 1%)
-    );
-}
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        border-radius: 30px;
+        width: 390px; 
+        padding: 100px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(
+            to right,
+            #C4F1C0 calc(var(--percentage) * 1%),
+            white calc(var(--percentage) * 1%)
+        );
+    }
+    
     .tulem p{
         margin: 0; 
         text-align: center;
