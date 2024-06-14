@@ -137,15 +137,15 @@
 	}
 
 	.input-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-bottom: 10px;
+   	 	display: flex;
+    	align-items: center;
+    	position: relative;
+    	margin-bottom: 10px;
 	}
 
 	.mandatory {
-    color: red;
-    gap: 5px;
+    	color: red;
+    	gap: 5px;
 	}
 
 	.forgot-password p {
