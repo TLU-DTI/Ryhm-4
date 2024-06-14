@@ -76,7 +76,6 @@
 				</div>
 			</div>
 			
-
 		<div class="forgot-password">
 			<p>Unustasid salasõna?</p>
 		</div>
