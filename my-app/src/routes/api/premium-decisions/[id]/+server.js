@@ -27,8 +27,9 @@ export async function GET({ params }) {
 }
 
 export async function POST({ request }) {
-  const { premium_decision_id, results, user_id, is_group_decision } = await request.json();
-  
+  const { premium_decision_id, results, user_id, is_group_decision, group_id } = await request.json();
+
+  // Insert into premium_decision_results
   const { data, error } = await supabase
     .from('premium_decision_results')
     .insert([
@@ -36,7 +37,8 @@ export async function POST({ request }) {
         premium_decision_id,
         results,
         user_id,
-        is_group_decision
+        is_group_decision,
+        group_id: is_group_decision ? group_id : null // Only save group_id if it's a group decision
       }
     ]);
 
@@ -46,6 +48,26 @@ export async function POST({ request }) {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });
+  }
+
+  if (is_group_decision && group_id) {
+    // Insert into premium_decisions_groups
+    const { groupError } = await supabase
+      .from('premium_decisions_groups')
+      .insert([
+        {
+          group_id,
+          premium_decision_id
+        }
+      ]);
+
+    if (groupError) {
+      console.error('Error inserting group data:', groupError.message);
+      return new Response(JSON.stringify({ error: groupError.message }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
   }
 
   console.log('Inserted data:', data);  // Debug log

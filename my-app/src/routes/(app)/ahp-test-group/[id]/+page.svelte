@@ -22,6 +22,7 @@
   let criteriaPercentages: number[] = [];
   let user_id: number; // Add user_id
   let is_group_decision: boolean = false; // Add group decision flag
+  let group_id: number; // Add group_id
 
   $: if (data) {
     if (data.error) {
@@ -107,7 +108,8 @@
       premium_decision_id: data.id,
       results: JSON.stringify({ scores, percentages }),
       user_id, // Include user_id
-      is_group_decision // Include group decision flag
+      is_group_decision, // Include group decision flag
+      group_id: is_group_decision ? group_id : null // Only include group_id if it's a group decision
     };
 
     try {
@@ -138,6 +140,7 @@
     calculateCriteriaWeights();
   });
 </script>
+
 
 
 <style>
@@ -244,6 +247,13 @@
         Is this a group decision?
       </label>
     </div>
+  
+    {#if is_group_decision}
+      <div>
+        <label>Group ID:</label>
+        <input type="number" bind:value={group_id} />
+      </div>
+    {/if}
   
     <!-- Rest of your existing Svelte template -->
   
