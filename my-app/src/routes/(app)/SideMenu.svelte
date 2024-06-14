@@ -6,11 +6,13 @@
     import groupsIcon from '$lib/images/groups.svg';
     import premiumIcon from '$lib/images/premium.svg';
     import logoutIcon from '$lib/images/logout.svg';
-	import { sat_user_id } from '../../store.js';
     import { onMount } from 'svelte';
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { get } from "svelte/store";
+
+    import { sat_user_id, sat_username } from '../../store.js';
+
     
     // Define a type for the button configuration
     type ButtonConfig = {
@@ -81,6 +83,7 @@
     let isOpen = true;
     let loading = true;  // State to track loading status
     let currentUserId = null;
+    let currentUsername = "";
 
     function toggleMenu() {
         isOpen = !isOpen;
@@ -101,6 +104,9 @@
             } else {
                 loading = false;  // Set loading to false if user is authenticated
             }
+        });
+        sat_username.subscribe(value => {
+            currentUsername = value || "";
         });
     });
 </script>
@@ -201,7 +207,7 @@
             
         <div class="head">
             <div class="kasutaja">
-                <p>Tere Mari!</p>
+                <p>Tere {currentUsername}!</p>
             </div>
             <div class="close-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>
                 <span>&times;</span>
