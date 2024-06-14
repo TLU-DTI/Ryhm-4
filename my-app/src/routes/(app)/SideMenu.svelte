@@ -92,6 +92,7 @@
     function logout() {
         // Clear the user ID from the store and localStorage
         sat_user_id.set(null);
+        sat_username.set(null);
         // Redirect to the login page
         window.location.href = '/login';
     }
