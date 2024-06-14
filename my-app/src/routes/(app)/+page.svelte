@@ -8,7 +8,7 @@
     import groupsIcon from '$lib/images/groups.svg';
     import { goto } from "$app/navigation";
 
-    let FreeUserView:boolean = false;
+    let FreeUserView = true;
     let loading = true;  // State to track loading status
     let currentUserId = null;
 
@@ -33,9 +33,9 @@
                 <img src={choicesIcon} alt="Choices icon" width="100px"/>
             </div>
             <div class="action-area">
-                {#if FreeUserView === true}
+                {#if FreeUserView}
                     <Button on:click={() => goto("/tasuta-ot-valikud")} on:keydown>Otsuse tegija</Button>
-                {#if FreeUserView === true}
+                {:else}
                     <Button on:click={() => goto("/tasuline-ot-valikud")} on:keydown>Otsuse tegija</Button>
                 {/if}
             </div>
