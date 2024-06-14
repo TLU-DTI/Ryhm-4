@@ -231,7 +231,6 @@
         <div class="kasutaja">
             <p>Tere {currentUsername}!</p>
         </div>
-       
 
         {#each buttons as button}
             {#if button.id === 6} 
