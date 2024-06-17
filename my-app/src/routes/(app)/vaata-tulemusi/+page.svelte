@@ -13,11 +13,11 @@
     }
     });
 
-    let tulemused: { title: string, lk: number}[] = [
-        { title: "tulemus 1",lk: 1 },
-        { title: "tulemus 2",lk: 1 },
-        { title: "tulemus 3",lk: 1 },
-        { title: "tulemus 4" ,lk: 1 }
+    let tulemused: { title: string}[] = [
+        { title: "tulemus 1" },
+        { title: "tulemus 2" },
+        { title: "tulemus 3" },
+        { title: "tulemus 4" }
     ];
 
 </script>
@@ -28,10 +28,8 @@
         <div class="button-name">
             <div class="tulemid">
                 {#each tulemused as tulemus}
-                {#if code === tulemus.lk}
                 <div class="nupp"><Button>{tulemus.title}</Button>
                 </div>
-                {/if}
                 {/each}
             </div>
             <br>
