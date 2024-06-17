@@ -3,63 +3,37 @@
     import Input from "$lib/components/Input.svelte";
     import { goto } from "$app/navigation";
     import { supabase } from '$lib/supabaseClient';
-	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
-	import { writable, derived } from 'svelte/store';
+    import { useForm } from "svelte-use-form";
+    import { writable } from 'svelte/store';
+    import { premiumDecisionStore } from '../../../store/premiumDecisionStore';
 
     const form = useForm();
-	
-	async function handleSubmit(event: SubmitEvent) {
-	event.preventDefault();
-	const formData = new FormData(event.target as HTMLFormElement);
+    let decisionName = '';
 
-	const choiceName = formData.get('choice_name') as string; // Assuming your form field is named 'choice_name'
+    premiumDecisionStore.subscribe(store => {
+        decisionName = store.decisionName;
+    });
 
-	try {
-		// Check if the choice name already exists
-		let { data: existingChoice, error: existingChoiceError } = await supabase
-			.from('premium_decisions')
-			.select('id')
-			.eq('choice_name', choiceName)
-			.single();
-
-		if (existingChoice) {
-			console.log(`Choice name '${choiceName}' already exists.`);
-			return; // Handle this case appropriately (e.g., show error message)
-		}
-
-		// If the choice name doesn't exist, insert it
-		const { data: insertedChoice, error: insertError } = await supabase
-			.from('premium_decisions')
-			.insert([{ choice_name: choiceName }])
-			.single();
-
-		if (insertedChoice) {
-			console.log('Choice name inserted:', insertedChoice);
-			// Handle success (e.g., redirect or show success message)
-		}
-
-		if (insertError) {
-			throw new Error(insertError.message);
-		}
-
-	} catch (error) {
-		console.error('Error:', error);
-	}
-}
+    function savedecisionName() {
+        premiumDecisionStore.update(store => {
+            return { ...store, decisionName };
+        });
+        goto("/tasuline-ot-valikud/otsusemudel");
+    }
 </script>
 
 <section class="container">
     <div class="input-container">
         <h2>Anna oma otsusele nimi:</h2>
-        <form on:submit={handleSubmit}>
+        <form on:submit|preventDefault={savedecisionName}>
             <div class="input-name">
-                <Input placeholder="Nimi"></Input> 
+                <Input placeholder="Nimi" bind:value={decisionName}></Input> 
             </div>
             <br>
             <div class="buttons">
                 <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi
                 </Button>
-                <Button type="submit" on:click={() => goto("/tasuline-ot-valikud/otsusemudel")} on:keydown>Jätka</Button>
+                <Button type="submit" on:keydown>Jätka</Button>
             </div>
         </form>
     </div>
@@ -86,14 +60,13 @@
         align-items: center; /* vertikaalne joondamine */
     }
 
-    .buttons{
+    .buttons {
         margin-top: 20px;
         display: flex;
         justify-content: space-between;
     }
 
-    h2{
+    h2 {
         font-size: 30px;
     }
-    
 </style>
