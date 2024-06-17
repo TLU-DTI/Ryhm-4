@@ -5,7 +5,7 @@
 	import Button from "$lib/components/Button.svelte";
     import { useForm, validators, HintGroup, Hint, required } from "svelte-use-form";
     import { writable } from 'svelte/store';
-    import { sat_user_id } from '../../../../store.js';
+    import { sat_user_id, sat_premium } from '../../../../store.js';
     import { onMount } from 'svelte';
     import { goto } from "$app/navigation";
 
@@ -16,7 +16,7 @@
     function checkAuth() {
         sat_user_id.subscribe(value => {
             currentUserId = value;
-            if (currentUserId == null) {
+            if ($sat_user_id == null || $sat_premium == false) {
                 window.location.href = "/login";
             } else {
                 loading = false;
@@ -122,9 +122,7 @@
 </script>
 
 <section class="center-container">
-    {#if loading}
-        <p></p>
-    {:else}
+    {#if !loading}
     <form class="rectangle" use:form on:submit={handleCreateGroup}>
             <h1>Grupi loomine</h1>
             <p>Lisa grupile nimi</p>

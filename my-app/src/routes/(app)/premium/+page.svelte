@@ -1,19 +1,35 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import { goto } from "$app/navigation";
+    import { sat_user_id, sat_username, sat_premium } from '../../../store.js';
+    import { onMount } from 'svelte';
+
+    let loading = true;
+
+    onMount(() => {
+        sat_user_id.subscribe(value => {
+            if ($sat_user_id == null || $sat_premium == true) {
+                window.location.href = "/login";
+            } else {
+                loading = false;
+            }
+        });
+    });
 </script>
 
-<section class="container">
-    <div class="input-container">
-        <h2>Tasulise versiooni ostmine</h2>
-        <p>Tasulise versiooniga on võimalik kasutada kõiki mudeleid, kui ka luua gruppe.</p> 
-        <br>
-        <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi</Button>
-            <Button on:click={() => goto("premium/buy")} on:keydown>Osta tasuline</Button>
+{#if !loading}
+    <section class="container">
+        <div class="input-container">
+            <h2>Tasulise versiooni ostmine</h2>
+            <p>Tasulise versiooniga on võimalik kasutada kõiki mudeleid, kui ka luua gruppe.</p> 
+            <br>
+            <div class="buttons">
+                <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi</Button>
+                <Button on:click={() => goto("premium/buy")} on:keydown>Osta tasuline</Button>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+{/if}
 
 <style>
     section.container {

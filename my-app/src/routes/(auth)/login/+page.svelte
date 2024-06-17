@@ -7,9 +7,6 @@
 	import { sat_user_id, sat_username, sat_premium } from '../../../store.js';
 	import { tooltip } from "$lib/script/tooltip.js";
 
-	console.log($sat_user_id);
-	console.log($sat_username);
-
 
 	const form = useForm();
 

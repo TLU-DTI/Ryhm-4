@@ -3,11 +3,8 @@
     import { supabase } from '$lib/supabaseClient';
     import { useForm, validators, HintGroup, Hint, required } from "svelte-use-form";
     import { writable } from 'svelte/store';
-    import { sat_user_id, sat_username } from '../../../store.js';
+    import { sat_user_id, sat_username, sat_premium } from '../../../store.js';
     import { onMount } from 'svelte';
-
-    console.log($sat_user_id);
-	console.log($sat_username);
 
     const form = useForm();
     let loading = true;
@@ -16,7 +13,7 @@
     function checkAuth() {
         sat_user_id.subscribe(value => {
             currentUserId = value;
-            if (currentUserId == null) {
+            if ($sat_user_id == null || $sat_premium == false) {
                 window.location.href = "/login";
             } else {
                 loading = false;
@@ -86,9 +83,7 @@
     }
 </script>
 
-{#if loading}
-    <p></p>
-{:else}
+{#if !loading}
     <form use:form on:submit={handleJoinGroup}>
         <h1>Join Group</h1>
 

@@ -7,6 +7,19 @@
     import { writable, derived } from 'svelte/store';
     import { sat_user_id, sat_premium } from '../../../../store.js';
     import { tooltip } from "$lib/script/tooltip.js";
+    import { onMount } from 'svelte';
+
+    let loading = true;
+
+    onMount(() => {
+        sat_user_id.subscribe(value => {
+            if ($sat_user_id == null || $sat_premium == true) {
+                window.location.href = "/login";
+            } else {
+                loading = false;
+            }
+        });
+    });
 
 
     const form = useForm();
@@ -53,39 +66,41 @@
     }
 </script>
 
-<section class="container">
-    <form class="input-container" use:form on:submit={submit}>
-        <h2>Maksa krediitkaardiga</h2>
-        <br>
-        <div class="input-field">
-            <label for="first-name">Eesnimi</label>
-            <Input type="text" name="first-name" placeholder="Eesnimi"></Input>
-        </div>
-        <div class="input-field">
-            <label for="last-name">Perekonnanimi</label>
-            <Input type="text" name="last-name" placeholder="Perekonnanimi"></Input>
-        </div>
-        <div class="input-field">
-            <label for="email">E-posti aadress</label>
-            <Input type="email" name="email" placeholder="E-posti aadress"></Input>
-        </div>
-        <div class="input-field">
-            <label for="card-number">Kaardi number</label>
-            <Input type="text" name="card-number" placeholder="1234 5678 9012 3456"></Input>
-        </div>
-        <div class="input-field">
-            <label for="expiration-date">Aegumiskuupäev</label>
-            <Input type="text" name="expiration-date" placeholder="MM/YY"></Input>
-        </div>
-        <div class="input-field">
-            <label for="cvv">CVV</label>
-            <Input type="text" name="cvv" placeholder="123"></Input>
-        </div>
-        <div class="buttons">
-            <Button style="secondary" type="submit" disabled={!$form.valid}>Jätka</Button>
-        </div>
-    </form>
-</section>
+{#if !loading}
+    <section class="container">
+        <form class="input-container" use:form on:submit={submit}>
+            <h2>Maksa krediitkaardiga</h2>
+            <br>
+            <div class="input-field">
+                <label for="first-name">Eesnimi</label>
+                <Input type="text" name="first-name" placeholder="Eesnimi"></Input>
+            </div>
+            <div class="input-field">
+                <label for="last-name">Perekonnanimi</label>
+                <Input type="text" name="last-name" placeholder="Perekonnanimi"></Input>
+            </div>
+            <div class="input-field">
+                <label for="email">E-posti aadress</label>
+                <Input type="email" name="email" placeholder="E-posti aadress"></Input>
+            </div>
+            <div class="input-field">
+                <label for="card-number">Kaardi number</label>
+                <Input type="text" name="card-number" placeholder="1234 5678 9012 3456"></Input>
+            </div>
+            <div class="input-field">
+                <label for="expiration-date">Aegumiskuupäev</label>
+                <Input type="text" name="expiration-date" placeholder="MM/YY"></Input>
+            </div>
+            <div class="input-field">
+                <label for="cvv">CVV</label>
+                <Input type="text" name="cvv" placeholder="123"></Input>
+            </div>
+            <div class="buttons">
+                <Button style="secondary" type="submit" disabled={!$form.valid}>Jätka</Button>
+            </div>
+        </form>
+    </section>
+{/if}
 
 <style>
     section.container {
