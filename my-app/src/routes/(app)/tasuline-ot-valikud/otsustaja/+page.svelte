@@ -66,8 +66,8 @@
       </div>
       <br>
       <div class="buttons">
-        <Button style="secondary" on:click={() => goto("/")}>Tagasi</Button>
-        <Button on:click={() => goto("/tasuline-ot-valikud/otsusemudel")}>Jätka</Button>
+        <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")}>Tagasi</Button>
+        <Button on:click={() => goto("/tasuline-ot-valikud/otsustaja?code=2")} on:keydown>Jätka</Button>
       </div>
     </div>
   </section>
@@ -90,6 +90,7 @@
       height: auto;
       box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
       align-content: center;
+      gap: 20px;
     }
   
     .button-name {
