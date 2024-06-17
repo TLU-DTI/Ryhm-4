@@ -16,8 +16,10 @@
     function checkAuth() {
         sat_user_id.subscribe(value => {
             currentUserId = value;
-            if ($sat_user_id == null || $sat_premium == false) {
+            if ($sat_user_id == null) {
                 window.location.href = "/login";
+            } else if ($sat_premium == false){
+                location.href = "/";
             } else {
                 loading = false;
             }

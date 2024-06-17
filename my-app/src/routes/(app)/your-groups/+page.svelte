@@ -2,7 +2,19 @@
     import { supabase } from '$lib/supabaseClient';
     import { onMount } from 'svelte';
     import { writable, get } from 'svelte/store';
-    import { sat_user_id } from '../../../store.js';
+    import { sat_user_id, sat_premium } from '../../../store.js';
+
+    onMount(() => {
+        sat_user_id.subscribe(value => {
+            if ($sat_user_id == null) {
+                window.location.href = "/login";
+            } else if ($sat_premium == false){
+                location.href = "/";
+            } else {
+                loading = false;
+            }
+        });
+    });
 
     // Define the type for groupInfo
     interface GroupInfo {

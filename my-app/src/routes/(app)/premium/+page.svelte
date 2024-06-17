@@ -8,8 +8,10 @@
 
     onMount(() => {
         sat_user_id.subscribe(value => {
-            if ($sat_user_id == null || $sat_premium == true) {
+            if ($sat_user_id == null) {
                 window.location.href = "/login";
+            } else if ($sat_premium == true){
+                location.href = "/";
             } else {
                 loading = false;
             }
