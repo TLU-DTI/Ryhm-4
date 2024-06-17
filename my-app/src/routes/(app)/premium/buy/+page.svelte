@@ -1,18 +1,36 @@
 <script>
     import Button from "$lib/components/Button.svelte";
     import { goto } from "$app/navigation";
+    import { sat_user_id, sat_username, sat_premium } from '../../../../store.js';
+    import { onMount } from 'svelte';
+
+    let loading = true;
+
+    onMount(() => {
+        sat_user_id.subscribe(value => {
+            if ($sat_user_id == null) {
+                window.location.href = "/login";
+            } else if ($sat_premium == true){
+                location.href = "/";
+            } else {
+                loading = false;
+            }
+        });
+    });
 </script>
 
-<section class="container">
-    <div class="input-container">
-        <h2>Kas soovid osta tasulise versiooni?</h2>
-        <br>
-        <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/")} on:keydown>Loobu</Button>
-            <Button on:click={() => goto("./makseviis")} on:keydown>Osta</Button>
+{#if !loading}
+    <section class="container">
+        <div class="input-container">
+            <h2>Kas soovid osta tasulise versiooni?</h2>
+            <br>
+            <div class="buttons">
+                <Button style="secondary" on:click={() => goto("/")} on:keydown>Loobu</Button>
+                <Button on:click={() => goto("./makseviis")} on:keydown>Osta</Button>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+{/if}
 
 <style>
     section.container {
