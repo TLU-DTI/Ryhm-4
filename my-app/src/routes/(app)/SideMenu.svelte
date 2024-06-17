@@ -11,20 +11,16 @@
     import { page } from "$app/stores";
     import { get } from "svelte/store";
     import { afterUpdate } from 'svelte';
-
-
     import { sat_user_id, sat_username } from '../../store.js';
 
     
-    // Define a type for the button configuration
     type ButtonConfig = {
         id: number;
         label: string;
-        icon: string; // Assuming icons are paths to images or SVGs
+        icon: string; 
         route: string;
     };
 
-    // Button configurations
     const buttons: ButtonConfig[] = [
         {
             id: 1,
@@ -64,14 +60,10 @@
         }
     ];
 
-   // Track clicked state for each button
    let clickedButtons: Record<number, boolean> = {};
 
-    // Function to handle button click and navigation
     function handleClick(buttonId: number, route: string): void {
-    // Navigate to the specified route
         goto(route).then(() => {
-        // Update clicked state for the specific button after navigation
             clickedButtons = { ...clickedButtons, [buttonId]: true };
         });
     }

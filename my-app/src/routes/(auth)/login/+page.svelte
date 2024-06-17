@@ -6,6 +6,7 @@
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
 	import { sat_user_id, sat_username } from '../../../store.js';
 	import { tooltip } from "$lib/script/tooltip.js";
+	import { goto } from "$app/navigation";
 
 	console.log($sat_user_id);
 	console.log($sat_username);
@@ -83,7 +84,7 @@
 		</div>
 
 		<div class="reg-login">
-			<Button style="secondary">Loo kasutaja</Button>
+			<Button style="secondary" on:click={() => goto("/register")} on:keydown>Loo kasutaja</Button>
 			<Button disabled={!$form.valid}>Logi sisse</Button>
 		</div>
 
