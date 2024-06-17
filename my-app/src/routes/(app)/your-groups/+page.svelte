@@ -156,9 +156,7 @@
     }
 </script>
 
-{#if loading}
-    <p>Loading...</p>
-{:else}
+{#if !loading}
     <h1>Your Groups</h1>
 
     <ul>
