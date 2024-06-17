@@ -11,7 +11,7 @@
     import { page } from "$app/stores";
     import { get } from "svelte/store";
 
-    import { sat_user_id, sat_username } from '../../store.js';
+    import { sat_user_id, sat_username, sat_premium } from '../../store.js';
 
     
     // Define a type for the button configuration
@@ -93,6 +93,7 @@
         // Clear the user ID from the store and localStorage
         sat_user_id.set(null);
         sat_username.set(null);
+        sat_premium.set(null);
         // Redirect to the login page
         window.location.href = '/login';
     }

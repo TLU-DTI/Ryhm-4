@@ -17,13 +17,23 @@ function getStoredUsername() {
     return null;
 }
 
+function getStoredPremium() {
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_premium');
+        return storedValue !== null ? storedValue === 'true' : null;
+    }
+    return null;
+}
+
 // Initialize the store with the value from sessionStorage if it exists
 const initialUserId = getStoredUserId();
 const initialUsername  = getStoredUsername();
+const initialPremium  = getStoredPremium();
 
 // Create a writable store and set its initial value
 export const sat_user_id = writable(initialUserId);
 export const sat_username = writable(initialUsername );
+export const sat_premium = writable(initialPremium );
 
 // Subscribe to the store to update sessionStorage whenever the value changes
 sat_user_id.subscribe(value => {
@@ -42,6 +52,16 @@ sat_username.subscribe(value => {
             sessionStorage.removeItem('sat_username');
         } else {
             sessionStorage.setItem('sat_username', String(value));
+        }
+    }
+});
+
+sat_premium.subscribe(value => {
+    if (typeof sessionStorage !== 'undefined') {
+        if (value === null) {
+            sessionStorage.removeItem('sat_premium');
+        } else {
+            sessionStorage.setItem('sat_premium', String(value));
         }
     }
 });
