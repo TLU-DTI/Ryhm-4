@@ -79,9 +79,9 @@
 				</div>
 			</div>
 			
-		<div class="forgot-password">
+		<button class="forgot-password" on:click={() => goto("/forgot-password")} on:keydown>
 			<p>Unustasid salasõna?</p>
-		</div>
+		</button>
 
 		<div class="reg-login">
 			<Button style="secondary" on:click={() => goto("/register")} on:keydown>Loo kasutaja</Button>
@@ -150,12 +150,17 @@
     color: red;
     gap: 5px;
 	}
+	.forgot-password {
+		border: none;
+		background-color: white;
+	}
 
 	.forgot-password p {
 		margin-top: 20px;
 		text-decoration: underline;
 		font-size: 14px;
 		color: rgb(194, 192, 192); 
+	
 	}
 
 	.forgot-password p:hover {
@@ -167,6 +172,7 @@
 		justify-content: center;
 		gap: 210px;
 		margin-top: 50px;
+		
 	}
 
 	:global(.tooltip) {
