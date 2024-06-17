@@ -13,9 +13,9 @@
     import { afterUpdate } from 'svelte';
 
 
-    import { sat_user_id, sat_username } from '../../store.js';
+    import { sat_user_id, sat_username, sat_premium } from '../../store.js';
 
-    let FreeUserView:boolean = true;
+    //let FreeUserView:boolean = $sat_premium;
 
     // Define a type for the button configuration
     type ButtonConfig = {
@@ -67,7 +67,7 @@
 
         const button2 = buttons.find(button => button.id === 2);
             if (button2) {
-                if (FreeUserView) {
+                if (!$sat_premium) {
                     button2.route = '/tasuta-ot-valikud';
                     buttons.splice(buttons.findIndex(button => button.id === 4), 1); // Remove button with id 4
                 } else {
@@ -117,6 +117,8 @@
     function logout() {
         // Clear the user ID from the store and localStorage
         sat_user_id.set(null);
+        sat_username.set(null);
+        sat_premium.set(null);
         // Redirect to the login page
         window.location.href = '/login';
     }

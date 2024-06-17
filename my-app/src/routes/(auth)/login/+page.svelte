@@ -4,7 +4,7 @@
 	import Button from "$lib/components/Button.svelte";
 	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
-	import { sat_user_id, sat_username } from '../../../store.js';
+	import { sat_user_id, sat_username, sat_premium } from '../../../store.js';
 	import { tooltip } from "$lib/script/tooltip.js";
 
 	console.log($sat_user_id);
@@ -26,7 +26,7 @@
 			// Fetch user from database by email
 			const { data: user, error } = await supabase
 				.from('users')
-				.select('pw_hash, id, name')
+				.select('pw_hash, id, name, premium')
 				.eq('email', data.email)
 				.single();
 
@@ -45,6 +45,7 @@
 
 			sat_user_id.set(user.id);
 			sat_username.set(user.name);
+			sat_premium.set(user.premium);
 			console.log('Login successful. The user: ' + user.id + ' logged in.');
 			window.location.href = "/";//Muuda seda!
 		} catch (error) {

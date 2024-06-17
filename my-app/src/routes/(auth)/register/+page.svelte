@@ -5,7 +5,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
 	import { writable, derived } from 'svelte/store';
-	import { sat_user_id } from '../../../store.js';
+	import { sat_user_id, sat_premium } from '../../../store.js';
 	import { tooltip } from "$lib/script/tooltip.js";
 
 
@@ -75,6 +75,7 @@
 				throw new Error(error.message);
 			}
 			sat_user_id.set(supabaseData.id);
+			sat_premium.set(false);
 			console.log('User created:', supabaseData);
 			window.location.href = "/";//Muuda seda!
 		} catch (error) {
