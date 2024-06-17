@@ -47,7 +47,7 @@
                 {/each}
             </div>
             <div class="buttons">
-                <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/vali-kriteeriumid")} on:keydown>Tagasi</Button>
+                <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Tagasi</Button>
                 <Button on:click={() => goto("/")} on:keydown>Jätka</Button>
             </div>
         </div>
