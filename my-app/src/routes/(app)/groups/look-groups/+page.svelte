@@ -3,8 +3,6 @@
     import { onMount } from 'svelte';
     import { writable, get } from 'svelte/store';
     import { sat_user_id } from '../../../../store.js';
-    import Button from "$lib/components/Button.svelte";
-    import { goto } from "$app/navigation";
 
     // Define the type for groupInfo
     interface GroupInfo {
@@ -138,89 +136,35 @@
     }
 </script>
 
-<section class="center-container">
-    {#if loading}
-        <p>Loading...</p>
-    {:else}
-        <div class="rectangle">
-            <h1>Sinu grupid</h1>
-            <div class="rectangle2">   
-                {#each $groupInfo as info}
-                    <div class="group-item">
-                        <div class="group-details">                            
-                            {#if info.leader}
-                                <!--<p>Leader: {info.leader ? 'Yes' : 'No'}</p>-->
-                                <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
-                            {/if}
-                            <p>{info.group_name}</p>
-                            <Button type="button" on:click={() => goto("/groups/your-groups")} on:keydown>Vaata gruppi</Button>
-                        </div>
-                        {#if info.leader}
-                            <button on:click={() => deleteGroup(info.group_ID)} class="icon-button">
-                                <img src="../src/lib/images/trash.png" alt="Delete group">
-                            </button>
-                        {/if}
-                    </div>
-                {/each}
-            </div>                
-        </div>    
-    {/if}
-</section>
+{#if loading}
+    <p>Loading...</p>
+{:else}
+    <h1>Your Groups</h1>
 
-<style>
-    .center-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 170px;
-    }
-    .rectangle {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 610px; 
-        height: 450px; 
-        background: white; 
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-        border-radius: 38px;
-        padding: 40px 10px; 
-        box-sizing: border-box; 
-    }
-    .rectangle2 {
-        width: 95%;
-        padding: 10px;
-    }
-    .group-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: #F2F1E7;
-        border-radius: 10px;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-    .group-details {
-        display: flex;
-        align-items: center; /* Joondab ikooni ja teksti vertikaalselt keskjoonele */
-    }
-    .leader-icon {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px; /* Lisa vahe ikooni ja teksti vahele */
-    }
-    .icon-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-        margin: 0;
-    }
-    .icon-button img {
-        width: 20px;
-        height: 20px;
-    }
-    .icon-button:hover img {
-        opacity: 0.7; 
-    }
-</style>
+    <ul>
+        {#each $groupInfo as info}
+            <li>
+                <p>Group Name: {info.group_name}</p>
+                <p>Group Code: {info.group_code}</p>
+                <p>Leader: {info.leader ? 'Yes' : 'No'}</p>
+                {#if info.leader}
+                    <button on:click={() => deleteGroup(info.group_ID)}>Delete group</button>
+                {/if}
+                <h3>Members</h3>
+                <ul>
+                    {#each info.members as member}
+                        <li>
+                            {member.user_name} 
+                            {member.is_current_user ? '(you)' : ''} 
+                            {member.is_leader ? '(leader)' : ''}
+                            {#if info.leader && !member.is_leader}
+                                <button on:click={() => removeMember(info.group_ID, member.user_ID)}>Remove</button>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+                <hr>
+            </li>
+        {/each}
+    </ul>
+{/if}

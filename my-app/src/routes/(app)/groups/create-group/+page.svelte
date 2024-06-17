@@ -127,7 +127,7 @@
     {:else}
         <form class="rectangle" use:form on:submit={handleCreateGroup}>
             <h1>Grupi loomine</h1>
-            <p>Lisa grupile nimi</p>
+            <p>Lisa grupile nimi:</p>
 
             <div class="input mandatory">
                 <Input type="text" name="group_name" placeholder="Grupi nimi"></Input>
@@ -142,8 +142,7 @@
     {/if}
 </section>
 
-<style>
-    
+<style>   
     .center-container {
 		display: flex;
 		justify-content: center;

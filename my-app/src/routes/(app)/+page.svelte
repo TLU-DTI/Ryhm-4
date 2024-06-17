@@ -14,7 +14,7 @@
         window.location.href = "/otsuse-tegija";
     }
     function handleClick2() {
-        window.location.href = "/create-group";
+        window.location.href = "/groups/create-group";
     }
 
     onMount(() => {
@@ -61,7 +61,7 @@
                 <img src={groupsIcon} alt="Groups icon" width="100 px"/>
             </div>
             <div class="action-area">
-                <Button on:click={handleClick2}>Gruppide loomine</Button>
+                <Button on:click={handleClick2}>Grupi loomine</Button>
             </div>
         </div> 
     </section>
