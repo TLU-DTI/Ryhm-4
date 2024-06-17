@@ -48,7 +48,7 @@
             <br>
             <div class="buttons">
                 <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/valikud")} on:keydown>Tagasi</Button>
-                <Button on:click={() => goto("/tasuline-ot-valikud/vali-kriteeriumid")} on:keydown>Jätka</Button>
+                <Button on:click={() => goto("/tasuline-ot-valikud/vali-kriteeriumid?code=1")} on:keydown>Jätka</Button>
             </div>
     </div>
           
