@@ -144,26 +144,33 @@
     {:else}
         <div class="rectangle">
             <h1>Sinu grupid</h1>
-            <div class="rectangle2">   
-                {#each $groupInfo as info}
-                    <div class="group-item">
-                        <div class="group-details">                            
-                            {#if info.leader}
-                                <!--<p>Leader: {info.leader ? 'Yes' : 'No'}</p>-->
-                                <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
-                            {/if}
-                            <p>{info.group_name}</p>
-                            <Button type="button" on:click={() => goto("/groups/your-groups")} on:keydown>Vaata gruppi</Button>
+            <div class="rectangle2">
+                <div class="groups-list">
+                    {#each $groupInfo as info}
+                        <div class="group-item">
+                            <div class="group-details">
+                                {#if info.leader}
+                                    <!--<p>Leader: {info.leader ? 'Yes' : 'No'}</p>-->
+                                    <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
+                                {/if}
+                                <p>{info.group_name}</p>
+                            </div>
+                            <div class="button-group">
+                                {#if info.leader}
+                                    <button on:click={() => deleteGroup(info.group_ID)} class="icon-button">
+                                        <img src="../src/lib/images/trash.png" alt="Delete group">
+                                    </button>
+                                {/if}
+                                <Button type="button" on:click={() => goto("/groups/your-groups")} on:keydown>Vaata gruppi</Button>
+                            </div>
                         </div>
-                        {#if info.leader}
-                            <button on:click={() => deleteGroup(info.group_ID)} class="icon-button">
-                                <img src="../src/lib/images/trash.png" alt="Delete group">
-                            </button>
-                        {/if}
-                    </div>
-                {/each}
-            </div>                
-        </div>    
+                    {/each}
+                </div>
+                <div class="back">
+                    <Button type="button" style="secondary" on:click={() => goto("/groups")} on:keydown>Tagasi</Button>
+                </div>
+            </div>
+        </div>
     {/if}
 </section>
 
@@ -172,25 +179,48 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 170px;
+        padding: 130px;
     }
     .rectangle {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 610px; 
-        height: 450px; 
-        background: white; 
+        width: 610px;
+        height: 510px;
+        background: white;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
         border-radius: 38px;
-        padding: 40px 10px; 
-        box-sizing: border-box; 
+        padding: 40px 10px;
+        box-sizing: border-box;
     }
     .rectangle2 {
-        width: 95%;
-        padding: 10px;
+        width: 93%;
+        padding: 20px;
     }
+    .groups-list {
+        max-height: 270px;
+        overflow-y: auto;
+        scrollbar-width: thin; /* horisontaalse kerimisriba jaoks */
+        scrollbar-color: #C4F1C0 #f0f0f0; /* värvid kerimisribale (thumb, track) */
+        padding-right: 10px;
+    }
+
+    .groups-list::-webkit-scrollbar {
+        width: 8px; /* laius */
+        height: 8px; /* kõrgus */
+    }
+
+    .groups-list::-webkit-scrollbar-thumb {
+        background-color: #aaa; /* kerimisriba värv */
+        border-radius: 10px; /* nurga raadius */
+    }
+
+    .groups-list::-webkit-scrollbar-track {
+        background-color: #f0f0f0; /* tausta värv */
+        border-radius: 10px; /* nurga raadius */
+    }
+
     .group-item {
         display: flex;
         justify-content: space-between;
@@ -202,12 +232,22 @@
     }
     .group-details {
         display: flex;
-        align-items: center; /* Joondab ikooni ja teksti vertikaalselt keskjoonele */
+        align-items: center;
+        margin-left: 10px;
     }
     .leader-icon {
         width: 20px;
         height: 20px;
-        margin-right: 10px; /* Lisa vahe ikooni ja teksti vahele */
+        margin-right: 10px;
+    }
+    .button-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-right: 10px;
+    }
+    .back {
+        margin: 20px 0px 10px;
     }
     .icon-button {
         background: none;
@@ -221,6 +261,6 @@
         height: 20px;
     }
     .icon-button:hover img {
-        opacity: 0.7; 
+        opacity: 0.7;
     }
 </style>
