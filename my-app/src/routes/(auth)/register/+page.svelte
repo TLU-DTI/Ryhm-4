@@ -132,7 +132,7 @@
 			
 			<div class="reg-user">
 				<Button style="secondary" on:click={() => goto("/login")} on:keydown>Tagasi</Button>
-				<Button disabled={!$form.valid || !$passwordsMatch}>Loo kasutaja</Button>
+				<Button disabled={!$form.valid || !$passwordsMatch} on:click={() => goto("/completed")} on:keydown>Loo kasutaja</Button>
 			</div>	
 		</div>
 	</form>
