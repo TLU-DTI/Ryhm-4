@@ -10,6 +10,8 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { get } from "svelte/store";
+    import { afterUpdate } from 'svelte';
+
 
     import { sat_user_id, sat_username } from '../../store.js';
 
@@ -67,12 +69,23 @@
 
     // Function to handle button click and navigation
     function handleClick(buttonId: number, route: string): void {
-        // Update clicked state for the specific button
-        clickedButtons = { ...clickedButtons, [buttonId]: true };
-
-        // Navigate to the specified route
-        goto(route);
+    // Navigate to the specified route
+        goto(route).then(() => {
+        // Update clicked state for the specific button after navigation
+            clickedButtons = { ...clickedButtons, [buttonId]: true };
+        });
     }
+
+    afterUpdate(() => {
+        const currentPath = get(page).url.pathname;
+        buttons.forEach(button => {
+            clickedButtons = {
+                ...clickedButtons,
+                [button.id]: currentPath === button.route
+            };
+        });
+    });
+
 
      // Function to check if the button's route matches the current path
      function isActive(route: string): boolean {
@@ -163,10 +176,12 @@
     button:hover {
         background: #CFFFCB;
         cursor: pointer;
+        width: 100%;
     }
 
     .menu-item.active{
         background: #CFFFCB;
+        width: 100%
     }
     
     .close-button {
@@ -199,12 +214,14 @@
         width: max-content;
         margin: 20px;
     }
+
+
     
 </style>
 
+
 {#if isOpen} 
     <div class="container" class:open={isOpen}> 
-            
         <div class="head">
             <div class="kasutaja">
                 <p>Tere {currentUsername}!</p>
@@ -219,19 +236,25 @@
             <p>Desicion Maker</p>
         </div>
 
-        {#each buttons as button}
-            {#if button.id === 6} 
-                <button class="menu-item {isActive(button.route) ? 'active' : ''} {clickedButtons[button.id] ? 'clicked' : ''}" on:click={logout}>
-                    <img src={button.icon} alt="{button.label} icon" width="35px" height="35px"/>
-                    <p>{button.label}</p>
-                </button>
-            {:else}
-                <button class="menu-item {isActive(button.route) ? 'active' : ''} {clickedButtons[button.id] ? 'clicked' : ''}" on:click={() => handleClick(button.id, button.route)}>
-                    <img src={button.icon} alt="{button.label} icon" width="35px" height="35px"/>
-                    <p>{button.label}</p>
-                </button>
-            {/if}
-        {/each}    
+        <div class="menu">
+            {#each buttons as button}
+                {#if button.id === 6} 
+                    <button 
+                        class="menu-item {isActive(button.route) ? 'active' : ''} {clickedButtons[button.id] ? 'clicked' : ''}" 
+                        on:click={logout}>
+                        <img src={button.icon} alt="{button.label} icon" width="35px" height="35px"/>
+                        <p>{button.label}</p>
+                    </button>
+                {:else}
+                    <button 
+                        class="menu-item {isActive(button.route) ? 'active' : ''} {clickedButtons[button.id] ? 'clicked' : ''}" 
+                        on:click={() => handleClick(button.id, button.route)}>
+                        <img src={button.icon} alt="{button.label} icon" width="35px" height="35px"/>
+                        <p>{button.label}</p>
+                    </button>
+                {/if}
+            {/each}
+        </div>  
     </div>
 {:else}
     <div class="open-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>
