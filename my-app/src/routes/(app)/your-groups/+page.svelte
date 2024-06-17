@@ -146,6 +146,14 @@
             alert('Error removing member: ' + error);
         }
     }
+    async function groupdesicion(groupId: number) {
+        try {
+
+        } catch (error) {
+            console.error('Error making a group desicion:', error);
+            alert('Error making a group desicion: ' + error);
+        }
+    }
 </script>
 
 {#if loading}
@@ -161,6 +169,7 @@
                 <p>Leader: {info.leader ? 'Yes' : 'No'}</p>
                 {#if info.leader}
                     <button on:click={() => deleteGroup(info.group_ID)}>Delete group</button>
+                    <button on:click={() => groupdesicion(info.group_ID)}>Otsuste tegija</button>
                 {/if}
                 <h3>Members</h3>
                 <ul>
