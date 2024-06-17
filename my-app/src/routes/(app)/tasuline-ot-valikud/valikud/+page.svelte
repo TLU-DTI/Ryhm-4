@@ -30,8 +30,8 @@
             </div>
         <br>
         <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/otsusemudel")} on:keydown>Tagasi</Button>
-            <Button on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Jätka</Button>
+            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Tagasi</Button>
+            <Button on:click={() => goto("/tasuline-ot-valikud/salvesta")} on:keydown>Jätka</Button>
         </div>
     </div>
 </section>
@@ -47,11 +47,12 @@
     .input-container {
         background-color: white;
         border-radius: 20px;
-        height: auto;
-        padding: 40px;
+        padding: 50px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
         display: flex;
         flex-direction: column;
+        padding-bottom: 10px;
+        height: auto;
         gap: 8px;
     }
 

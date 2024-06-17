@@ -6,18 +6,13 @@
 
 <section class="container">
     <div class="input-container">
-        <h2>Vali otsuse mudel:</h2>
+        <h2>Kuidas soovid jätkata?</h2>
         <br>
-        <div class="AHP">
-            <Button style="secondary" size="large">Analüütiline hierarhia mudel
-            </Button>
-            <Button size="mini">
-                <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
-            </Button>
-        </div>
+
         <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud")} on:keydown>Tagasi</Button>
-            <Button on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Jätka</Button>
+            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteerium")} on:keydown size="large">Tagasi</Button>
+            <Button size="large">Salvesta otsuste tegija ja vasta hiljem</Button>
+            <Button on:click={() => goto("/tasuline-ot-valikud/otsustaja?code=1")} on:keydown size="large">Jätka</Button>
         </div>
     </div>
 </section>
@@ -31,7 +26,7 @@
     }
 
     .input-container {
-        width: 500px;
+        width: 600px;
         background-color: white;
         border-radius: 20px;
         padding: 50px;
