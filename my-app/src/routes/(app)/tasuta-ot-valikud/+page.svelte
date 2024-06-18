@@ -35,7 +35,6 @@
         padding: 50px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
     }
-
     .input-name {
         display: flex; /* sõna valik ja sisestusvälja jaoks */
         align-items: center; /* vertikaalne joondamine */
