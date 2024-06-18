@@ -80,11 +80,12 @@
     .input-container {
         background-color: white;
         border-radius: 20px;
-        height: auto;
-        padding: 40px;
+        padding: 50px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
         display: flex;
         flex-direction: column;
+        padding-bottom: 10px;
+        height: auto;
         gap: 8px;
     }
 
