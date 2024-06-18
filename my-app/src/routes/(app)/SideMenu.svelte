@@ -234,7 +234,7 @@
     <div class="container" class:open={isOpen}> 
         <div class="head">
             <div class="logo"> 
-                <img src={logo} alt="logo"/>
+                <img src={logo} alt="logo"width="50px" height="50px"/>
                 <p>Desicion Maker</p>
             </div>
             
