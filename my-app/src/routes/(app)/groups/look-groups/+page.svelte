@@ -2,9 +2,21 @@
     import { supabase } from '$lib/supabaseClient';
     import { onMount } from 'svelte';
     import { writable, get } from 'svelte/store';
-    import { sat_user_id } from '../../../../store.js';
-    import { goto } from "$app/navigation";
+    import { sat_user_id, sat_premium, sat_group_id } from '../../../../store.js';
     import Button from "$lib/components/Button.svelte";
+    import { goto } from "$app/navigation";
+
+    onMount(() => {
+        sat_user_id.subscribe(value => {
+            if ($sat_user_id == null) {
+                window.location.href = "/login";
+            } else if ($sat_premium == false){
+                location.href = "/";
+            } else {
+                loading = false;
+            }
+        });
+    });
 
     // Define the type for groupInfo
     interface GroupInfo {
@@ -13,6 +25,7 @@
         group_code: string;
         leader: boolean;
         members: Array<{ user_ID: number, user_name: string, is_current_user: boolean, is_leader: boolean }>;
+        decisions: Array<{ id: number, choice_name: string }>;
     }
 
     const groupInfo = writable<GroupInfo[]>([]);
@@ -55,6 +68,17 @@
                         throw new Error(membersError.message);
                     }
 
+                    const { data: decisions, error: decisionsError } = await supabase
+                        .from('premium_decisions_groups')
+                        .select(`
+                            premium_decisions (id, choice_name)
+                        `)
+                        .eq('group_ID', info.group_ID);
+
+                    if (decisionsError) {
+                        throw new Error(decisionsError.message);
+                    }
+
                     return {
                         group_ID: info.group_ID,
                         group_name: info.groups.group_name,
@@ -65,6 +89,10 @@
                             user_name: member.users.name,
                             is_current_user: member.user_ID === currentUserId,
                             is_leader: member.leader
+                        })),
+                        decisions: (decisions || []).map((decision: any) => ({
+                            id: decision.premium_decisions.id,
+                            choice_name: decision.premium_decisions.choice_name
                         }))
                     };
                 }));
@@ -114,6 +142,30 @@
         }
     }
 
+    async function leaveGroup(groupId: number, memberId: number) {
+        try {
+            console.log(memberId, groupId);
+            // First delete all members of the group
+            const { data: membersData, error: membersError } = await supabase
+                .from('users_groups')
+                .delete()
+                .eq('group_ID', groupId)
+                .eq('user_ID', memberId);
+
+            if (membersError) {
+                throw new Error(membersError.message);
+            }
+
+            console.log(`Members deleted: ${JSON.stringify(membersData)}`);
+
+            // Refresh group info after deleting the group
+            await refreshGroupInfo();
+        } catch (error) {
+            console.error('Error deleting group:', error);
+            alert('Error deleting group: ' + error);
+        }
+    }
+
     async function removeMember(groupId: number, memberId: number) {
         try {
             console.log('Leader is trying to remove: ' + memberId + ' from group id: ' + groupId);
@@ -136,6 +188,47 @@
             alert('Error removing member: ' + error);
         }
     }
+    async function groupdesicion(groupId: number) {
+        try {
+            sat_group_id.set(groupId);
+            location.href = "/groups/desicion-name";
+
+        } catch (error) {
+            console.error('Error making a group desicion:', error);
+            alert('Error making a group desicion: ' + error);
+        }
+    }
+    async function removeDesicion(groupId: number, decisionId: number) {
+    try {
+        const { data: deleteGroupDecisionData, error: deleteGroupDecisionError } = await supabase
+            .from('premium_decisions_groups')
+            .delete()
+            .eq('group_ID', groupId)
+            .eq('premium_decisions_ID', decisionId);
+
+        if (deleteGroupDecisionError) {
+            throw new Error(deleteGroupDecisionError.message);
+        }
+
+        const { data: deleteDecisionData, error: deleteDecisionError } = await supabase
+            .from('premium_decisions')
+            .delete()
+            .eq('id', decisionId);
+
+        if (deleteDecisionError) {
+            throw new Error(deleteDecisionError.message);
+        }
+
+        console.log(`Removal successful: ${JSON.stringify(deleteDecisionData)}`);
+
+        // Refresh group info after removing a decision
+        await refreshGroupInfo();
+    } catch (error) {
+        console.error('Error removing decision:', error);
+        alert('Error removing decision: ' + error);
+    }
+    }
+
     function copyToClipboard(group_code: string) {
         if (group_code) {
             navigator.clipboard.writeText(group_code)
@@ -187,7 +280,15 @@
                     <div class="box">
                         <div class="box-title">Otsused</div>
                         <div class="box-content">
-                            <!-- Siia tulevad otsused -->
+                            {#each info.decisions as decision}
+                                {decision.choice_name}
+                                <button on:click={() => groupdesicion(info.group_ID)}>Proovi</button>
+                                {#if info.leader}
+                                    <button on:click={() => removeDesicion(info.group_ID, decision.id)}>Kustuta</button>
+                                {/if}
+                                <button on:click={() => groupdesicion(info.group_ID)}>Tulemused</button>
+                                <br>
+                            {/each}
                         </div>
                     </div>
                 </div>
@@ -200,7 +301,7 @@
                     </div>
                     <div class="buttons-right">
                         {#if info.leader}
-                        <Button on:click={() => deleteGroup(info.group_ID)}>Loo uus otsus</Button>
+                        <Button on:click={() => groupdesicion(info.group_ID)}>Loo uus otsus</Button>
                         {/if}
                     </div>
                 </div>    
