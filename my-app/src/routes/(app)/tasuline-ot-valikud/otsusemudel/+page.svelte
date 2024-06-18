@@ -18,8 +18,16 @@
 <section class="container">
     <div class="input-container">
         <h2>Vali otsuse mudel:</h2>
-        <br>
-        <div class="AHP">
+        <div class="mudel">
+            <Button style="secondary" size="large" on:click={() => { modelType = 3; saveModelType(); }}>
+                Forced choice mudel
+            </Button>
+            <Button size="mini">
+                <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
+            </Button>
+        </div>
+        
+        <div class="mudel">
             <Button style="secondary" size="large" on:click={() => { modelType = 3; saveModelType(); }}>
                 Analüütiline hierarhia mudel
             </Button>
@@ -49,6 +57,9 @@
         padding: 50px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
         height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
     }
 
     .buttons{
@@ -57,12 +68,11 @@
         justify-content: space-between;
     }
 
-    .AHP{
-        display: flex;
-        margin-top: 50px;
-        margin-bottom: 90px;
-        justify-content: center;
+    .mudel{
+        display: grid;
+        grid-template-columns: 5fr max-content;
         gap: 20px;
+        align-items: center;
     }
 
     h2{
