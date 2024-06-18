@@ -1,20 +1,12 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
-    import { tooltip } from "$lib/script/tooltip.js";
     import { goto } from "$app/navigation";
     import { get } from "svelte/store";
-    import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
-
-    let kriteeriumid = get(premiumDecisionStore).criteria.map(criteria => ({ title: criteria }));
-
+    import { premiumDecisionStore } from '../../../../store-group/premiumDecisionStore';
 
     // Initialize inputs with values from the store
-    let inputs = get(premiumDecisionStore).choices.map((choice, index) => ({ id: index + 1, value: choice }));
-
-    function getTooltipContent() {
-        return kriteeriumid.map(criteria => criteria.title).join(", ");
-    }
+    let inputs = get(premiumDecisionStore).criteria.map((criterion, index) => ({ id: index + 1, value: criterion }));
     
     if (inputs.length === 0) {
         inputs = [{ id: 1, value: '' }, { id: 2, value: '' }];
@@ -30,22 +22,22 @@
         }
     };
 
-    function saveChoices() {
-        const choices = inputs.map(input => input.value).filter(value => value.trim() !== '');
+    function saveCriteria() {
+        const criteria = inputs.map(input => input.value).filter(value => value.trim() !== '');
         premiumDecisionStore.update(store => {
-            return { ...store, choices };
+            return { ...store, criteria };
         });
-        goto("/tasuline-ot-valikud/finished");
+        goto("/groups/choices");
     }
 </script>
 
 <section class="container">
     <div class="input-container">
-        <h2>Sisesta objektid, mille vahel soovid valida:</h2>
+        <h2>Sisesta kriteeriumid, mida võrrelda:</h2>
         {#each inputs as input (input.id)}
             <div class="input-group">
-                <p>valik:</p>
-                <Input placeholder="Lisa uus valik" bind:value={input.value}></Input>  
+                <p>kriteerium:</p>
+                <Input placeholder="Lisa uus kriteerium" bind:value={input.value}></Input>  
                 {#if inputs.length > 2}
                     <Button size="mini" on:click={removeInput}>-</Button>
                 {/if}
@@ -53,18 +45,15 @@
             <br>
         {/each}
         <div class="valkri">
-            <div class="lisavalik">
-                <p>Lisa veel valikuid</p>
+            <div class="lisakriteerium">
+                <p>Lisa veel kriteeriume</p>
                 <Button size="mini" on:click={addInput}>+</Button>
-            </div>
-            <div class="lisaval">
-                <p><span use:tooltip={getTooltipContent()}>Vaata lisatud valikuid</span></p>
             </div>            
         </div>
         <br>
         <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Tagasi</Button>
-            <Button on:click={saveChoices} on:keydown>Jätka</Button>
+            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/otsusemudel")} on:keydown>Tagasi</Button>
+            <Button on:click={saveCriteria} on:keydown>Jätka</Button>
         </div>
     </div>
 </section>
@@ -100,30 +89,62 @@
         font-size: medium;
     }
 
-    .buttons {
+    .buttons{
         margin-top: 40px;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
     }
 
-    .input-container p {
+    .input-container p{
         text-align: center;
         margin-right: 10px;
         font-size: 20px;
     }
 
-    .lisavalik {
+    h2{
+        font-size: 30px;
+    }
+
+    :global(.tooltip) {
+        position: relative;
+        padding-top: 0.35rem;
+        cursor: pointer;
+	}
+	
+	:global(#tooltip) {
+        position: absolute;
+        bottom: 100%;
+        right: 50%;
+        transform: translate(50%, 0);
+        color: black;
+        padding: 8px 12px;
+        background: #CFFFCB;
+        border-radius: 0.25rem;
+        filter: drop-shadow(0 1px 2px hsla(0, 0%, 0%, 0.2));
+        width: 150px;
+        text-align: center;
+    }
+
+	:global(.tooltip:not(:focus) #tooltip::before) {
+		content: '';
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 0.6em;
+		height: 0.25em;
+		background: inherit;
+		clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+	}
+    
+    .lisakriteerium{
         margin-top: 20px;
         display: flex;
         flex-direction: row;
     }
 
-    h2 {
-        font-size: 30px;
-    }
-
-    .lisavalik p {
+    .lisakriteerium p{
         font-size: 15px;
     }
 
@@ -143,5 +164,5 @@
     .lisaval p{
         font-size: 15px;
     }
-
+    
 </style>

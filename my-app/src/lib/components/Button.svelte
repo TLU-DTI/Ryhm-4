@@ -17,12 +17,12 @@
         align-items: center;
         min-width: 100px;
         cursor: pointer;
-        border: 1px solid #DDD8D8;
+        border: 2px solid #DDD8D8;
         border-radius: 40px;
         background: var(--bg-color);
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
         font-family: 'Merriweather', serif;
-
+        max-height: 50px;
     }
 
     .style-primary {
@@ -69,6 +69,11 @@
         min-width: 36px;
         max-width: 40px;
         min-height: 36px;
+        max-height: 40px;
+    }
+
+    button:hover {
+        border: 2px solid #C4F1C0;    
     }
 
 </style>

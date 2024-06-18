@@ -3,7 +3,7 @@
     import { tooltip } from "$lib/script/tooltip.js";
     import { goto } from "$app/navigation";
     import { get } from "svelte/store";
-    import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
+    import { premiumDecisionStore } from '../../../../store-group/premiumDecisionStore';
 
     let modelType = 1; // Default model type
 
@@ -11,23 +11,15 @@
         premiumDecisionStore.update(store => {
             return { ...store, modelType };
         });
-        goto("/tasuline-ot-valikud/sisesta-kriteeriumid");
+        goto("/groups/enter-criteria");
     }
 </script>
 
 <section class="container">
     <div class="input-container">
         <h2>Vali otsuse mudel:</h2>
-        <div class="mudel">
-            <Button style="secondary" size="large" on:click={() => { modelType = 3; saveModelType(); }}>
-                Forced choice mudel
-            </Button>
-            <Button size="mini">
-                <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
-            </Button>
-        </div>
-        
-        <div class="mudel">
+        <br>
+        <div class="AHP">
             <Button style="secondary" size="large" on:click={() => { modelType = 3; saveModelType(); }}>
                 Analüütiline hierarhia mudel
             </Button>
@@ -36,7 +28,7 @@
             </Button>
         </div>
         <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud")} on:keydown>Tagasi</Button>
+            <Button style="secondary" on:click={() => goto("/groups/desicion-name")} on:keydown>Tagasi</Button>
             <Button on:click={saveModelType} on:keydown>Jätka</Button>
         </div>
     </div>
@@ -57,9 +49,6 @@
         padding: 50px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
         height: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
     }
 
     .buttons{
@@ -68,11 +57,12 @@
         justify-content: space-between;
     }
 
-    .mudel{
-        display: grid;
-        grid-template-columns: 5fr max-content;
+    .AHP{
+        display: flex;
+        margin-top: 50px;
+        margin-bottom: 90px;
+        justify-content: center;
         gap: 20px;
-        align-items: center;
     }
 
     h2{

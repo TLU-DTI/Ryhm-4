@@ -21,11 +21,10 @@
     type ButtonConfig = {
         id: number;
         label: string;
-        icon: string; // Assuming icons are paths to images or SVGs
+        icon: string; 
         route: string;
     };
 
-    // Button configurations
     const buttons: ButtonConfig[] = [
         {
             id: 1,
@@ -49,7 +48,7 @@
             id: 4,
             label: 'Grupid',
             icon: groupsIcon,
-            route: '/grupid'
+            route: '/groups'
         },
         {
             id: 5,
@@ -79,11 +78,8 @@
    // Track clicked state for each button
    let clickedButtons: Record<number, boolean> = {};
 
-    // Function to handle button click and navigation
     function handleClick(buttonId: number, route: string): void {
-    // Navigate to the specified route
         goto(route).then(() => {
-        // Update clicked state for the specific button after navigation
             clickedButtons = { ...clickedButtons, [buttonId]: true };
         });
     }
@@ -238,7 +234,7 @@
     <div class="container" class:open={isOpen}> 
         <div class="head">
             <div class="logo"> 
-                <img src={logo} alt="logo"/>
+                <img src={logo} alt="logo"width="50px" height="50px"/>
                 <p>Desicion Maker</p>
             </div>
             

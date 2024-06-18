@@ -4,7 +4,7 @@
     import { tooltip } from "$lib/script/tooltip.js";
     import { goto } from "$app/navigation";
     import { get } from "svelte/store";
-    import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
+    import { premiumDecisionStore } from '../../../../store-group/premiumDecisionStore';
 
     let kriteeriumid = get(premiumDecisionStore).criteria.map(criteria => ({ title: criteria }));
 
@@ -35,7 +35,7 @@
         premiumDecisionStore.update(store => {
             return { ...store, choices };
         });
-        goto("/tasuline-ot-valikud/finished");
+        goto("/groups/finished");
     }
 </script>
 
@@ -63,7 +63,7 @@
         </div>
         <br>
         <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Tagasi</Button>
+            <Button style="secondary" on:click={() => goto("/groups/enter-criteria")} on:keydown>Tagasi</Button>
             <Button on:click={saveChoices} on:keydown>Jätka</Button>
         </div>
     </div>
@@ -80,12 +80,11 @@
     .input-container {
         background-color: white;
         border-radius: 20px;
-        padding: 50px;
+        height: auto;
+        padding: 40px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
         display: flex;
         flex-direction: column;
-        padding-bottom: 10px;
-        height: auto;
         gap: 8px;
     }
 

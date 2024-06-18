@@ -116,18 +116,19 @@
             }
 
             console.log('Group created and user added: ', groupData);
-            //window.location.href = "/groups/your-groups";
+            window.location.href = "/groups/your-groups";
         } catch (error) {
             console.error('Error:', error);
         }
     }
 </script>
 
+
 <section class="center-container">
     {#if !loading}
-    <form class="rectangle" use:form on:submit={handleCreateGroup}>
+        <form class="rectangle" use:form on:submit={handleCreateGroup}>
             <h1>Grupi loomine</h1>
-            <p>Lisa grupile nimi</p>
+            <p>Lisa grupile nimi:</p>
 
             <div class="input mandatory">
                 <Input type="text" name="group_name" placeholder="Grupi nimi"></Input>
@@ -135,14 +136,14 @@
             </div>
 
             <div class="create">
-                <Button type="button" on:click={() => goto("/groups")} on:keydown>Tagasi</Button>
-                <Button type="submit" disabled={!$form.valid}>Loo grupp</Button>
+                <Button type="button" style="secondary" on:click={() => goto("/groups")} on:keydown>Tagasi</Button>
+                <Button disabled={!$form.valid}>Loo grupp</Button>
             </div>
         </form>
     {/if}
 </section>
-<style>
-    
+
+<style>   
     .center-container {
 		display: flex;
 		justify-content: center;
@@ -156,7 +157,7 @@
 		align-items: center;
 		justify-content: center;
 		width: 610px; 
-		height: 410px; 
+		height: 450px; 
 		background: white; 
 		box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
 		border-radius: 38px;
@@ -165,12 +166,10 @@
 	}
 
     h1 {
-      margin-bottom: 50px;
+      margin-bottom: 60px;
     }
 
     .mandatory {
-		display: flex;
-		align-items: center;
 		color: red;
 		gap: 5px;
 	}
@@ -178,20 +177,13 @@
     .create {
         display: flex;
 		justify-content: center;
-        margin-top: 50px;
+        margin-top: 80px;
         gap: 230px;
     }
     
     .input {
 		display: flex;
-		flex-direction: column;
-		gap: 25px; 
-		width: 100%; 
+		flex-direction: row;
 		align-items: center; 
 	}
-
-    :global(.touched:invalid) {
-        border-color: red;
-        outline-color: red;
-    }
 </style>

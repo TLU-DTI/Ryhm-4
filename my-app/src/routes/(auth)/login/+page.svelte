@@ -6,6 +6,7 @@
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
 	import { sat_user_id, sat_username, sat_premium } from '../../../store.js';
 	import { tooltip } from "$lib/script/tooltip.js";
+	import { goto } from "$app/navigation";
 
 
 	const form = useForm();
@@ -76,16 +77,15 @@
 				</div>
 			</div>
 			
-		<div class="forgot-password">
+		<button class="forgot-password" on:click={(event) => { event.preventDefault(); goto("/forgot-password"); }} on:keydown>
 			<p>Unustasid salasõna?</p>
-		</div>
+		</button>
 
 		<div class="reg-login">
-			<Button style="secondary">Loo kasutaja</Button>
+			<Button style="secondary" on:click={(event) => { event.preventDefault(); goto("/register"); }} on:keydown>Loo kasutaja</Button>
 			<Button disabled={!$form.valid}>Logi sisse</Button>
 		</div>
-
-	</form>
+		</form>
 
 	</div>
 
@@ -137,15 +137,19 @@
 	}
 
 	.input-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-bottom: 10px;
+   	 	display: flex;
+    	align-items: center;
+    	position: relative;
+    	margin-bottom: 10px;
 	}
 
 	.mandatory {
-    color: red;
-    gap: 5px;
+    	color: red;
+    	gap: 5px;
+	}
+	.forgot-password {
+		border: none;
+		background-color: white;
 	}
 
 	.forgot-password p {
@@ -153,6 +157,7 @@
 		text-decoration: underline;
 		font-size: 14px;
 		color: rgb(194, 192, 192); 
+	
 	}
 
 	.forgot-password p:hover {
@@ -164,6 +169,7 @@
 		justify-content: center;
 		gap: 210px;
 		margin-top: 50px;
+		
 	}
 
 	:global(.tooltip) {
