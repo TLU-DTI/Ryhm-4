@@ -1,7 +1,18 @@
-<script>
+<script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import { tooltip } from "$lib/script/tooltip.js";
     import { goto } from "$app/navigation";
+    import { get } from "svelte/store";
+    import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
+
+    let modelType = 1; // Default model type
+
+    function saveModelType() {
+        premiumDecisionStore.update(store => {
+            return { ...store, modelType };
+        });
+        goto("/tasuline-ot-valikud/sisesta-kriteeriumid");
+    }
 </script>
 
 <section class="container">
@@ -9,7 +20,8 @@
         <h2>Vali otsuse mudel:</h2>
         <br>
         <div class="AHP">
-            <Button style="secondary" size="large">Analüütiline hierarhia mudel
+            <Button style="secondary" size="large" on:click={() => { modelType = 3; saveModelType(); }}>
+                Analüütiline hierarhia mudel
             </Button>
             <Button size="mini">
                 <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
@@ -17,7 +29,7 @@
         </div>
         <div class="buttons">
             <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud")} on:keydown>Tagasi</Button>
-            <Button on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Jätka</Button>
+            <Button on:click={saveModelType} on:keydown>Jätka</Button>
         </div>
     </div>
 </section>

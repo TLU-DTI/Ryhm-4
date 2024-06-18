@@ -1,29 +1,34 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
-    import { tooltip } from "$lib/script/tooltip.js";
     import { goto } from "$app/navigation";
+    import { get } from "svelte/store";
+    import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
 
-    let valikud: { title: string }[] = [
-        { title: "valik 1" },
-        { title: "valik 2" },
-        { title: "valik 3" }
-    ];
-
-    function getTooltipContent() {
-        return valikud.map(valik => valik.title).join(", ");
+    // Initialize inputs with values from the store
+    let inputs = get(premiumDecisionStore).criteria.map((criterion, index) => ({ id: index + 1, value: criterion }));
+    
+    if (inputs.length === 0) {
+        inputs = [{ id: 1, value: '' }, { id: 2, value: '' }];
     }
 
-    let inputs = [{ id: 1 }, { id: 2 }]; //esialgsed inputi osad
     const addInput = () => {
-        inputs = [...inputs, { id: inputs.length + 1 }]; //lisab uue inputi massiivi
+        inputs = [...inputs, { id: inputs.length + 1, value: '' }];
     };
+
     const removeInput = () => {
         if (inputs.length > 2) {
             inputs = inputs.slice(0, -1); 
         }
     };
 
+    function saveCriteria() {
+        const criteria = inputs.map(input => input.value).filter(value => value.trim() !== '');
+        premiumDecisionStore.update(store => {
+            return { ...store, criteria };
+        });
+        goto("/tasuline-ot-valikud/valikud");
+    }
 </script>
 
 <section class="container">
@@ -32,26 +37,25 @@
         {#each inputs as input (input.id)}
             <div class="input-group">
                 <p>kriteerium:</p>
-                <Input placeholder="Lisa uus kriteerium"></Input>  <Button size="mini" on:click={removeInput}>-</Button>
+                <Input placeholder="Lisa uus kriteerium" bind:value={input.value}></Input>  
+                {#if inputs.length > 2}
+                    <Button size="mini" on:click={removeInput}>-</Button>
+                {/if}
             </div>
             <br>
         {/each}
-            <div class="valkri">
-                <div class="lisakriteerium">
-                    <p>Lisa veel kriteeriume</p>
-                    <Button size="mini" on:click={addInput}>+</Button>
-                </div>
-                <div class="lisaval">
-                    <p><span use:tooltip={getTooltipContent()}>Vaata lisatud valikuid</span></p>
-                </div>            
-            </div>
-            <br>
-            <div class="buttons">
-                <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/otsusemudel")} on:keydown>Tagasi</Button>
-                <Button on:click={() => goto("/tasuline-ot-valikud/valikud")} on:keydown>Jätka</Button>
-            </div>
+        <div class="valkri">
+            <div class="lisakriteerium">
+                <p>Lisa veel kriteeriume</p>
+                <Button size="mini" on:click={addInput}>+</Button>
+            </div>            
+        </div>
+        <br>
+        <div class="buttons">
+            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/otsusemudel")} on:keydown>Tagasi</Button>
+            <Button on:click={saveCriteria} on:keydown>Jätka</Button>
+        </div>
     </div>
-          
 </section>
 
 <style>
