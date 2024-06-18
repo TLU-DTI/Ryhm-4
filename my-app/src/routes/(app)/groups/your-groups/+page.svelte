@@ -266,7 +266,9 @@
                         <li>
                             {decision.choice_name}
                             <button on:click={() => groupdesicion(info.group_ID)}>Proovi</button>
-                            <button on:click={() => removeDesicion(info.group_ID, decision.id)}>Kustuta</button>
+                            {#if info.leader}
+                                <button on:click={() => removeDesicion(info.group_ID, decision.id)}>Kustuta</button>
+                            {/if}
                             <button on:click={() => groupdesicion(info.group_ID)}>Tulemused</button>
                         </li>
                     {/each}
