@@ -85,11 +85,6 @@
 			<Button style="secondary" on:click={() => goto("/register")} on:keydown>Loo kasutaja</Button>
 			<Button disabled={!$form.valid}>Logi sisse</Button>
 		</div>
-
-			<div class="reg-login">
-				<Button style="secondary">Loo kasutaja</Button>
-				<Button disabled={!$form.valid}>Logi sisse</Button>
-			</div>
 		</form>
 
 	</div>
