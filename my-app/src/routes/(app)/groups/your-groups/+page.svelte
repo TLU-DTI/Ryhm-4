@@ -2,7 +2,7 @@
     import { supabase } from '$lib/supabaseClient';
     import { onMount } from 'svelte';
     import { writable, get } from 'svelte/store';
-    import { sat_user_id, sat_premium } from '../../../store.js';
+    import { sat_user_id, sat_premium } from '../../../../store.js';
 
     onMount(() => {
         sat_user_id.subscribe(value => {
@@ -124,6 +124,30 @@
         }
     }
 
+    async function leaveGroup(groupId: number, memberId: number) {
+        try {
+            console.log(memberId, groupId);
+            // First delete all members of the group
+            const { data: membersData, error: membersError } = await supabase
+                .from('users_groups')
+                .delete()
+                .eq('group_ID', groupId)
+                .eq('user_ID', memberId);
+
+            if (membersError) {
+                throw new Error(membersError.message);
+            }
+
+            console.log(`Members deleted: ${JSON.stringify(membersData)}`);
+
+            // Refresh group info after deleting the group
+            await refreshGroupInfo();
+        } catch (error) {
+            console.error('Error deleting group:', error);
+            alert('Error deleting group: ' + error);
+        }
+    }
+
     async function removeMember(groupId: number, memberId: number) {
         try {
             console.log('Leader is trying to remove: ' + memberId + ' from group id: ' + groupId);
@@ -158,7 +182,6 @@
 
 {#if !loading}
     <h1>Your Groups</h1>
-
     <ul>
         {#each $groupInfo as info}
             <li>
@@ -168,6 +191,13 @@
                 {#if info.leader}
                     <button on:click={() => deleteGroup(info.group_ID)}>Delete group</button>
                     <button on:click={() => groupdesicion(info.group_ID)}>Otsuste tegija</button>
+                {/if}
+                {#if !info.leader}
+                    {#each info.members as member}
+                        {#if member.is_current_user}
+                            <button on:click={() => leaveGroup(info.group_ID, member.user_ID)}>Leave group</button>
+                        {/if}
+                    {/each}
                 {/if}
                 <h3>Members</h3>
                 <ul>

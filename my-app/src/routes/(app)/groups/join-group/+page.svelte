@@ -3,7 +3,7 @@
     import { supabase } from '$lib/supabaseClient';
     import { useForm, validators, HintGroup, Hint, required } from "svelte-use-form";
     import { writable } from 'svelte/store';
-    import { sat_user_id, sat_username, sat_premium } from '../../../store.js';
+    import { sat_user_id, sat_username, sat_premium } from '../../../../store.js';
     import { onMount } from 'svelte';
 
     const form = useForm();
