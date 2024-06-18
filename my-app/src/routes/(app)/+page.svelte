@@ -12,6 +12,13 @@
     let loading = true;  // State to track loading status
     let currentUserId = null;
 
+    function handleClick() {
+        window.location.href = "/otsuse-tegija";
+    }
+    function handleClick2() {
+        window.location.href = "/groups/create-group";
+    }
+
     onMount(() => {
         sat_user_id.subscribe(value => {
             currentUserId = value;
@@ -55,7 +62,7 @@
                 <img src={groupsIcon} alt="Groups icon" width="100 px"/>
             </div>
             <div class="action-area">
-                <Button on:click={() => goto("/grupid")} on:keydown>Gruppide loomine</Button>
+                <Button on:click={handleClick2}>Grupi loomine</Button>
             </div>
         </div> 
     </section>
