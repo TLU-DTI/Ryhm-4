@@ -304,7 +304,7 @@
                 </div>
                 <div class="btn">
                     <div class="buttons-left">
-                        <Button type="button" style="secondary" on:click={() => goto("/groups")} on:keydown>Tagasi</Button>
+                        <Button type="button" style="secondary" on:click={() => goto("/groups/your-groups")} on:keydown>Tagasi</Button>
                         {#if info.leader}
                             <Button style="secondary" on:click={() => deleteGroup(info.group_ID)}>Kustuta grupp</Button>
                         {/if}
