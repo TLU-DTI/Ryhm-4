@@ -5,7 +5,7 @@
 	import { supabase } from '$lib/supabaseClient';
 	import { useForm, validators, HintGroup, Hint, email, required } from "svelte-use-form";
 	import { writable, derived } from 'svelte/store';
-	import { sat_user_id, sat_premium } from '../../../store.js';
+	import { sat_user_id, sat_username, sat_premium } from '../../../store.js';
 	import { tooltip } from "$lib/script/tooltip.js";
 	import { goto } from "$app/navigation";
 
@@ -68,7 +68,7 @@
 						premium: data.premium
 					}
 				])
-					.select('id')
+					.select('id, name')
 					.single();
 
 			if (error) {
@@ -76,6 +76,7 @@
 			}
 			sat_user_id.set(supabaseData.id);
 			sat_premium.set(false);
+			sat_username.set(supabaseData.name);
 			console.log('User created:', supabaseData);
 			window.location.href = "/";//Muuda seda!
 		} catch (error) {
