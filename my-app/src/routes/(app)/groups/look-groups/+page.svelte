@@ -155,60 +155,57 @@
     {#if loading}
         <p>Loading...</p>
     {:else}
-    <div class="rectangle">
-        {#each $groupInfo as info}
-            <div class="copy">
-                <h1>{info.group_name}</h1>
-                <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
-                    <span><div>{info.group_code}<img src="../src/lib/images/copy.png" alt="copy icon" class="icon"/></div></span>
-                </Button>
-            </div>
-            <!--<p>Group Name: {info.group_name}</p>
-            <p>Group Code: {info.group_code}</p>
-            <p>Leader: {info.leader ? 'Yes' : 'No'}</p>-->
-            <div class="boxes-container">
-                <div class="box">
-                    <div class="box-title">Liikmed</div>
-                    <div class="box-content">
-                        {#each info.members as member}
-                            <div class="member-row">
-                                <span>
-                                    <!--{member.is_current_user ? '(you)' : ''} 
-                                    {member.is_leader ? '(leader)' : ''}-->
-                                    {#if member.is_leader}
-                                    <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
+        <div class="rectangle">
+            {#each $groupInfo as info}
+                <div class="copy">
+                    <h1>{info.group_name}</h1>
+                    <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
+                        <span><div>{info.group_code}<img src="../src/lib/images/copy.png" alt="copy icon" class="icon"/></div></span>
+                    </Button>
+                </div>
+                <div class="boxes-container">
+                    <div class="box">
+                        <div class="box-title">Liikmed</div>
+                        <div class="box-content">
+                            {#each info.members as member}
+                                <div class="member-row">
+                                    <span>
+                                        {#if member.is_leader}
+                                            <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
+                                        {/if}
+                                        {member.user_name} 
+                                    </span>
+                                    {#if info.leader && !member.is_leader}
+                                        <button on:click={() => removeMember(info.group_ID, member.user_ID)} class="icon-button">
+                                            <img src="../src/lib/images/trash.png" alt="Delete user">
+                                        </button>
                                     {/if}
-                                    {member.user_name} 
-                                </span>
-                                {#if info.leader && !member.is_leader}
-                                    <button on:click={() => removeMember(info.group_ID, member.user_ID)} class="icon-button">
-                                        <img src="../src/lib/images/trash.png" alt="Delete user">
-                                    </button>
-                                {/if}
-                            </div>
-                        {/each}
+                                </div>
+                            {/each}
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="box-title">Otsused</div>
+                        <div class="box-content">
+                            <!-- Siia tulevad otsused -->
+                        </div>
                     </div>
                 </div>
-                <div class="box">
-                    <div class="box-title">Otsused</div>
-                    <div class="box-content">
-                        <!-- Siia tulevad otsused -->
+                <div class="btn">
+                    <div class="buttons-left">
+                        <Button type="button" style="secondary" on:click={() => goto("/groups")} on:keydown>Tagasi</Button>
+                        {#if info.leader}
+                            <Button style="secondary" on:click={() => deleteGroup(info.group_ID)}>Kustuta grupp</Button>
+                        {/if}
                     </div>
-                </div>
-            </div>
-            <div class="btn">
-                <div class="buttons">
-                    <Button type="button" style="secondary" on:click={() => goto("/groups")} on:keydown>Tagasi</Button>
-                    {#if info.leader}
-                    <Button style="secondary" on:click={() => deleteGroup(info.group_ID)}>Kustuta grupp</Button>
-                    {/if}
-                </div>
-                <div class="buttons2">
-                <Button on:click={() => deleteGroup(info.group_ID)}>Loo uus otsus</Button>
-                </div>
-            </div>    
-        {/each}
-    </div>                     
+                    <div class="buttons-right">
+                        {#if info.leader}
+                        <Button on:click={() => deleteGroup(info.group_ID)}>Loo uus otsus</Button>
+                        {/if}
+                    </div>
+                </div>    
+            {/each}
+        </div>                     
     {/if}
 </section>
 
@@ -225,7 +222,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 810px;
+        width: 100%;
         height: auto;
         background: white;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -336,11 +333,19 @@
         margin-top: 23px;
         margin-left: 40px;
         align-self: start;
+        justify-content: space-between; /* Veenduge, et see oleks space-between */
+        gap: 250px;
     }
 
-    .buttons {
+    .buttons-left {
+        flex: 1; /* Veenduge, et see oleks flex: 1 */
+        display: flex;
+        justify-content: flex-start;
+        gap: 15px;
     }
 
-    .buttons2 {
+    .buttons-right {
+        display: flex;
+        justify-content: flex-end;
     }
 </style>
