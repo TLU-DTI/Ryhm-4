@@ -2,7 +2,7 @@
     import { supabase } from '$lib/supabaseClient';
     import { onMount } from 'svelte';
     import { writable, get } from 'svelte/store';
-    import { sat_user_id, sat_premium } from '../../../../store.js';
+    import { sat_user_id, sat_premium, sat_group_id } from '../../../../store.js';
 
     onMount(() => {
         sat_user_id.subscribe(value => {
@@ -23,6 +23,7 @@
         group_code: string;
         leader: boolean;
         members: Array<{ user_ID: number, user_name: string, is_current_user: boolean, is_leader: boolean }>;
+        decisions: Array<{ id: number, choice_name: string }>;
     }
 
     const groupInfo = writable<GroupInfo[]>([]);
@@ -65,6 +66,17 @@
                         throw new Error(membersError.message);
                     }
 
+                    const { data: decisions, error: decisionsError } = await supabase
+                        .from('premium_decisions_groups')
+                        .select(`
+                            premium_decisions (id, choice_name)
+                        `)
+                        .eq('group_ID', info.group_ID);
+
+                    if (decisionsError) {
+                        throw new Error(decisionsError.message);
+                    }
+
                     return {
                         group_ID: info.group_ID,
                         group_name: info.groups.group_name,
@@ -75,6 +87,10 @@
                             user_name: member.users.name,
                             is_current_user: member.user_ID === currentUserId,
                             is_leader: member.leader
+                        })),
+                        decisions: (decisions || []).map((decision: any) => ({
+                            id: decision.premium_decisions.id,
+                            choice_name: decision.premium_decisions.choice_name
                         }))
                     };
                 }));
@@ -172,12 +188,44 @@
     }
     async function groupdesicion(groupId: number) {
         try {
+            sat_group_id.set(groupId);
+            location.href = "/groups/desicion-name";
 
         } catch (error) {
             console.error('Error making a group desicion:', error);
             alert('Error making a group desicion: ' + error);
         }
     }
+    async function removeDesicion(groupId: number, decisionId: number) {
+    try {
+        const { data: deleteGroupDecisionData, error: deleteGroupDecisionError } = await supabase
+            .from('premium_decisions_groups')
+            .delete()
+            .eq('group_ID', groupId)
+            .eq('premium_decisions_ID', decisionId);
+
+        if (deleteGroupDecisionError) {
+            throw new Error(deleteGroupDecisionError.message);
+        }
+
+        const { data: deleteDecisionData, error: deleteDecisionError } = await supabase
+            .from('premium_decisions')
+            .delete()
+            .eq('id', decisionId);
+
+        if (deleteDecisionError) {
+            throw new Error(deleteDecisionError.message);
+        }
+
+        console.log(`Removal successful: ${JSON.stringify(deleteDecisionData)}`);
+
+        // Refresh group info after removing a decision
+        await refreshGroupInfo();
+    } catch (error) {
+        console.error('Error removing decision:', error);
+        alert('Error removing decision: ' + error);
+    }
+}
 </script>
 
 {#if !loading}
@@ -209,6 +257,17 @@
                             {#if info.leader && !member.is_leader}
                                 <button on:click={() => removeMember(info.group_ID, member.user_ID)}>Remove</button>
                             {/if}
+                        </li>
+                    {/each}
+                </ul>
+                <h3>Otsused</h3>
+                <ul>
+                    {#each info.decisions as decision}
+                        <li>
+                            {decision.choice_name}
+                            <button on:click={() => groupdesicion(info.group_ID)}>Proovi</button>
+                            <button on:click={() => removeDesicion(info.group_ID, decision.id)}>Kustuta</button>
+                            <button on:click={() => groupdesicion(info.group_ID)}>Tulemused</button>
                         </li>
                     {/each}
                 </ul>

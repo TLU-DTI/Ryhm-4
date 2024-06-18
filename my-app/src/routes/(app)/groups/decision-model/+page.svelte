@@ -28,7 +28,7 @@
             </Button>
         </div>
         <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud")} on:keydown>Tagasi</Button>
+            <Button style="secondary" on:click={() => goto("/groups/desicion-name")} on:keydown>Tagasi</Button>
             <Button on:click={saveModelType} on:keydown>Jätka</Button>
         </div>
     </div>

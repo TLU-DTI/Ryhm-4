@@ -117,7 +117,7 @@
             }
 
             console.log('Group created and user added: ', groupData);
-            window.location.href = "/your-groups";
+            window.location.href = "groups/your-groups";
         } catch (error) {
             console.error('Error:', error);
         }

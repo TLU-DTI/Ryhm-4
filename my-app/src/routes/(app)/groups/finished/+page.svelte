@@ -4,13 +4,18 @@
     import { premiumDecisionStore } from '../../../../store-group/premiumDecisionStore';
     import { supabase } from '$lib/supabaseClient';
     import { get } from "svelte/store";
-    import { sat_user_id } from '../../../../store.js';
+    import { sat_user_id, sat_group_id } from '../../../../store.js';
 
     let premiumDecisionData = get(premiumDecisionStore);
-    let userId;
+    let userId: number | null = null;
+    let groupId: number | null = null;
 
     sat_user_id.subscribe(value => {
         userId = value;
+    });
+
+    sat_group_id.subscribe(value => {
+        groupId = value;
     });
 
     console.log('Retrieved userId:', userId);
@@ -28,9 +33,11 @@
         console.log('Data being sent to the database:', dataToInsert);
 
         try {
-            const { error } = await supabase
+            const { data, error } = await supabase
                 .from('premium_decisions')
-                .insert([dataToInsert]);
+                .insert([dataToInsert])
+                .select('id')
+                .single();
 
             if (error) {
                 throw new Error(error.message);
@@ -39,21 +46,36 @@
                 // Reset the project store
                 premiumDecisionStore.resetStore();
             }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+
+            const decision_id = data.id;
+
+            const { error: userGroupError } = await supabase
+                .from('premium_decisions_groups')
+                .insert([
+                    {
+                        group_ID: groupId,
+                        premium_decisions_ID: decision_id
+                    }
+                ]);
+
+            if (userGroupError) {
+                throw new Error(userGroupError.message);
+            }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                }
 
     function startAnswering() {
-        saveToDatabase().then(() => goto("/tasuline-ot-valikud/answer-questions"));
+        saveToDatabase().then(() => goto("/groups/your-groups"));
     }
 
     function saveResult() {
-        saveToDatabase().then(() => goto("/tasuline-ot-valikud/results"));
+        saveToDatabase().then(() => goto("/groups/your-groups"));
     }
 
     function goBack() {
-        goto("/tasuline-ot-valikud/valikud");
+        goto("/groups/choices");
     }
 </script>
 

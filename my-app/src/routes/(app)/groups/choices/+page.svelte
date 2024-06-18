@@ -63,7 +63,7 @@
         </div>
         <br>
         <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Tagasi</Button>
+            <Button style="secondary" on:click={() => goto("/groups/enter-criteria")} on:keydown>Tagasi</Button>
             <Button on:click={saveChoices} on:keydown>Jätka</Button>
         </div>
     </div>
