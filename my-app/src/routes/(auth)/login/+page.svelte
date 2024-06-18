@@ -76,16 +76,16 @@
 				</div>
 			</div>
 			
-		<div class="forgot-password">
-			<p>Unustasid salasõna?</p>
-		</div>
 
-		<div class="reg-login">
-			<Button style="secondary">Loo kasutaja</Button>
-			<Button disabled={!$form.valid}>Logi sisse</Button>
-		</div>
+			<div class="forgot-password">
+				<p>Unustasid salasõna?</p>
+			</div>
 
-	</form>
+			<div class="reg-login">
+				<Button style="secondary">Loo kasutaja</Button>
+				<Button disabled={!$form.valid}>Logi sisse</Button>
+			</div>
+		</form>
 
 	</div>
 
@@ -137,15 +137,15 @@
 	}
 
 	.input-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-bottom: 10px;
+   	 	display: flex;
+    	align-items: center;
+    	position: relative;
+    	margin-bottom: 10px;
 	}
 
 	.mandatory {
-    color: red;
-    gap: 5px;
+    	color: red;
+    	gap: 5px;
 	}
 
 	.forgot-password p {
