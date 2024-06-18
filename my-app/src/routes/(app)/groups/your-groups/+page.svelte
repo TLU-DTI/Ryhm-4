@@ -202,7 +202,7 @@
         max-height: 270px;
         overflow-y: auto;
         scrollbar-width: thin; /* horisontaalse kerimisriba jaoks */
-        scrollbar-color: #C4F1C0 #f0f0f0; /* värvid kerimisribale (thumb, track) */
+        scrollbar-color: #C4F1C0 #F2F1E7; /* värvid kerimisribale (thumb, track) */
         padding-right: 10px;
     }
 
@@ -217,7 +217,7 @@
     }
 
     .groups-list::-webkit-scrollbar-track {
-        background-color: #f0f0f0; /* tausta värv */
+        background-color: #F2F1E7; /* tausta värv */
         border-radius: 10px; /* nurga raadius */
     }
 

@@ -3,6 +3,8 @@
     import { onMount } from 'svelte';
     import { writable, get } from 'svelte/store';
     import { sat_user_id } from '../../../../store.js';
+    import { goto } from "$app/navigation";
+    import Button from "$lib/components/Button.svelte";
 
     // Define the type for groupInfo
     interface GroupInfo {
@@ -134,37 +136,211 @@
             alert('Error removing member: ' + error);
         }
     }
+    function copyToClipboard(group_code: string) {
+        if (group_code) {
+            navigator.clipboard.writeText(group_code)
+                .then(() => {
+                    console.log('Text copied to clipboard');
+                })
+                .catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+        } else {
+            console.error('Group code is not defined');
+        }
+    }
 </script>
 
-{#if loading}
-    <p>Loading...</p>
-{:else}
-    <h1>Your Groups</h1>
-
-    <ul>
+<section class="center-container">
+    {#if loading}
+        <p>Loading...</p>
+    {:else}
+    <div class="rectangle">
         {#each $groupInfo as info}
-            <li>
-                <p>Group Name: {info.group_name}</p>
-                <p>Group Code: {info.group_code}</p>
-                <p>Leader: {info.leader ? 'Yes' : 'No'}</p>
-                {#if info.leader}
-                    <button on:click={() => deleteGroup(info.group_ID)}>Delete group</button>
-                {/if}
-                <h3>Members</h3>
-                <ul>
-                    {#each info.members as member}
-                        <li>
-                            {member.user_name} 
-                            {member.is_current_user ? '(you)' : ''} 
-                            {member.is_leader ? '(leader)' : ''}
-                            {#if info.leader && !member.is_leader}
-                                <button on:click={() => removeMember(info.group_ID, member.user_ID)}>Remove</button>
-                            {/if}
-                        </li>
-                    {/each}
-                </ul>
-                <hr>
-            </li>
+            <div class="copy">
+                <h1>{info.group_name}</h1>
+                <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
+                    <span><div>{info.group_code}<img src="../src/lib/images/copy.png" alt="copy icon" class="icon"/></div></span>
+                </Button>
+            </div>
+            <!--<p>Group Name: {info.group_name}</p>
+            <p>Group Code: {info.group_code}</p>
+            <p>Leader: {info.leader ? 'Yes' : 'No'}</p>-->
+            <div class="boxes-container">
+                <div class="box">
+                    <div class="box-title">Liikmed</div>
+                    <div class="box-content">
+                        {#each info.members as member}
+                            <div class="member-row">
+                                <span>
+                                    <!--{member.is_current_user ? '(you)' : ''} 
+                                    {member.is_leader ? '(leader)' : ''}-->
+                                    {#if member.is_leader}
+                                    <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
+                                    {/if}
+                                    {member.user_name} 
+                                </span>
+                                {#if info.leader && !member.is_leader}
+                                    <button on:click={() => removeMember(info.group_ID, member.user_ID)} class="icon-button">
+                                        <img src="../src/lib/images/trash.png" alt="Delete user">
+                                    </button>
+                                {/if}
+                            </div>
+                        {/each}
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-title">Otsused</div>
+                    <div class="box-content">
+                        <!-- Siia tulevad otsused -->
+                    </div>
+                </div>
+            </div>
+            <div class="btn">
+                <div class="buttons">
+                    <Button type="button" style="secondary" on:click={() => goto("/groups")} on:keydown>Tagasi</Button>
+                    {#if info.leader}
+                    <Button style="secondary" on:click={() => deleteGroup(info.group_ID)}>Kustuta grupp</Button>
+                    {/if}
+                </div>
+                <div class="buttons2">
+                <Button on:click={() => deleteGroup(info.group_ID)}>Loo uus otsus</Button>
+                </div>
+            </div>    
         {/each}
-    </ul>
-{/if}
+    </div>                     
+    {/if}
+</section>
+
+<style>
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 130px;
+    }
+
+    .rectangle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 810px;
+        height: auto;
+        background: white;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 38px;
+        padding: 40px 10px;
+        box-sizing: border-box;
+    }
+    
+    .copy {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: -20px;
+        margin-bottom: 30px;
+        gap: 30px;
+    }
+
+    .icon {
+        width: 16px;
+        height: 16px;
+        margin-left: 8px;
+    }
+
+    .boxes-container {
+        display: flex;
+        justify-content: space-around;
+        width: 88%;
+        margin-top: 20px;
+        gap: 30px;
+    }
+
+    .box {
+        width: 45%;
+        background: #F2F1E7;
+        border-radius: 15px;
+        padding: 20px;
+        position: relative;
+    }
+
+    .box-title {
+        position: absolute;
+        top: -30px;
+        left: 110px;
+        background: white;
+        padding: 0 10px;
+        font-size: 20px;
+    }
+
+    .box-content {
+        max-height: 150px; /* Maksimaalne kõrgus, millele lisame scrollbari */
+        overflow-y: auto; /* Lubame vertikaalse kerimise, kui sisu ületab maksimaalse kõrguse */
+        scrollbar-width: thin; /* Defineerime standardse kerimisriba laiuse (Chrome'i jaoks) */
+        scrollbar-color: #C4F1C0 #ffffff9e; /* Defineerime kerimisriba ja taustavärvi (Chrome'i jaoks) */
+        padding-right: 10px;
+    }
+
+    /* Kerimisriba stiil Chrome'i jaoks */
+    .box-content::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .box-content::-webkit-scrollbar-thumb {
+        background-color: #aaa;
+        border-radius: 10px;
+    }
+
+    .box-content::-webkit-scrollbar-track {
+        background-color: #f0f0f0;
+        border-radius: 10px;
+    }
+
+
+    .member-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px solid #aaa 
+    }
+
+    .icon-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .icon-button img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .icon-button:hover img {
+        opacity: 0.7;
+    }
+
+    .leader-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px; /* Muudame marginaali paremalt vasakule */
+        margin-left: 0; /* Eemaldame hetkel oleva marginaali vasakult */
+    }
+
+    .btn {
+        display: flex;
+        margin-top: 23px;
+        margin-left: 40px;
+        align-self: start;
+    }
+
+    .buttons {
+    }
+
+    .buttons2 {
+    }
+</style>
