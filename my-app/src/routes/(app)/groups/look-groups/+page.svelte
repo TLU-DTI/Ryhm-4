@@ -250,6 +250,7 @@
     {:else}
         <div class="rectangle">
             {#each $groupInfo as info}
+            {#if $sat_group_id == info.group_ID}
                 <div class="copy">
                     <h1>{info.group_name}</h1>
                     <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
@@ -263,7 +264,7 @@
                             {#each info.members as member}
                                 <div class="member-row">
                                     <span>
-                                        {#if member.is_leader}
+                                       { #if member.is_leader}
                                             <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
                                         {/if}
                                         {member.user_name} 
@@ -281,20 +282,29 @@
                         <div class="box-title">Otsused</div>
                         <div class="box-content">
                             {#each info.decisions as decision}
-                                {decision.choice_name}
-                                <button on:click={() => groupdesicion(info.group_ID)}>Proovi</button>
-                                {#if info.leader}
-                                    <button on:click={() => removeDesicion(info.group_ID, decision.id)}>Kustuta</button>
-                                {/if}
-                                <button on:click={() => groupdesicion(info.group_ID)}>Tulemused</button>
-                                <br>
+                            <div class="member-row">
+                                    <span><button class="name">{decision.choice_name}</button></span> <!--TEKST VAJA TEHA KLIKITAVAKS-->
+                                    <div class="icons-container">
+                                        <!-- <button on:click={() => groupdesicion(info.group_ID)} class="icon-button">
+                                            <img src="../src/lib/images/new-group.png" alt="Decisions">
+                                        </button> -->
+                                        <button on:click={() => groupdesicion(info.group_ID)} class="icon-button">
+                                            <img src="../src/lib/images/results.svg" alt="Results">
+                                        </button>
+                                        {#if info.leader}
+                                        <button on:click={() => removeDesicion(info.group_ID, decision.id)} class="icon-button">
+                                            <img src="../src/lib/images/trash.png" alt="Delete decision">
+                                        </button>
+                                        {/if}   
+                                    </div>
+                            </div>        
                             {/each}
                         </div>
                     </div>
                 </div>
                 <div class="btn">
                     <div class="buttons-left">
-                        <Button type="button" style="secondary" on:click={() => goto("/groups")} on:keydown>Tagasi</Button>
+                        <Button type="button" style="secondary" on:click={() => goto("/groups/your-groups")} on:keydown>Tagasi</Button>
                         {#if info.leader}
                             <Button style="secondary" on:click={() => deleteGroup(info.group_ID)}>Kustuta grupp</Button>
                         {/if}
@@ -304,9 +314,10 @@
                         <Button on:click={() => groupdesicion(info.group_ID)}>Loo uus otsus</Button>
                         {/if}
                     </div>
-                </div>    
+                </div>  
+            {/if}  
             {/each}
-        </div>                     
+        </div>                
     {/if}
 </section>
 
@@ -323,7 +334,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 100%;
+        width: 1000px;
         height: auto;
         background: white;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
@@ -350,7 +361,9 @@
     .boxes-container {
         display: flex;
         justify-content: space-around;
-        width: 88%;
+        width: 800px;
+        margin-left: 20px;
+        margin-right: 20px;
         margin-top: 20px;
         gap: 30px;
     }
@@ -366,21 +379,20 @@
     .box-title {
         position: absolute;
         top: -30px;
-        left: 110px;
+        left: 140px;
         background: white;
         padding: 0 10px;
         font-size: 20px;
     }
 
     .box-content {
-        max-height: 150px; /* Maksimaalne kõrgus, millele lisame scrollbari */
-        overflow-y: auto; /* Lubame vertikaalse kerimise, kui sisu ületab maksimaalse kõrguse */
-        scrollbar-width: thin; /* Defineerime standardse kerimisriba laiuse (Chrome'i jaoks) */
-        scrollbar-color: #C4F1C0 #ffffff9e; /* Defineerime kerimisriba ja taustavärvi (Chrome'i jaoks) */
+        max-height: 150px; 
+        overflow-y: auto; 
+        scrollbar-width: thin; 
+        scrollbar-color: #C4F1C0 #ffffff9e; 
         padding-right: 10px;
     }
 
-    /* Kerimisriba stiil Chrome'i jaoks */
     .box-content::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -396,13 +408,22 @@
         border-radius: 10px;
     }
 
-
     .member-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 5px 0;
-        border-bottom: 1px solid #aaa 
+        border-bottom: 1px solid #aaa;
+    }
+
+    .member-row span {
+        flex: 1;
+    }
+
+    .icons-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 5px; 
     }
 
     .icon-button {
@@ -425,21 +446,21 @@
     .leader-icon {
         width: 20px;
         height: 20px;
-        margin-right: 5px; /* Muudame marginaali paremalt vasakule */
-        margin-left: 0; /* Eemaldame hetkel oleva marginaali vasakult */
+        margin-right: 5px; 
+        margin-left: 0; 
     }
 
     .btn {
         display: flex;
         margin-top: 23px;
-        margin-left: 40px;
+        margin-left: 25px;
         align-self: start;
-        justify-content: space-between; /* Veenduge, et see oleks space-between */
-        gap: 250px;
+        justify-content: space-between; 
+        gap: 420px;
     }
 
     .buttons-left {
-        flex: 1; /* Veenduge, et see oleks flex: 1 */
+        flex: 1; 
         display: flex;
         justify-content: flex-start;
         gap: 15px;
@@ -448,5 +469,10 @@
     .buttons-right {
         display: flex;
         justify-content: flex-end;
+    }
+
+    .name {
+        border: none;
+        background-color: #F2F1E7;
     }
 </style>
