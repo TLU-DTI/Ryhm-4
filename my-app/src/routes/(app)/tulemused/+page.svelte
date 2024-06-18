@@ -14,10 +14,10 @@
     });
 
     let tulemused: { title: string}[] = [
-        { title: "tulemus 1" },
-        { title: "tulemus 2" },
-        { title: "tulemus 3" },
-        { title: "tulemus 4" }
+        { title: "Autode valimine" },
+        { title: "Aiamööbel" },
+        { title: "Puhkuse reis" },
+        { title: "Õhtusöök" }
     ];
 
 </script>
@@ -37,7 +37,7 @@
         <div class="buttons">
             <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi
             </Button>
-            <Button on:click={() => goto("/vaata-tulemusi/tulemused?code=1")} on:keydown>Jätka</Button>
+            <Button on:click={() => goto("/tulemused/tulemus?code=1")} on:keydown>Jätka</Button>
         </div>
     </div>
 </section>
