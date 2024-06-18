@@ -250,6 +250,7 @@
     {:else}
         <div class="rectangle">
             {#each $groupInfo as info}
+            {#if $sat_group_id == info.group_ID}
                 <div class="copy">
                     <h1>{info.group_name}</h1>
                     <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
@@ -263,7 +264,7 @@
                             {#each info.members as member}
                                 <div class="member-row">
                                     <span>
-                                        {#if member.is_leader}
+                                       { #if member.is_leader}
                                             <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
                                         {/if}
                                         {member.user_name} 
@@ -313,9 +314,10 @@
                         <Button on:click={() => groupdesicion(info.group_ID)}>Loo uus otsus</Button>
                         {/if}
                     </div>
-                </div>    
+                </div>  
+            {/if}  
             {/each}
-        </div>                     
+        </div>                
     {/if}
 </section>
 
