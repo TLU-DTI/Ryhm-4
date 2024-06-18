@@ -77,12 +77,12 @@
 				</div>
 			</div>
 			
-		<button class="forgot-password" on:click={() => goto("/forgot-password")} on:keydown>
+		<button class="forgot-password" on:click={(event) => { event.preventDefault(); goto("/forgot-password"); }} on:keydown>
 			<p>Unustasid salasõna?</p>
 		</button>
 
 		<div class="reg-login">
-			<Button style="secondary" on:click={() => goto("/register")} on:keydown>Loo kasutaja</Button>
+			<Button style="secondary" on:click={(event) => { event.preventDefault(); goto("/register"); }} on:keydown>Loo kasutaja</Button>
 			<Button disabled={!$form.valid}>Logi sisse</Button>
 		</div>
 		</form>
