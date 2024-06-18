@@ -13,9 +13,10 @@
     import { afterUpdate } from 'svelte';
 
 
-    import { sat_user_id, sat_username } from '../../store.js';
+    import { sat_user_id, sat_username, sat_premium } from '../../store.js';
 
-    
+    //let FreeUserView:boolean = $sat_premium;
+
     // Define a type for the button configuration
     type ButtonConfig = {
         id: number;
@@ -64,6 +65,17 @@
         }
     ];
 
+        const button2 = buttons.find(button => button.id === 2);
+            if (button2) {
+                if (!$sat_premium) {
+                    button2.route = '/tasuta-ot-valikud';
+                    buttons.splice(buttons.findIndex(button => button.id === 4), 1); // Remove button with id 4
+                } else {
+                    button2.route = '/tasuline-ot-valikud';
+                    buttons.splice(buttons.findIndex(button => button.id === 5), 1); // Remove button with id 5
+                }
+            }
+
    // Track clicked state for each button
    let clickedButtons: Record<number, boolean> = {};
 
@@ -105,6 +117,8 @@
     function logout() {
         // Clear the user ID from the store and localStorage
         sat_user_id.set(null);
+        sat_username.set(null);
+        sat_premium.set(null);
         // Redirect to the login page
         window.location.href = '/login';
     }
@@ -144,7 +158,6 @@
 
     .kasutaja {
        padding-left: 20px;
-       grid-row: 1 / span 2;
     }
   
     .logo {
@@ -154,6 +167,7 @@
         height: max-content;
         min-width: 200px;
         align-items: center;
+        grid-row: 1 / span 2;
     }
 
     .container.open {
@@ -223,17 +237,18 @@
 {#if isOpen} 
     <div class="container" class:open={isOpen}> 
         <div class="head">
-            <div class="kasutaja">
-                <p>Tere {currentUsername}!</p>
+            <div class="logo"> 
+                <img src={logo} alt="logo"/>
+                <p>Desicion Maker</p>
             </div>
+            
             <div class="close-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>
                 <span>&times;</span>
             </div>
         </div>
         
-        <div class="logo"> 
-            <img src={logo} alt="logo"/>
-            <p>Desicion Maker</p>
+        <div class="kasutaja">
+            <p>Tere {currentUsername}!</p>
         </div>
 
         <div class="menu">

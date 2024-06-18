@@ -6,16 +6,11 @@
     import choicesIcon from '$lib/images/choices.svg';
     import resultsIcon from '$lib/images/results.svg';
     import groupsIcon from '$lib/images/groups.svg';
+    import { goto } from "$app/navigation";
 
+    let FreeUserView = true;
     let loading = true;  // State to track loading status
     let currentUserId = null;
-
-    function handleClick() {
-        window.location.href = "/otsuse-tegija";
-    }
-    function handleClick2() {
-        window.location.href = "/create-group";
-    }
 
     onMount(() => {
         sat_user_id.subscribe(value => {
@@ -29,11 +24,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Home</title>
-    <meta name="description" content="Svelte demo app" />
-</svelte:head>
-
 {#if loading}
     <p></p> 
 {:else}
@@ -43,7 +33,11 @@
                 <img src={choicesIcon} alt="Choices icon" width="100px"/>
             </div>
             <div class="action-area">
-                <Button on:click={handleClick}>Otsuse tegija</Button>
+                {#if FreeUserView}
+                    <Button on:click={() => goto("/tasuta-ot-valikud")} on:keydown>Otsuse tegija</Button>
+                {:else}
+                    <Button on:click={() => goto("/tasuline-ot-valikud")} on:keydown>Otsuse tegija</Button>
+                {/if}
             </div>
         </div>
 
@@ -52,7 +46,7 @@
                 <img src={resultsIcon} alt="Results icon" width="100px"/>
             </div>
             <div class="action-area">    
-                <Button>Vaata tulemusi</Button> 
+                <Button on:click={() => goto("/tulemused")} on:keydown>Vaata tulemusi</Button> 
             </div>
         </div>
 
@@ -61,7 +55,7 @@
                 <img src={groupsIcon} alt="Groups icon" width="100 px"/>
             </div>
             <div class="action-area">
-                <Button on:click={handleClick2}>Gruppide loomine</Button>
+                <Button on:click={() => goto("/grupid")} on:keydown>Gruppide loomine</Button>
             </div>
         </div> 
     </section>

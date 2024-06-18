@@ -1,21 +1,41 @@
-<script>
+<script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
     import { goto } from "$app/navigation";
+    import { supabase } from '$lib/supabaseClient';
+    import { useForm } from "svelte-use-form";
+    import { writable } from 'svelte/store';
+    import { premiumDecisionStore } from '../../../store/premiumDecisionStore';
+
+    const form = useForm();
+    let decisionName = '';
+
+    premiumDecisionStore.subscribe(store => {
+        decisionName = store.decisionName;
+    });
+
+    function savedecisionName() {
+        premiumDecisionStore.update(store => {
+            return { ...store, decisionName };
+        });
+        goto("/tasuline-ot-valikud/otsusemudel");
+    }
 </script>
 
 <section class="container">
     <div class="input-container">
         <h2>Anna oma otsusele nimi:</h2>
-        <div class="input-name">
-            <Input placeholder="Nimi"></Input> 
-        </div>
-        <br>
-        <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi
-            </Button>
-            <Button on:click={() => goto("/tasuline-ot-valikud/otsusemudel")} on:keydown>Jätka</Button>
-        </div>
+        <form on:submit|preventDefault={savedecisionName}>
+            <div class="input-name">
+                <Input placeholder="Nimi" bind:value={decisionName}></Input> 
+            </div>
+            <br>
+            <div class="buttons">
+                <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi
+                </Button>
+                <Button type="submit" on:keydown>Jätka</Button>
+            </div>
+        </form>
     </div>
 </section>
 
@@ -40,14 +60,13 @@
         align-items: center; /* vertikaalne joondamine */
     }
 
-    .buttons{
+    .buttons {
         margin-top: 20px;
         display: flex;
         justify-content: space-between;
     }
 
-    h2{
+    h2 {
         font-size: 30px;
     }
-    
 </style>
