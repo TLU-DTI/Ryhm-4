@@ -37,6 +37,6 @@ https://histoire.dev/guide/svelte3/getting-started.html - Me kasutasime Svelte H
 
 Paigaldusjuhend: Vajuta lingile: https://decision-maker-one.vercel.app/ ning tee kasutaja või logi sisse, et kasutada rakendust.
 
-Viide litsentsile: 
+Viide litsentsile - https://github.com/TLU-DTI/Ryhm-4/blob/main/LITSENTS
 
 Projekti autoriteks on: Albert Berkman, Elika Laur, Jarl Koha, Õnnela Link ja Gertrud Roos.
