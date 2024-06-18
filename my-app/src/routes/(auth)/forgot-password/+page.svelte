@@ -2,6 +2,8 @@
 	import '$lib/auth_style.css';
 	import Input from "$lib/components/Input.svelte";
 	import Button from "$lib/components/Button.svelte";
+	import { goto } from "$app/navigation";
+
 </script>
 
 <section class="center-container">
@@ -22,7 +24,7 @@
 		</div>
 		
 		<div class="reg-user">
-			<Button style="secondary">Tagasi</Button>
+			<Button style="secondary" on:click={() => goto("/login")} on:keydown>Tagasi</Button>
 			<Button>Salvesta</Button>
 		</div>	
 	</div>

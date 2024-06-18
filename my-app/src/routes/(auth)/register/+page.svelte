@@ -7,7 +7,7 @@
 	import { writable, derived } from 'svelte/store';
 	import { sat_user_id, sat_premium } from '../../../store.js';
 	import { tooltip } from "$lib/script/tooltip.js";
-
+	import { goto } from "$app/navigation";
 
 	const form = useForm();
 	const password = writable('');
@@ -125,15 +125,15 @@
 					<p style="color: red; font-size: 14px;">Paroolid ei ühti!</p>
 				{/if}
 	
-				<div class="already-user">
+				<button class="already-user" on:click={() => goto("/login")} on:keydown>
 					<p>Kasutaja juba olemas?</p>
-				</div>
+				</button>
 			</div>
 
 			
 			<div class="reg-user">
-				<Button style="secondary">Tagasi</Button>
-				<Button disabled={!$form.valid || !$passwordsMatch}>Loo kasutaja</Button>
+				<Button style="secondary" on:click={() => goto("/login")} on:keydown>Tagasi</Button>
+				<Button disabled={!$form.valid || !$passwordsMatch} on:click={() => goto("/completed")} on:keydown>Loo kasutaja</Button>
 			</div>	
 		</div>
 	</form>
@@ -186,6 +186,8 @@
 
 	.already-user {
 		margin-top: -20px;
+		border: none;
+		background-color: white;
 	}
 
 	.already-user p {
