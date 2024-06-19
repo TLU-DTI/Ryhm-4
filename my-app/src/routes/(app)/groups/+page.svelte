@@ -4,6 +4,8 @@
     import { goto } from "$app/navigation";
     import Button from "$lib/components/Button.svelte";
     import newgroup from '$lib/images/new-group.svg';
+    import group from '$lib/images/group.svg';
+    import joingroup from '$lib/images/join-group.svg';
 </script>
 
 <section class="container">
@@ -19,7 +21,7 @@
     </div>  
     <div class="rectangle2">
         <div class="rectangle-up"> 
-            <img src="..\src\lib\images\group.svg" alt="Grupid" >
+            <img src={group} alt="Grupid" >
         </div>
         <div class="rectangle-down"> 
             <div class="continue">
@@ -29,7 +31,7 @@
     </div>  
     <div class="rectangle3">
         <div class="rectangle-up"> 
-            <img src="..\src\lib\images\join-group.svg" alt="Liitu grupiga" >
+            <img src={joingroup} alt="Liitu grupiga" >
         </div>
         <div class="rectangle-down"> 
             <div class="continue">
