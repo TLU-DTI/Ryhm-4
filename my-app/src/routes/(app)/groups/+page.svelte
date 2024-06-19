@@ -39,7 +39,6 @@
     </div>
 </section>
 
-
 <style>
     .container {
     display: flex;
@@ -49,6 +48,7 @@
     padding-top: 220px;
     gap: 50px;
     }
+    
     .rectangle1, .rectangle2, .rectangle3 {
         display: flex;
         flex-direction: column;
