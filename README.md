@@ -1,7 +1,8 @@
 # Ryhm-4
 Decision Maker
 
-Ekraanipilt
+Ekraanipilt: <img width="1440" alt="Screenshot 2024-06-19 at 10 16 05" src="https://github.com/TLU-DTI/Ryhm-4/assets/133976166/400fe838-57f8-4e21-bb3f-7f1349a06c41">
+
 
 Eesmärk: Otsuste langetamine võib olla keeruline, eriti kui on vaja valida mitme olulise valiku vahel. 
 Meie plaan on pakkuda objektiivset ja usaldusväärset abi keeruliste otsuste tegemisel, võimaldades kasutajatel valida erinevate otsustusmudelite vahel ning arvestada erinevate valikukriteeriumidega. 
