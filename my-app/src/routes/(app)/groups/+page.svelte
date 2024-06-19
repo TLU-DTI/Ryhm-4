@@ -2,14 +2,14 @@
 <script lang="ts">
     import '$lib/styles.css';
     import { goto } from "$app/navigation";
-    import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
+    import newgroup from '$lib/images/new-group.svg';
 </script>
 
 <section class="container">
     <div class="rectangle1">
         <div class="rectangle-up"> 
-            <img src="..\src\lib\images\new-group.svg" alt="Loo grupp" width="100" height="100">
+            <img src={newgroup} alt="Loo grupp" width="100" height="100">
         </div>
         <div class="rectangle-down"> 
             <div class="continue">
