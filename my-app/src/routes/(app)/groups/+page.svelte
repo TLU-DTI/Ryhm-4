@@ -2,7 +2,6 @@
 <script lang="ts">
     import '$lib/styles.css';
     import { goto } from "$app/navigation";
-    import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
     import newgroup from '$lib/images/new-group.svg';
 </script>
