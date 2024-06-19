@@ -474,5 +474,7 @@
     .name {
         border: none;
         background-color: #F2F1E7;
+        font-family: 'Merriweather', serif;
+        font-size: 16px;
     }
 </style>
