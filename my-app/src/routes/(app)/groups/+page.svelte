@@ -44,12 +44,11 @@
 
 <style>
     .container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    padding-top: 220px;
-    gap: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 0.6;
+        gap: 40px;
     }
     .rectangle1, .rectangle2, .rectangle3 {
         display: flex;
@@ -62,7 +61,7 @@
         justify-content: center;
         align-items: center;
         width: 300px;
-        height: 200px;
+        height: 220px;
         background: #CFFFCB;
         border-top-left-radius: 38px;
         border-top-right-radius: 38px;
@@ -74,7 +73,7 @@
         align-items: center;
         justify-content: center;
         width: 300px;
-        height: 100px;
+        height: 130px;
         background: white;
         border-bottom-left-radius: 38px;
         border-bottom-right-radius: 38px;
