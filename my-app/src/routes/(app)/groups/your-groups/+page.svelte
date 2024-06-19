@@ -167,14 +167,14 @@
                             <div class="group-details">
                                 {#if info.leader}
                                     <!--<p>Leader: {info.leader ? 'Yes' : 'No'}</p>-->
-                                    <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
+                                    <img src="../src/lib/images/crown.svg" alt="Leader" class="leader-icon">
                                 {/if}
                                 <p>{info.group_name}</p>
                             </div>
                             <div class="button-group">
                                 {#if info.leader}
                                     <button on:click={() => deleteGroup(info.group_ID)} class="icon-button">
-                                        <img src="../src/lib/images/trash.png" alt="Delete group">
+                                        <img src="../src/lib/images/trash.svg" alt="Delete group">
                                     </button>
                                 {/if}
                                 <Button type="button" on:click={() => lookGroup(info.group_ID)} on:keydown>Vaata gruppi</Button>

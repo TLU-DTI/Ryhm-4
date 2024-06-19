@@ -5,7 +5,7 @@
 	import Button from "$lib/components/Button.svelte";
     import { useForm, validators, HintGroup, Hint, required } from "svelte-use-form";
     import { writable } from 'svelte/store';
-    import { sat_user_id, sat_premium } from '../../../../store.js';
+    import { sat_user_id, sat_premium, sat_group_id } from '../../../../store.js';
     import { onMount } from 'svelte';
     import { goto } from "$app/navigation";
 
@@ -83,6 +83,8 @@
 
         data.group_code = groupCode;
 
+
+
         try {
             const { data: groupData, error: groupError } = await supabase
                 .from('groups')
@@ -92,12 +94,16 @@
                         group_code: data.group_code
                     }
                 ])
-                .select('id')
+                .select('id, group_code')
                 .single();
 
             if (groupError) {
                 throw new Error(groupError.message);
             }
+
+            sat_group_id.set(groupData.id);
+
+            
 
             const groupId = groupData.id;
 
@@ -116,7 +122,7 @@
             }
 
             console.log('Group created and user added: ', groupData);
-            window.location.href = "/groups/your-groups";
+            window.location.href = "/groups/create-group/create-group-completed";
         } catch (error) {
             console.error('Error:', error);
         }

@@ -8,7 +8,7 @@
 <section>
 	<div class="container">
 		<div class="rectangle-up"> 
-			<img src="../../src/lib/images/free-verified-badge-1-866240.webp" alt="Õnnestus!" width="200" height="200">
+			<img src="../../src/lib/images/kinnitatud.svg" alt="Õnnestus!" width="200" height="200">
 		</div>
 
 		<div class="rectangle-down"> 
