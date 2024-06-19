@@ -39,7 +39,6 @@
     </div>
 </section>
 
-
 <style>
     .container {
     display: flex;
