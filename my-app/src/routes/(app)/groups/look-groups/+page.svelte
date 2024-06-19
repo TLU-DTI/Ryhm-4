@@ -136,33 +136,34 @@
 
             // Refresh group info after deleting the group
             await refreshGroupInfo();
+            window.location.href = "/groups/your-groups";
         } catch (error) {
             console.error('Error deleting group:', error);
             alert('Error deleting group: ' + error);
         }
     }
 
-    async function leaveGroup(groupId: number, memberId: number) {
+    async function leaveGroup(groupId: number) {
         try {
-            console.log(memberId, groupId);
             // First delete all members of the group
             const { data: membersData, error: membersError } = await supabase
                 .from('users_groups')
                 .delete()
                 .eq('group_ID', groupId)
-                .eq('user_ID', memberId);
+                .eq('user_ID', $sat_user_id);
 
             if (membersError) {
                 throw new Error(membersError.message);
             }
 
-            console.log(`Members deleted: ${JSON.stringify(membersData)}`);
+            console.log(`Members leaved: ${JSON.stringify(membersData)}`);
 
             // Refresh group info after deleting the group
             await refreshGroupInfo();
+            window.location.href = "/groups/your-groups";
         } catch (error) {
-            console.error('Error deleting group:', error);
-            alert('Error deleting group: ' + error);
+            console.error('Error leaving group:', error);
+            alert('Error leaving group: ' + error);
         }
     }
 
@@ -307,6 +308,9 @@
                         <Button type="button" style="secondary" on:click={() => goto("/groups/your-groups")} on:keydown>Tagasi</Button>
                         {#if info.leader}
                             <Button style="secondary" on:click={() => deleteGroup(info.group_ID)}>Kustuta grupp</Button>
+                        {/if}
+                        {#if !info.leader}
+                            <Button style="secondary" on:click={() => leaveGroup(info.group_ID)}>Lahku grupist</Button>
                         {/if}
                     </div>
                     <div class="buttons-right">
