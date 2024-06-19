@@ -31,7 +31,7 @@
             </div>
             <br>
             <div class="buttons">
-                <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi
+                <Button style="secondary" on:click={() => goto("/")} on:keydown>Mine tagasi
                 </Button>
                 <Button type="submit" on:keydown>Jätka</Button>
             </div>
