@@ -5,6 +5,8 @@
     import { sat_user_id, sat_premium, sat_group_id } from '../../../../store.js';
     import Button from "$lib/components/Button.svelte";
     import { goto } from "$app/navigation";
+    import crown from '$lib/images/crown.svg';
+    import trash from '$lib/images/trash.svg';
 
     onMount(() => {
         sat_user_id.subscribe(value => {
@@ -167,14 +169,14 @@
                             <div class="group-details">
                                 {#if info.leader}
                                     <!--<p>Leader: {info.leader ? 'Yes' : 'No'}</p>-->
-                                    <img src="../src/lib/images/crown.svg" alt="Leader" class="leader-icon">
+                                    <img src={crown} alt="Leader" class="leader-icon">
                                 {/if}
                                 <p>{info.group_name}</p>
                             </div>
                             <div class="button-group">
                                 {#if info.leader}
                                     <button on:click={() => deleteGroup(info.group_ID)} class="icon-button">
-                                        <img src="../src/lib/images/trash.svg" alt="Delete group">
+                                        <img src={trash} alt="Delete group">
                                     </button>
                                 {/if}
                                 <Button type="button" on:click={() => lookGroup(info.group_ID)} on:keydown>Vaata gruppi</Button>
