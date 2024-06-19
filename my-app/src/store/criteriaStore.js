@@ -42,3 +42,37 @@ export function calculateCriteriaWeights() {
     return store;
   });
 }
+
+export function updateChoiceComparisons(criteriaIndex, i, j, value) {
+  criteriaStore.update(store => {
+    if (!store.choicesComparisons[criteriaIndex]) {
+      store.choicesComparisons[criteriaIndex] = Array(store.choices.length).fill(0).map(() => Array(store.choices.length).fill(0));
+    }
+    store.choicesComparisons[criteriaIndex][i][j] = value;
+    store.choicesComparisons[criteriaIndex][j][i] = 6 - value;
+    return store;
+  });
+  calculateChoiceWeights();
+}
+
+export function calculateChoiceWeights() {
+  criteriaStore.update(store => {
+    if (store.criteria.length && store.choices.length) {
+      let choiceScores = Array(store.choices.length).fill(0);
+      for (let c = 0; c < store.criteria.length; c++) {
+        const weight = store.criteriaWeights[c];
+        const comparisons = store.choicesComparisons[c];
+        for (let i = 0; i < comparisons.length; i++) {
+          for (let j = 0; j < comparisons[i].length; j++) {
+            choiceScores[i] += comparisons[i][j] * weight;
+          }
+        }
+      }
+      const totalChoiceScore = choiceScores.reduce((sum, score) => sum + score, 0);
+      store.choiceWeights = choiceScores.map(score => (score / totalChoiceScore) * 100);
+    } else {
+      store.choiceWeights = [];
+    }
+    return store;
+  });
+}

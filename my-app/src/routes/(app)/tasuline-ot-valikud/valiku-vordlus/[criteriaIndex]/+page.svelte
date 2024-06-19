@@ -4,7 +4,7 @@
   import { onMount, beforeUpdate } from 'svelte';
   import { get } from 'svelte/store';
   import { page } from "$app/stores";
-  import { criteriaStore } from '../../../../../store/criteriaStore';
+  import { criteriaStore, updateChoiceComparisons } from '../../../../../store/criteriaStore';
 
   let criteriaIndex;
   let criteria;
@@ -17,7 +17,7 @@
     choices = store.choices;
 
     // Initialize comparisons matrix if not already done
-    comparisons = store.choicesComparisons[criteriaIndex] || Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
+    comparisons = store.choicesComparisons[criteriaIndex] || Array(choices.length).fill(0).map(() => Array(choices.length).fill(0));
     console.log('initializeData: criteriaIndex', criteriaIndex);
     console.log('initializeData: criteria', criteria);
     console.log('initializeData: choices', choices);
@@ -34,20 +34,12 @@
     }
   }
 
-  beforeUpdate(() => {
-    const params = get(page).params;
-    const newCriteriaIndex = parseInt(params.criteriaIndex, 10);
-    if (criteriaIndex !== newCriteriaIndex) {
-      criteriaIndex = newCriteriaIndex;
-      initializeData();
-    }
-  });
 
-  function updateComparison(i, j, value) {
+  /*function updateComparison(i, j, value) {
     comparisons[i][j] = value;
     comparisons[j][i] = 6 - value; // inverse value for the other pair
     console.log('updateComparison: comparisons', comparisons);
-  }
+  }*/
 
   function handleNext() {
     // Store comparisons in criteriaStore
@@ -62,7 +54,7 @@
     if (criteriaIndex < store.criteria.length - 1) {
       goto(`/tasuline-ot-valikud/valiku-vordlus/${criteriaIndex + 1}`);
     } else {
-      goto('/tasuline-ot-valikud/results'); // Assuming a results page
+      goto('/tulemused/tulemus'); // Assuming a results page
     }
   }
 
@@ -86,7 +78,7 @@
                   type="radio"
                   name="comparison-{i}-{j}"
                   value="{5 - k}"
-                  on:change={() => updateComparison(i, j, 5 - k)}
+                  on:change={() => updateChoiceComparisons(criteriaIndex, i, j, 5 - k)}
                   checked={comparisons[i][j] === 5 - k}
                 >
               {/each}

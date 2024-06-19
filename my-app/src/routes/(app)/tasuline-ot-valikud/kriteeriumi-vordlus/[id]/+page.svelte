@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   import { get } from 'svelte/store';
   import { page } from "$app/stores";
-  import { criteriaStore, updateCriteriaMatrix, calculateCriteriaWeights } from '../../../../../store/criteriaStore';
+  import { criteriaStore, updateCriteriaMatrix, calculateCriteriaWeights, calculateChoiceWeights } from '../../../../../store/criteriaStore';
 
   let code: number | null = null;
 
@@ -19,6 +19,7 @@
   $: criteriaMatrix = $criteriaStore.criteriaMatrix || [];
   $: criteriaWeights = $criteriaStore.criteriaWeights || [];
   $: criteriaPercentages = $criteriaStore.criteriaPercentages || [];
+  $: choiceWeights = $criteriaStore.choiceWeights || [];
 </script>
 
 <section class="container">
@@ -58,6 +59,11 @@
       <h2>Criteria Percentages:</h2>
       {#each criteriaPercentages as percentage, index}
         <p>{criteria[index]}: {percentage.toFixed(2)}%</p>
+      {/each}
+
+      <h2>Choice Weights:</h2>
+      {#each choiceWeights as weight, index}
+        <p>Choice {index + 1}: {weight.toFixed(2)}%</p>
       {/each}
     </div>
 
