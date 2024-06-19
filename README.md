@@ -6,7 +6,7 @@ Otsuste langetamine võib olla keeruline, eriti kui on vaja valida mitme olulise
 
 Lühikirjeldus:
 
-Lõime rakenduse, mis arvutab välja parima valiku, kasutades otsustusmudeleid: Forced Choice ja Analytical Hierarchy Process. Üks mudelitest on tasuta (Forced Choice) ja teine on tasuline (Analytical Hierarchy Process). Tasulise konto ostmise korral on võimalik kasutajal luua ka grupid. Grupp võimaldab jagada ülesseatud otsuse mudelit teiste inimestega ning teised liikmed saavad täita sama mudelit ja teha valikud enda otsuste järgi. Seejärel arvutab süsteem kogu grupi peale kokku mingi lõppvaliku sobivuse.
+Lõime rakenduse, mis arvutab välja parima valiku, kasutades otsustusmudeleid: Forced Choice ja Analytical Hierarchy Process. Üks mudelitest on tasuta (Forced Choice) ja teine on tasuline (Analytical Hierarchy Process). Tasulise konto ostmise korral on võimalik kasutajal luua ka grupid. Seejärel arvutab süsteem kas  kogu grupile või üksikisikule lõppvaliku sobivuse.
 
 Rakendus on tehtud DTI instituudi informaatika tudengite suvepraktika raames.
 
