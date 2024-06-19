@@ -4,6 +4,7 @@
     import { goto } from "$app/navigation";
     import { get } from "svelte/store";
     import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
+    import { writable } from 'svelte/store';
 
     let modelType = 1; // Default model type
 
@@ -13,28 +14,46 @@
         });
         goto("/tasuline-ot-valikud/sisesta-kriteeriumid");
     }
+
+
+    // Track the selected state for each button
+    let isForcedChoiceSelected = writable(false);
+    let isAnalyticalHierarchySelected = writable(false);
+
+    // Toggle the selected state for the Forced Choice button
+    function toggleForcedChoice() {
+        isForcedChoiceSelected.update(selected => !selected);
+    }
+
+    // Toggle the selected state for the Analytical Hierarchy button
+    function toggleAnalyticalHierarchy() {
+        isAnalyticalHierarchySelected.update(selected => !selected);
+    }
 </script>
 
 <section class="container">
     <div class="input-container">
         <h2>Vali otsuse mudel:</h2>
         <div class="mudel">
-            <Button style="secondary" size="large" on:click={() => { modelType = 3; saveModelType(); }}>
+            <button class="button { $isForcedChoiceSelected ? 'active' : '' }" on:click={toggleForcedChoice}>
                 Forced choice mudel
+            </button>
+            <Button size="mini">
+                <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
             </Button>
+        </div>
+
+        <div class="mudel">
+            <button class="button { $isAnalyticalHierarchySelected ? 'active' : '' }" 
+            on:click={toggleAnalyticalHierarchy}
+        >
+                Analüütiline hierarhia mudel
+            </button>
             <Button size="mini">
                 <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
             </Button>
         </div>
         
-        <div class="mudel">
-            <Button style="secondary" size="large" on:click={() => { modelType = 3; saveModelType(); }}>
-                Analüütiline hierarhia mudel
-            </Button>
-            <Button size="mini">
-                <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
-            </Button>
-        </div>
         <div class="buttons">
             <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud")} on:keydown>Tagasi</Button>
             <Button on:click={saveModelType} on:keydown>Jätka</Button>
@@ -60,6 +79,28 @@
         display: flex;
         flex-direction: column;
         gap: 40px;
+    }
+    .button {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-width: 100px;
+        cursor: pointer;
+        border: 2px solid #DDD8D8;
+        border-radius: 40px;
+        background: #F2F1E7;
+        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+        font-family: 'Merriweather', serif;
+        max-height: 50px;
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+
+    /* Styles for when the button is clicked and active */
+    .button.active {
+        transform: translate(2px, 2px);
+        border: 2px solid #C4F1C0;
     }
 
     .buttons{
