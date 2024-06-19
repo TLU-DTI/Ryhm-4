@@ -45,7 +45,7 @@
 
   function updateComparison(i, j, value) {
     comparisons[i][j] = value;
-    comparisons[j][i] = 1 / value; // inverse value for the other pair
+    comparisons[j][i] = 6 - value; // inverse value for the other pair
     console.log('updateComparison: comparisons', comparisons);
   }
 
