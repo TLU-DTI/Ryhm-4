@@ -7,6 +7,7 @@
     import { supabase } from '$lib/supabaseClient';
     import { writable, get } from 'svelte/store';
     import kinnitatud from '$lib/images/kinnitatud.svg';
+    import copy from '$lib/images/copy.svg';
 
     onMount(() => {
         sat_user_id.subscribe(value => {
@@ -141,7 +142,7 @@
                         <div class="copy2">
                             <span class="group-code-text">Loodud grupi kood:</span>
                             <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
-                                <span><div>{info.group_code}<img src="../../src/lib/images/copy.svg" alt="copy icon" class="icon"/></div></span>
+                                <span><div>{info.group_code}<img src={copy} alt="copy icon" class="icon"/></div></span>
                             </Button>
                         </div>
                     {/if}
