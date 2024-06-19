@@ -4,6 +4,7 @@
     import { goto } from "$app/navigation";
     import { get } from "svelte/store";
     import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
+    import { sat_array  } from '../../../../store.js';
 
     // Initialize inputs with values from the store
     let inputs = get(premiumDecisionStore).criteria.map((criterion, index) => ({ id: index + 1, value: criterion }));
@@ -27,7 +28,9 @@
         premiumDecisionStore.update(store => {
             return { ...store, criteria };
         });
-        goto("/tasuline-ot-valikud/sisesta-valikud");
+        sat_array.set(criteria);
+        //goto("/tasuline-ot-valikud/sisesta-valikud");
+        
     }
 </script>
 

@@ -33,19 +33,30 @@ function getStoredPremium() {
     return null;
 }
 
+// Utility function to get the value from sessionStorage and convert it to an array of strings
+function getStoredArray() {
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_array');
+        return storedValue !== null ? JSON.parse(storedValue) : [];
+    }
+    return [];
+}
+
 // Initialize the store with the value from sessionStorage if it exists
 const initialUserId = getStoredUserId();
-const initialUsername  = getStoredUsername();
-const initialPremium  = getStoredPremium();
-const initialGroupId  = getStoredGroupId();
+const initialUsername = getStoredUsername();
+const initialPremium = getStoredPremium();
+const initialGroupId = getStoredGroupId();
+const initialArray = getStoredArray(); // example key for array storage
 
-// Create a writable store and set its initial value
+// Create writable stores and set their initial values
 export const sat_user_id = writable(initialUserId);
-export const sat_username = writable(initialUsername );
-export const sat_premium = writable(initialPremium );
-export const sat_group_id = writable(initialGroupId );
+export const sat_username = writable(initialUsername);
+export const sat_premium = writable(initialPremium);
+export const sat_group_id = writable(initialGroupId);
+export const sat_array = writable(initialArray); // writable store for array
 
-// Subscribe to the store to update sessionStorage whenever the value changes
+// Subscribe to the stores to update sessionStorage whenever the value changes
 sat_user_id.subscribe(value => {
     if (typeof sessionStorage !== 'undefined') {
         if (value === null) {
@@ -82,6 +93,16 @@ sat_premium.subscribe(value => {
             sessionStorage.removeItem('sat_premium');
         } else {
             sessionStorage.setItem('sat_premium', String(value));
+        }
+    }
+});
+
+sat_array.subscribe(value => {
+    if (typeof sessionStorage !== 'undefined') {
+        if (value.length === 0) {
+            sessionStorage.removeItem('sat_array');
+        } else {
+            sessionStorage.setItem('sat_array', JSON.stringify(value));
         }
     }
 });

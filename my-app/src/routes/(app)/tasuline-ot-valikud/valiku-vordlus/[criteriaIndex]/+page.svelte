@@ -62,7 +62,7 @@
     if (criteriaIndex < store.criteria.length - 1) {
       goto(`/tasuline-ot-valikud/valiku-vordlus/${criteriaIndex + 1}`);
     } else {
-      goto('/tasuline-ot-valikud/results'); // Assuming a results page
+      goto('tulemused/tulemus'); // Assuming a results page
     }
   }
 
