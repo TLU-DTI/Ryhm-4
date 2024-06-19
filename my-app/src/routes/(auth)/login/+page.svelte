@@ -11,6 +11,23 @@
 
 	const form = useForm();
 
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			const formElement = document.querySelector('form');
+			if (formElement) {
+				formElement.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+			}
+		}
+	}
+
+	import { onMount } from 'svelte';
+	onMount(() => {
+		window.addEventListener('keydown', handleKeyDown);
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	});
+
 	async function handleLogin(event: SubmitEvent) {
 		event.preventDefault();
 		const formData = new FormData(event.target as HTMLFormElement);
@@ -77,13 +94,13 @@
 				</div>
 			</div>
 			
-		<button class="forgot-password" on:click={(event) => { event.preventDefault(); goto("/forgot-password"); }} on:keydown>
+		<button class="forgot-password" on:click={(event) => { event.preventDefault(); goto("/forgot-password"); }}>
 			<p>Unustasid salasõna?</p>
 		</button>
 
 		<div class="reg-login">
-			<Button style="secondary" on:click={(event) => { event.preventDefault(); goto("/register"); }} on:keydown>Loo kasutaja</Button>
-			<Button disabled={!$form.valid}>Logi sisse</Button>
+			<Button style="secondary" on:click={(event) => { event.preventDefault(); goto("/register"); }}>Loo kasutaja</Button>
+			<Button type="submit" disabled={!$form.valid}>Logi sisse</Button>
 		</div>
 		</form>
 
