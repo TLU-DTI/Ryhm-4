@@ -1,13 +1,13 @@
 <script>
 	import '$lib/auth_style.css';
-	import Input from "$lib/components/Input.svelte";
 	import Button from "$lib/components/Button.svelte";
+    import kinnitatud from '$lib/images/kinnitatud.svg';
 </script>
 
 <section>
 	<div class="container">
 		<div class="rectangle-up"> 
-			<img src="..\src\lib\images\kinnitatud.svg" alt="Õnnestus!" width="200" height="200">
+			<img src={kinnitatud} alt="Õnnestus!" width="200" height="200">
 		</div>
 
 		<div class="rectangle-down"> 
