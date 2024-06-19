@@ -6,7 +6,7 @@ export async function GET({ params }) {
 
   const { data, error } = await supabase
     .from('premium_decisions')
-    .select('*')
+    .select('criteria, choices') // Specify the fields you need
     .eq('id', id)
     .single();
 

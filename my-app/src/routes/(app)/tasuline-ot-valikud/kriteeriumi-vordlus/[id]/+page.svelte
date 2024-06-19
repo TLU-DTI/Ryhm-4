@@ -4,63 +4,59 @@
   import { onMount } from 'svelte';
   import { get } from 'svelte/store';
   import { page } from "$app/stores";
-  import { criteriaStore, updateCriteriaMatrix, calculateCriteriaWeights, calculateChoiceWeights } from '../../../../../store/criteriaStore';
+  import { criteriaStore, updateCriterionWeight } from '../../../../../store/criteriaStore';
 
   let code: number | null = null;
+  let criteria = [];
+  let criteriaWeights = [];
+  let choiceWeights = [];
+
+  const unsubscribe = criteriaStore.subscribe(value => {
+    criteria = value.criteria || [];
+    criteriaWeights = value.criteriaWeights || [];
+    choiceWeights = value.choiceWeights || [];
+  });
 
   onMount(() => {
     const urlCode = get(page).url.searchParams.get("code");
     if (urlCode) {
       code = parseInt(urlCode, 10);
     }
+    // Initialize store if necessary
+    const store = get(criteriaStore);
+    if (!store.criteriaWeights.length && store.criteria.length) {
+      criteriaStore.update(store => {
+        store.criteriaWeights = Array(store.criteria.length).fill(100);
+        return store;
+      });
+    }
   });
 
-  $: criteria = $criteriaStore.criteria || [];
-  $: criteriaMatrix = $criteriaStore.criteriaMatrix || [];
-  $: criteriaWeights = $criteriaStore.criteriaWeights || [];
-  $: criteriaPercentages = $criteriaStore.criteriaPercentages || [];
-  $: choiceWeights = $criteriaStore.choiceWeights || [];
+  function handleWeightChange(index, event) {
+    const value = parseFloat(event.target.value);
+    updateCriterionWeight(index, value);
+  }
 </script>
 
 <section class="container">
   <div class="button-container">
-    <h2>Milline on Sinu valik, kui kriteeriumiks on:</h2>
+    <h2>Anna kriteeriumitele osakaal:</h2>
 
-    {#each criteriaMatrix as row, i}
-      {#each row as cell, j}
-        {#if i > j}
-          <div class="criteria-comparison">
-            <div class="criteria-title">
-              <span>{criteria[i]}</span>
-              <form class="likert-form">
-                {#each Array(5) as _, k}
-                  <input
-                    type="radio"
-                    name="likert-{i}-{j}"
-                    value="{5 - k}"
-                    on:change={() => updateCriteriaMatrix(i, j, 5 - k)}
-                    checked={cell === 5 - k}
-                  >
-                {/each}
-              </form>
-              <span>{criteria[j]}</span>
-            </div>
-          </div>
-        {/if}
-      {/each}
+    {#each criteria as criterion, index}
+      <div class="criteria-weight">
+        <label>{criterion}</label>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          bind:value={criteriaWeights[index]}
+          on:input={event => handleWeightChange(index, event)}
+        />
+        <span>{criteriaWeights[index]?.toFixed(2)}%</span>
+      </div>
     {/each}
 
     <div class="results">
-      <h2>Criteria Weights:</h2>
-      {#each criteriaWeights as weight, index}
-        <p>{criteria[index]}: {weight.toFixed(2)}</p>
-      {/each}
-
-      <h2>Criteria Percentages:</h2>
-      {#each criteriaPercentages as percentage, index}
-        <p>{criteria[index]}: {percentage.toFixed(2)}%</p>
-      {/each}
-
       <h2>Choice Weights:</h2>
       {#each choiceWeights as weight, index}
         <p>Choice {index + 1}: {weight.toFixed(2)}%</p>
@@ -95,7 +91,7 @@
     gap: 40px;
   }
 
-  .criteria-comparison {
+  .criteria-weight {
     margin-bottom: 20px;
     display: flex;
     align-items: center;
@@ -117,14 +113,6 @@
     width: 70%;
     place-self: center;
     border-radius: 20px;
-  }
-
-  .likert-form {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    align-items: center;
-    margin: 0 20px;
   }
 
   .results {
