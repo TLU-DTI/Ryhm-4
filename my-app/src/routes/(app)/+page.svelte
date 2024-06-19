@@ -1,14 +1,13 @@
 <script>
     import { supabase } from '$lib/supabaseClient';
     import { onMount } from 'svelte';
-    import { sat_user_id } from '../../store.js';
     import Button from "$lib/components/Button.svelte";
     import choicesIcon from '$lib/images/choices.svg';
     import resultsIcon from '$lib/images/results.svg';
     import groupsIcon from '$lib/images/groups.svg';
     import { goto } from "$app/navigation";
+    import { sat_user_id, sat_username, sat_premium } from '../../store.js';
 
-    let FreeUserView = true;
     let loading = true;  // State to track loading status
     let currentUserId = null;
 
@@ -40,7 +39,7 @@
                 <img src={choicesIcon} alt="Choices icon" width="100px"/>
             </div>
             <div class="action-area">
-                {#if FreeUserView}
+                {#if !$sat_premium}
                     <Button on:click={() => goto("/tasuta-ot-valikud")} on:keydown>Otsuse tegija</Button>
                 {:else}
                     <Button on:click={() => goto("/tasuline-ot-valikud")} on:keydown>Otsuse tegija</Button>
@@ -57,14 +56,16 @@
             </div>
         </div>
 
-        <div class="back-container">
-            <div class="back-container-green">
-                <img src={groupsIcon} alt="Groups icon" width="100 px"/>
-            </div>
-            <div class="action-area">
-                <Button on:click={handleClick2}>Grupi loomine</Button>
-            </div>
-        </div> 
+        {#if $sat_premium}
+            <div class="back-container">
+                <div class="back-container-green">
+                    <img src={groupsIcon} alt="Groups icon" width="100 px"/>
+                </div>
+                <div class="action-area">
+                    <Button on:click={handleClick2}>Grupi loomine</Button>
+                </div>
+            </div> 
+        {/if}
     </section>
 {/if}
 
@@ -82,11 +83,11 @@
         grid-template-rows: 1fr 1fr;
         min-width: 300px;
         max-width: 393px;
-        height: 400px;
+        height: 350px;
         flex-shrink: 0;
         border-radius: 38px;
         background: #FFF;
-        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.25);
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
         z-index: 1;
     }
 
@@ -95,7 +96,7 @@
         place-items: center;
         grid-template-columns: 1;
         width: 100%;
-        height: 100%;
+        height: 125%;
         flex-shrink: 0;
         border-radius: 38px 38px 0px 0px;
         background: #CFFFCB;
@@ -108,7 +109,7 @@
         justify-content: center;
         align-items: center;
         align-self: center;
-        margin-bottom: 20px;
+        margin-bottom: -30px;
         height: 100%;
     }
 </style>
