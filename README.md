@@ -25,23 +25,24 @@ WordPress (versioon 6.5.4): Projekti blogi/päeviku pidamiseks.
 ChatGPT (versioon 3.5): Koodi lahendamiseks ja ideede genereerimiseks.
 Svelte Histoire (versioon 0.17.17): Kohandatud komponentide loomiseks.
 
+
 Paigaldusjuhend: 
 Vajuta lingile: https://decision-maker-one.vercel.app/ ning tee kasutaja või logi sisse. 
-
-Tasuta versioon:
-
-Olles peamenüü lehel, vajuta “Otsuse tegija”, et alustada oma otsuste tegemist.
-Sind juhatatakse “Otsuse tegija” esimesele lehele, kus pead andma oma otsusele nime (näiteks: Autode valimine, uue voodi ostmine jne).
-Vajuta nuppu “Jätka”.
-Sisesta objektid, mille vahel tahad valida. Tasuta versioonis saad sisestada ainult kaks valikut (näiteks autode valimisel erinevad autod, korterite ostmisel erinevad korterid jne).
-Vajuta nuppu “Jätka”.
-Seejärel kuvatakse ette antud kriteeriumid: “Mugavus”, “Värv” ja “Hind”. Nende kriteeriumide põhjal vali oma eelistatud valik.
-
-Tasuline versioon:
-
-Tasulise versiooni saab pärast selle ostmist.
-Tasulises versioonis saad lisaks valida ka otsuse mudeli, lisada nii palju kriteeriume kui soovid ja piiramatu arvu valikuid.
-Alusta vastamist. Vastamise pikkus sõltub kriteeriumide ja valikute kogusest.
+  
+  Tasuta versioon:
+  
+  Olles peamenüü lehel, vajuta “Otsuse tegija”, et alustada oma otsuste tegemist.
+  Sind juhatatakse “Otsuse tegija” esimesele lehele, kus pead andma oma otsusele nime (näiteks: Autode valimine, uue voodi ostmine jne).
+  Vajuta nuppu “Jätka”.
+  Sisesta objektid, mille vahel tahad valida. Tasuta versioonis saad sisestada ainult kaks valikut (näiteks autode valimisel erinevad autod, korterite       ostmisel erinevad korterid jne).
+  Vajuta nuppu “Jätka”.
+  Seejärel kuvatakse ette antud kriteeriumid: “Mugavus”, “Värv” ja “Hind”. Nende kriteeriumide põhjal vali oma eelistatud valik.
+  
+  Tasuline versioon:
+  
+  Tasulise versiooni saab pärast selle ostmist.
+  Tasulises versioonis saad lisaks valida ka otsuse mudeli, lisada nii palju kriteeriume kui soovid ja piiramatu arvu valikuid.
+  Alusta vastamist. Vastamise pikkus sõltub kriteeriumide ja valikute kogusest.
 
 
 
