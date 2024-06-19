@@ -9,7 +9,7 @@
 <section class="container">
     <div class="rectangle1">
         <div class="rectangle-up"> 
-            <img src="..\src\lib\images\new-group.png" alt="Loo grupp" width="100" height="100">
+            <img src="..\src\lib\images\new-group.svg" alt="Loo grupp" width="100" height="100">
         </div>
         <div class="rectangle-down"> 
             <div class="continue">
@@ -19,7 +19,7 @@
     </div>  
     <div class="rectangle2">
         <div class="rectangle-up"> 
-            <img src="..\src\lib\images\group.png" alt="Grupid" >
+            <img src="..\src\lib\images\group.svg" alt="Grupid" >
         </div>
         <div class="rectangle-down"> 
             <div class="continue">
@@ -29,7 +29,7 @@
     </div>  
     <div class="rectangle3">
         <div class="rectangle-up"> 
-            <img src="..\src\lib\images\join-group.png" alt="Liitu grupiga" >
+            <img src="..\src\lib\images\join-group.svg" alt="Liitu grupiga" >
         </div>
         <div class="rectangle-down"> 
             <div class="continue">

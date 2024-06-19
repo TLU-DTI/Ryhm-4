@@ -254,7 +254,7 @@
                 <div class="copy">
                     <h1>{info.group_name}</h1>
                     <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
-                        <span><div>{info.group_code}<img src="../src/lib/images/copy.png" alt="copy icon" class="icon"/></div></span>
+                        <span><div>{info.group_code}<img src="../src/lib/images/copy.svg" alt="copy icon" class="icon"/></div></span>
                     </Button>
                 </div>
                 <div class="boxes-container">
@@ -265,13 +265,13 @@
                                 <div class="member-row">
                                     <span>
                                        { #if member.is_leader}
-                                            <img src="../src/lib/images/crown.png" alt="Leader" class="leader-icon">
+                                            <img src="../src/lib/images/crown.svg" alt="Leader" class="leader-icon">
                                         {/if}
                                         {member.user_name} 
                                     </span>
                                     {#if info.leader && !member.is_leader}
                                         <button on:click={() => removeMember(info.group_ID, member.user_ID)} class="icon-button">
-                                            <img src="../src/lib/images/trash.png" alt="Delete user">
+                                            <img src="../src/lib/images/trash.svg" alt="Delete user">
                                         </button>
                                     {/if}
                                 </div>
@@ -293,7 +293,7 @@
                                         </button>
                                         {#if info.leader}
                                         <button on:click={() => removeDesicion(info.group_ID, decision.id)} class="icon-button">
-                                            <img src="../src/lib/images/trash.png" alt="Delete decision">
+                                            <img src="../src/lib/images/trash.svg" alt="Delete decision">
                                         </button>
                                         {/if}   
                                     </div>

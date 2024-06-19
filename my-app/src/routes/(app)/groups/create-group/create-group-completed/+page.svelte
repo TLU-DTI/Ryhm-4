@@ -249,7 +249,7 @@
 <section>
 	<div class="container">
 		<div class="rectangle-up"> 
-			<img src="../../src/lib/images/free-verified-badge-1-866240.webp" alt="Õnnestus!" width="200" height="200">
+			<img src="../../src/lib/images/kinnitatud.svg" alt="Õnnestus!" width="200" height="200">
 		</div>
 
 		<div class="rectangle-down"> 
@@ -262,7 +262,7 @@
                         <div class="copy2">
                             <span class="group-code-text">Loodud grupi kood:</span>
                             <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
-                                <span><div>{info.group_code}<img src="../../src/lib/images/copy.png" alt="copy icon" class="icon"/></div></span>
+                                <span><div>{info.group_code}<img src="../../src/lib/images/copy.svg" alt="copy icon" class="icon"/></div></span>
                             </Button>
                         </div>
                     {/if}
