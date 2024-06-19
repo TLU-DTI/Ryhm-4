@@ -1,35 +1,43 @@
 <script lang="ts">
   import Button from "$lib/components/Button.svelte";
   import { goto } from "$app/navigation";
-  import { onMount } from 'svelte';
+  import { onMount, beforeUpdate } from 'svelte';
   import { get } from 'svelte/store';
   import { page } from "$app/stores";
   import { criteriaStore, updateChoiceComparisons } from '../../../../../store/criteriaStore';
 
   let criteriaIndex: number;
-  let criteria;
-  let choices;
-  let comparisons = [];
+  let criteria: string;
+  let choices: string[];
+  let comparisons: number[][] = [];
 
   function initializeData() {
     const store = get(criteriaStore);
-    criteria = store.criteria[criteriaIndex];
-    choices = store.choices;
+    console.log('criteriaStore data on initializeData:', store);
+    if (criteriaIndex >= 0 && criteriaIndex < store.criteria.length) {
+      criteria = store.criteria[criteriaIndex];
+      choices = store.choices;
 
-    // Initialize comparisons matrix if not already done
-    comparisons = store.choicesComparisons[criteriaIndex] || Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
-  }
-
-  $: {
-    const params = get(page).params;
-    const newCriteriaIndex = parseInt(params.criteriaIndex, 10);
-    if (criteriaIndex !== newCriteriaIndex) {
-      criteriaIndex = newCriteriaIndex;
-      initializeData();
+      // Initialize comparisons matrix if not already done
+      comparisons = store.choicesComparisons[criteriaIndex] || Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
+      console.log('Initialized comparisons:', comparisons);
+    } else {
+      console.warn('Invalid criteriaIndex:', criteriaIndex);
     }
   }
 
-  function handleComparisonChange(i, j, value) {
+  beforeUpdate(() => {
+    const params = get(page).params;
+    const newCriteriaIndex = parseInt(params.criteriaIndex, 10);
+    if (criteriaIndex !== newCriteriaIndex) {
+      console.log('beforeUpdate: criteriaIndex updated to', newCriteriaIndex);
+      criteriaIndex = newCriteriaIndex;
+      initializeData();
+    }
+  });
+
+  function handleComparisonChange(i: number, j: number, value: number) {
+    console.log(`Updating comparison: criteriaIndex=${criteriaIndex}, i=${i}, j=${j}, value=${value}`);
     updateChoiceComparisons(criteriaIndex, i, j, value);
   }
 
@@ -37,6 +45,7 @@
     // Store comparisons in criteriaStore
     criteriaStore.update(store => {
       store.choicesComparisons[criteriaIndex] = comparisons;
+      console.log('Updated criteriaStore with comparisons:', store.choicesComparisons);
       return store;
     });
 
@@ -52,7 +61,9 @@
   onMount(() => {
     const params = get(page).params;
     criteriaIndex = parseInt(params.criteriaIndex, 10);
+    console.log('onMount: criteriaIndex set to', criteriaIndex);
     initializeData();
+    console.log('criteriaStore data on onMount:', get(criteriaStore));
   });
 </script>
 

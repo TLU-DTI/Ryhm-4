@@ -52,14 +52,14 @@
           bind:value={criteriaWeights[index]}
           on:input={event => handleWeightChange(index, event)}
         />
-        <span>{criteriaWeights[index]?.toFixed(2)}%</span>
+        <span>{criteriaWeights[index]?.toFixed(0)}%</span>
       </div>
     {/each}
 
     <div class="results">
       <h2>Choice Weights:</h2>
       {#each choiceWeights as weight, index}
-        <p>Choice {index + 1}: {weight.toFixed(2)}%</p>
+        <p>Choice {index + 1}: {weight.toFixed(0)}%</p>
       {/each}
     </div>
 
