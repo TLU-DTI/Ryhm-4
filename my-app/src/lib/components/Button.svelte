@@ -41,6 +41,12 @@
 
     button:active {
         transform: translate(2px, 2px);
+        border: 2px solid #C4F1C0;    
+    }
+
+    button:clicked {
+        transform: translate(2px, 2px);
+        border: 2px solid #C4F1C0;    
     }
 
     button:disabled {
