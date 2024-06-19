@@ -6,7 +6,7 @@ Otsuste langetamine võib olla keeruline, eriti kui on vaja valida mitme olulise
 
 Lühikirjeldus:
 
-Lõime rakenduse, mis arvutab välja parima valiku, kasutades otsustusmudeleid: Forced Choice ja Analytical Hierarchy Process. Üks mudelitest on tasuta (Forced Choice) ja teine on tasuline (Analytical Hierarchy Process). Tasulise konto ostmise korral on võimalik kasutajal luua ka grupid. Seejärel arvutab süsteem kas  kogu grupile või üksikisikule lõppvaliku sobivuse.
+Lõime rakenduse, mis arvutab välja parima valiku, kasutades otsustusmudeleid: Forced Choice ja Analytical Hierarchy Process. Üks mudelitest on tasuta (Forced Choice) ja teine on tasuline (Analytical Hierarchy Process). Tasulise konto ostmise korral on võimalik kasutajal luua ka grupid. Seejärel arvutab süsteem kas  kogu grupile või üksikisikule vastuse.
 
 Rakendus on tehtud DTI instituudi informaatika tudengite suvepraktika raames.
 
@@ -30,8 +30,7 @@ Vajuta lingile: Decision Maker ning tee kasutaja või logi sisse, et kasutada ra
 
 Ekraanipildid
 
-Ekraanipilt: 
-<img width="1440" alt="Screenshot 2024-06-19 at 10 16 05" src="https://github.com/TLU-DTI/Ryhm-4/assets/133976166/db8f0d06-0deb-4653-8db1-21dfc8560882">
+Ekraanipildid - https://github.com/TLU-DTI/Ryhm-4/tree/main/Ekraanipildid
 
 
 Viide Litsentsile - https://github.com/TLU-DTI/Ryhm-4/blob/main/LITSENTS
