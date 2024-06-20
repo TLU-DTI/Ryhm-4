@@ -6,7 +6,7 @@ Otsuste langetamine võib olla keeruline, eriti kui on vaja valida mitme olulise
 
 Lühikirjeldus:
 
-Lõime rakenduse, mis arvutab välja parima valiku, kasutades otsustusmudeleid: Forced Choice ja Analytical Hierarchy Process. Üks mudelitest on tasuta (Forced Choice) ja teine on tasuline (Analytical Hierarchy Process). Tasulise konto ostmise korral on võimalik kasutajal luua ka grupid. Seejärel arvutab süsteem kas  kogu grupile või üksikisikule lõppvaliku sobivuse.
+Lõime rakenduse, mis arvutab välja parima valiku, kasutades otsustusmudeleid: Forced Choice ja Analytical Hierarchy Process. Üks mudelitest on tasuta (Forced Choice) ja teine on tasuline (Analytical Hierarchy Process). Tasulise konto ostmise korral on võimalik kasutajal luua ka grupid. Seejärel arvutab süsteem kas  kogu grupile või üksikisikule vastuse.
 
 Rakendus on tehtud DTI instituudi informaatika tudengite suvepraktika raames.
 
@@ -24,14 +24,32 @@ Discord (versioon stable 302556): Meeskonnasisene suhtlus.
 WordPress (versioon 6.5.4): Projekti blogi/päeviku pidamiseks.
 ChatGPT (versioon 3.5): Koodi lahendamiseks ja ideede genereerimiseks.
 Svelte Histoire (versioon 0.17.17): Kohandatud komponentide loomiseks.
-Paigaldusjuhend
 
-Vajuta lingile: Decision Maker ning tee kasutaja või logi sisse, et kasutada rakendust.
+
+Paigaldusjuhend: 
+Vajuta lingile: https://decision-maker-one.vercel.app/ ning tee kasutaja või logi sisse. 
+  
+  Tasuta versioon:
+  
+  Olles peamenüü lehel, vajuta “Otsuse tegija”, et alustada oma otsuste tegemist.
+  Sind juhatatakse “Otsuse tegija” esimesele lehele, kus pead andma oma otsusele nime (näiteks: Autode valimine, uue voodi ostmine jne).
+  Vajuta nuppu “Jätka”.
+  Sisesta objektid, mille vahel tahad valida. Tasuta versioonis saad sisestada ainult kaks valikut (näiteks autode valimisel erinevad autod, korterite       ostmisel erinevad korterid jne).
+  Vajuta nuppu “Jätka”.
+  Seejärel kuvatakse ette antud kriteeriumid: “Mugavus”, “Värv” ja “Hind”. Nende kriteeriumide põhjal vali oma eelistatud valik.
+  
+  Tasuline versioon:
+  
+  Tasulise versiooni saab pärast selle ostmist.
+  Tasulises versioonis saad lisaks valida ka otsuse mudeli, lisada nii palju kriteeriume kui soovid ja piiramatu arvu valikuid.
+  Alusta vastamist. Vastamise pikkus sõltub kriteeriumide ja valikute kogusest.
+
+
+
 
 Ekraanipildid
 
-Ekraanipilt: 
-<img width="1440" alt="Screenshot 2024-06-19 at 10 16 05" src="https://github.com/TLU-DTI/Ryhm-4/assets/133976166/db8f0d06-0deb-4653-8db1-21dfc8560882">
+Ekraanipildid - https://github.com/TLU-DTI/Ryhm-4/tree/main/Ekraanipildid
 
 
 Viide Litsentsile - https://github.com/TLU-DTI/Ryhm-4/blob/main/LITSENTS

@@ -4,7 +4,6 @@
     import Input from "$lib/components/Input.svelte";
 	import Button from "$lib/components/Button.svelte";
     import { useForm, validators, HintGroup, Hint, required } from "svelte-use-form";
-    import { writable } from 'svelte/store';
     import { sat_user_id, sat_username, sat_premium } from '../../../../store.js';
     import { onMount } from 'svelte';
     import { goto } from "$app/navigation";
@@ -61,7 +60,6 @@
             }
 
             if (userGroupData) {
-                console.error('Sa oled juba selle grupi liige!');
                 throw new Error('Sa oled juba selle grupi liige!');
                 return;
             }

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import '$lib/styles.css';
-	import Input from "$lib/components/Input.svelte";
 	import Button from "$lib/components/Button.svelte";
     import { sat_user_id, sat_premium, sat_group_id } from '../../../../../store.js';
     import { goto } from "$app/navigation";
     import { onMount } from 'svelte';
     import { supabase } from '$lib/supabaseClient';
     import { writable, get } from 'svelte/store';
+    import kinnitatud from '$lib/images/kinnitatud.svg';
+    import copy from '$lib/images/copy.svg';
 
     onMount(() => {
         sat_user_id.subscribe(value => {
@@ -110,127 +111,6 @@
         }
     }
 
-    async function deleteGroup(groupId: number) {
-        try {
-            // First delete all members of the group
-            const { data: membersData, error: membersError } = await supabase
-                .from('users_groups')
-                .delete()
-                .eq('group_ID', groupId);
-
-            if (membersError) {
-                throw new Error(membersError.message);
-            }
-
-            console.log(`Members deleted: ${JSON.stringify(membersData)}`);
-
-            // Then delete the group
-            const { data: groupData, error: groupError } = await supabase
-                .from('groups')
-                .delete()
-                .eq('id', groupId);
-
-            if (groupError) {
-                throw new Error(groupError.message);
-            }
-
-            console.log(`Group deleted: ${JSON.stringify(groupData)}`);
-
-            // Refresh group info after deleting the group
-            await refreshGroupInfo();
-        } catch (error) {
-            console.error('Error deleting group:', error);
-            alert('Error deleting group: ' + error);
-        }
-    }
-
-    async function leaveGroup(groupId: number, memberId: number) {
-        try {
-            console.log(memberId, groupId);
-            // First delete all members of the group
-            const { data: membersData, error: membersError } = await supabase
-                .from('users_groups')
-                .delete()
-                .eq('group_ID', groupId)
-                .eq('user_ID', memberId);
-
-            if (membersError) {
-                throw new Error(membersError.message);
-            }
-
-            console.log(`Members deleted: ${JSON.stringify(membersData)}`);
-
-            // Refresh group info after deleting the group
-            await refreshGroupInfo();
-        } catch (error) {
-            console.error('Error deleting group:', error);
-            alert('Error deleting group: ' + error);
-        }
-    }
-
-    async function removeMember(groupId: number, memberId: number) {
-        try {
-            console.log('Leader is trying to remove: ' + memberId + ' from group id: ' + groupId);
-            const { data, error } = await supabase
-                .from('users_groups')
-                .delete()
-                .eq('group_ID', groupId)
-                .eq('user_ID', memberId);
-
-            if (error) {
-                throw new Error(error.message);
-            }
-
-            console.log(`Removal successful: ${JSON.stringify(data)}`);
-
-            // Refresh group info after removing a member
-            await refreshGroupInfo();
-        } catch (error) {
-            console.error('Error removing member:', error);
-            alert('Error removing member: ' + error);
-        }
-    }
-    async function groupdesicion(groupId: number) {
-        try {
-            sat_group_id.set(groupId);
-            location.href = "/groups/desicion-name";
-
-        } catch (error) {
-            console.error('Error making a group desicion:', error);
-            alert('Error making a group desicion: ' + error);
-        }
-    }
-    async function removeDesicion(groupId: number, decisionId: number) {
-    try {
-        const { data: deleteGroupDecisionData, error: deleteGroupDecisionError } = await supabase
-            .from('premium_decisions_groups')
-            .delete()
-            .eq('group_ID', groupId)
-            .eq('premium_decisions_ID', decisionId);
-
-        if (deleteGroupDecisionError) {
-            throw new Error(deleteGroupDecisionError.message);
-        }
-
-        const { data: deleteDecisionData, error: deleteDecisionError } = await supabase
-            .from('premium_decisions')
-            .delete()
-            .eq('id', decisionId);
-
-        if (deleteDecisionError) {
-            throw new Error(deleteDecisionError.message);
-        }
-
-        console.log(`Removal successful: ${JSON.stringify(deleteDecisionData)}`);
-
-        // Refresh group info after removing a decision
-        await refreshGroupInfo();
-    } catch (error) {
-        console.error('Error removing decision:', error);
-        alert('Error removing decision: ' + error);
-    }
-    }
-
     function copyToClipboard(group_code: string) {
         if (group_code) {
             navigator.clipboard.writeText(group_code)
@@ -249,7 +129,7 @@
 <section>
 	<div class="container">
 		<div class="rectangle-up"> 
-			<img src="../../src/lib/images/kinnitatud.svg" alt="Õnnestus!" width="200" height="200">
+			<img src="{kinnitatud}" alt="Õnnestus!" width="200" height="200">
 		</div>
 
 		<div class="rectangle-down"> 
@@ -262,7 +142,7 @@
                         <div class="copy2">
                             <span class="group-code-text">Loodud grupi kood:</span>
                             <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
-                                <span><div>{info.group_code}<img src="../../src/lib/images/copy.svg" alt="copy icon" class="icon"/></div></span>
+                                <span><div>{info.group_code}<img src={copy} alt="copy icon" class="icon"/></div></span>
                             </Button>
                         </div>
                     {/if}

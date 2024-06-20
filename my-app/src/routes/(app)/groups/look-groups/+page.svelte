@@ -5,6 +5,11 @@
     import { sat_user_id, sat_premium, sat_group_id } from '../../../../store.js';
     import Button from "$lib/components/Button.svelte";
     import { goto } from "$app/navigation";
+    import trash from '$lib/images/trash.svg';
+    import crown from '$lib/images/crown.svg';
+    import results from '$lib/images/results.svg';
+    import copy from '$lib/images/copy.svg';
+    
 
     onMount(() => {
         sat_user_id.subscribe(value => {
@@ -255,7 +260,7 @@
                 <div class="copy">
                     <h1>{info.group_name}</h1>
                     <Button type="button" style="secondary" on:click={() => copyToClipboard(info.group_code)} on:keydown>
-                        <span><div>{info.group_code}<img src="../src/lib/images/copy.svg" alt="copy icon" class="icon"/></div></span>
+                        <span><div>{info.group_code}<img src={copy} alt="copy icon" class="icon"/></div></span>
                     </Button>
                 </div>
                 <div class="boxes-container">
@@ -266,13 +271,13 @@
                                 <div class="member-row">
                                     <span>
                                        { #if member.is_leader}
-                                            <img src="../src/lib/images/crown.svg" alt="Leader" class="leader-icon">
+                                            <img src={crown} alt="Leader" class="leader-icon">
                                         {/if}
                                         {member.user_name} 
                                     </span>
                                     {#if info.leader && !member.is_leader}
                                         <button on:click={() => removeMember(info.group_ID, member.user_ID)} class="icon-button">
-                                            <img src="../src/lib/images/trash.svg" alt="Delete user">
+                                            <img src={trash} alt="Delete user">
                                         </button>
                                     {/if}
                                 </div>
@@ -290,11 +295,11 @@
                                             <img src="../src/lib/images/new-group.png" alt="Decisions">
                                         </button> -->
                                         <button on:click={() => groupdesicion(info.group_ID)} class="icon-button">
-                                            <img src="../src/lib/images/results.svg" alt="Results">
+                                            <img src={results} alt="Results">
                                         </button>
                                         {#if info.leader}
                                         <button on:click={() => removeDesicion(info.group_ID, decision.id)} class="icon-button">
-                                            <img src="../src/lib/images/trash.svg" alt="Delete decision">
+                                            <img src={trash} alt="Delete decision">
                                         </button>
                                         {/if}   
                                     </div>

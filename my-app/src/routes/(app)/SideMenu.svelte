@@ -12,7 +12,6 @@
     import { get } from "svelte/store";
     import { afterUpdate } from 'svelte';
 
-
     import { sat_user_id, sat_username, sat_premium } from '../../store.js';
 
     //let FreeUserView:boolean = $sat_premium;

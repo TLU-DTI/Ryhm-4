@@ -2,14 +2,16 @@
 <script lang="ts">
     import '$lib/styles.css';
     import { goto } from "$app/navigation";
-    import Input from "$lib/components/Input.svelte";
     import Button from "$lib/components/Button.svelte";
+    import newgroup from '$lib/images/new-group.svg';
+    import group from '$lib/images/group.svg';
+    import joingroup from '$lib/images/join-group.svg';
 </script>
 
 <section class="container">
     <div class="rectangle1">
         <div class="rectangle-up"> 
-            <img src="..\src\lib\images\new-group.svg" alt="Loo grupp" width="100" height="100">
+            <img src={newgroup} alt="Loo grupp" width="100" height="100">
         </div>
         <div class="rectangle-down"> 
             <div class="continue">
@@ -19,7 +21,7 @@
     </div>  
     <div class="rectangle2">
         <div class="rectangle-up"> 
-            <img src="..\src\lib\images\group.svg" alt="Grupid" >
+            <img src={group} alt="Grupid" >
         </div>
         <div class="rectangle-down"> 
             <div class="continue">
@@ -29,7 +31,7 @@
     </div>  
     <div class="rectangle3">
         <div class="rectangle-up"> 
-            <img src="..\src\lib\images\join-group.svg" alt="Liitu grupiga" >
+            <img src={joingroup} alt="Liitu grupiga" >
         </div>
         <div class="rectangle-down"> 
             <div class="continue">
@@ -42,12 +44,11 @@
 
 <style>
     .container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    padding-top: 220px;
-    gap: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 0.6;
+        gap: 40px;
     }
     .rectangle1, .rectangle2, .rectangle3 {
         display: flex;
@@ -60,7 +61,7 @@
         justify-content: center;
         align-items: center;
         width: 300px;
-        height: 200px;
+        height: 220px;
         background: #CFFFCB;
         border-top-left-radius: 38px;
         border-top-right-radius: 38px;
@@ -72,7 +73,7 @@
         align-items: center;
         justify-content: center;
         width: 300px;
-        height: 100px;
+        height: 130px;
         background: white;
         border-bottom-left-radius: 38px;
         border-bottom-right-radius: 38px;
