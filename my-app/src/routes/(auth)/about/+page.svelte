@@ -7,13 +7,18 @@
 
 <section class="container">
 	<div class="header">
-		<div class="logo"><button on:click={() => goto("/home")} on:keydown> <img src={logo} class="logo-img" alt="logo"></button>
+		<div class="logo">
+			<button on:click={() => goto("/home")} on:keydown> <img src={logo} class="logo-img" alt="logo"></button>
 		</div>
 		<div class="vertical-border"></div>
-		<div class="login-text"><button on:click={() => goto("/login")} on:keydown>Logi sisse</button></div>
+		<div class="login-text">
+			<button on:click={() => goto("/login")} on:keydown>Logi sisse</button>
+		</div>
 		<div class="vertical-border"></div>
-		<div class="register-text"><button on:click={() => goto("/register")} on:keydown>Registreeru</button></div>
-</div>
+		<div class="register-text">
+			<button on:click={() => goto("/register")} on:keydown>Registreeru</button>
+		</div>
+	</div>
 	<div class="rectangle">
 		<h1>Kes me oleme?</h1>
 		<img src={meie} class="meie-img" alt=“meie”>
@@ -28,7 +33,7 @@
 				Valiku Võlur kasutab erinevaid meetodeid ja algoritme, et pakkuda kasutajatele personaliseeritud soovitusi ja lahendusi. Rakendus analüüsib kasutaja sisestatud andmeid ja eelistusi, et pakkuda optimaalseid valikuvõimalusi.
 				<br><br>
 				Meie eesmärk on rakendada oma teadmisi ja oskusi, et lahendada reaalseid probleeme ning panustada innovatsiooni ja arengusse nii tehnoloogia kui ka meedia valdkonnas. Oleme põnevil oma tuleviku ees ja ootame, et saaksime oma teadmisi ja loomingulisust rakendada erinevates projektides ja algatustes.
-				</p>
+			</p>
 		</div>
 	</div>
 </section>
@@ -40,6 +45,7 @@
 		align-items: center;
 		height: 100vh; 
 	}
+
 	.rectangle {
 		display: flex;
 		flex-direction: column;
@@ -54,11 +60,13 @@
 		box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
 		padding-top: 300px; 
 	}
+
 	.rectangle h1 {
 		font-size: 80px;
 		font-weight: 700;
 		padding-top: 300px;
 	}
+
 	.header {
 		background-color: #C4F1C0;
 		box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
@@ -99,9 +107,10 @@
 		background-color: #a8e0a4; 
 	}
 
-.logo-img:hover{
+	.logo-img:hover{
 		background-color: #a8e0a4;
 	}
+
 	.meie-img {
 		padding: 10px;
 		width: 600px; 
@@ -117,13 +126,12 @@
 	}
 
 	.logo img.logo-img {
-    transform: translateX(-50%);
-    width: 100px;
+		transform: translateX(-50%);
+		width: 100px;
 		height: 80px;
 	}
 
 	.logo-img{
 		padding-left: 100px;
 	}
-
 </style>
