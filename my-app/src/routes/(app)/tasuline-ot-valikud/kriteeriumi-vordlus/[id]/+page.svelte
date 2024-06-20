@@ -6,15 +6,17 @@
   import { page } from "$app/stores";
   import { criteriaStore, updateCriterionWeight } from '../../../../../store/criteriaStore';
 
-  let code: number | null = null;
+  let code = null;
   let criteria = [];
   let criteriaWeights = [];
   let choiceWeights = [];
+  let premium_decision_id;
 
-  const unsubscribe = criteriaStore.subscribe(value => {
+  criteriaStore.subscribe(value => {
     criteria = value.criteria || [];
     criteriaWeights = value.criteriaWeights || [];
     choiceWeights = value.choiceWeights || [];
+    console.log('Subscribed criteriaStore:', value);
   });
 
   onMount(() => {
@@ -22,13 +24,31 @@
     if (urlCode) {
       code = parseInt(urlCode, 10);
     }
-    // Initialize store if necessary
+
+    // Retrieve premium_decision_id from session storage
+    const storedPremiumDecisionId = sessionStorage.getItem('premium_decision_id');
+    if (storedPremiumDecisionId) {
+      premium_decision_id = parseInt(storedPremiumDecisionId, 10);
+      criteriaStore.update(store => {
+        store.premium_decision_id = premium_decision_id;
+        return store;
+      });
+    }
+
     const store = get(criteriaStore);
+    console.log('onMount criteriaStore:', store);
     if (!store.criteriaWeights.length && store.criteria.length) {
       criteriaStore.update(store => {
         store.criteriaWeights = Array(store.criteria.length).fill(100);
         return store;
       });
+    }
+
+    // Check if premium_decision_id is undefined
+    if (!premium_decision_id) {
+      console.error('premium_decision_id is undefined in kriteeriumi-vordlus page');
+    } else {
+      console.log('premium_decision_id in kriteeriumi-vordlus page:', premium_decision_id);
     }
   });
 
@@ -38,30 +58,31 @@
   }
 </script>
 
+
 <section class="container">
   <div class="button-container">
-    <h2>Anna kriteeriumitele osakaal:</h2>
+      <h2>Anna kriteeriumitele osakaal:</h2>
+      {#each criteria as criterion, index}
+          <div class="criteria-weight">
+              <label>{criterion}</label>
+              <input class='slider'
+                  type="range"
+                  min="0"
+                  max="100"
+                  bind:value={criteriaWeights[index]}
+                  on:input={event => handleWeightChange(index, event)}
+              />
+              <span>{criteriaWeights[index]?.toFixed(0)}%</span>
+          </div>
+      {/each}
 
-    {#each criteria as criterion, index}
-      <div class="criteria-weight">
-        <p>{criterion}</p>
-        <input class="slider"
-          type="range"
-          min="0"
-          max="100"
-          bind:value={criteriaWeights[index]}
-          on:input={event => handleWeightChange(index, event)}
-        />
-        <p class="protsent">{criteriaWeights[index]?.toFixed(0)}%</p>
+      <div class="buttons">
+          <Button style="secondary" on:click={() => goto("/")}>Tagasi</Button>
+          <Button on:click={() => goto("/tasuline-ot-valikud/valiku-vordlus/0")}>Jätka</Button>
       </div>
-    {/each}
-
-    <div class="buttons">
-      <Button style="secondary" on:click={() => goto("/")}>Tagasi</Button>
-      <Button on:click={() => goto("/tasuline-ot-valikud/valiku-vordlus/0")}>Jätka</Button>
-    </div>
   </div>
 </section>
+
 
 <style>
   section.container {

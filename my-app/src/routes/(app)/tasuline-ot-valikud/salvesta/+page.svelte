@@ -1,22 +1,90 @@
-<script>
-    import Button from "$lib/components/Button.svelte";
-    import { goto } from "$app/navigation";
-    import { get } from "svelte/store";
+<script lang="ts">
+  import Button from "$lib/components/Button.svelte";
+  import { goto } from "$app/navigation";
+  import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
+  import { criteriaStore } from '../../../../store/criteriaStore';
+  import { supabase } from '$lib/supabaseClient';
+  import { get } from 'svelte/store';
+  import { sat_user_id } from '../../../../store.js';
+
+  let premiumDecisionData = get(premiumDecisionStore);
+  let userId = get(sat_user_id); // Get user_id directly from the store
+  let premium_decision_id: number;
+
+  console.log('Retrieved userId:', userId);
+
+  async function saveToDatabase() {
+    const dataToInsert = {
+      choice_name: premiumDecisionData.decisionName,
+      model_type: premiumDecisionData.modelType,
+      choices: premiumDecisionData.choices,
+      criteria: premiumDecisionData.criteria,
+      user_id: userId
+    };
+
+    // Log the data being sent to the database
+    console.log('Data being sent to the database:', dataToInsert);
+
+    try {
+      const { data, error } = await supabase
+        .from('premium_decisions')
+        .insert([dataToInsert])
+        .select('id')
+        .single();
+
+      if (error) {
+        throw new Error(error.message);
+      } else {
+        console.log('Data saved successfully');
+        premium_decision_id = data.id; // Store the decision ID
+
+        // Save premium_decision_id to session storage
+        sessionStorage.setItem('premium_decision_id', premium_decision_id.toString());
+
+        // Update the store with premium_decision_id
+        criteriaStore.update(store => {
+          store.premium_decision_id = premium_decision_id;
+          console.log('Updated criteriaStore (salvesta):', store); // Log the store after update
+          return store;
+        });
+
+        // Reset the project store
+        premiumDecisionStore.resetStore();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  async function startAnswering() {
+    await saveToDatabase();
+    const criteriaStoreState = get(criteriaStore);
+    console.log('Navigating to kriteeriumi-vordlus with id:', premium_decision_id);
+    console.log('criteriaStore state before navigation:', criteriaStoreState);
+    goto(`/tasuline-ot-valikud/kriteeriumi-vordlus/${premium_decision_id}`);
+  }
+
+  async function saveResult() {
+    await saveToDatabase();
+    goto("/");
+  }
+
+  function goBack() {
+    goto("/tasuline-ot-valikud/valikud");
+  }
 </script>
 
 <section class="container">
-    <div class="input-container">
-        <h2>Kuidas soovid jätkata?</h2>
-        <br>
-
-        <div class="buttons">
-            <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteerium")} on:keydown size="large">Tagasi</Button>
-            <Button size="large">Salvesta otsuste tegija ja vasta hiljem</Button>
-            <Button on:click={() => goto("/tasuline-ot-valikud/kriteeriumi-vordlus")} on:keydown size="large">Jätka</Button>
-        </div>
+  <div class="input-container">
+    <h2>Mida soovid edasi teha?</h2>
+    <div class="buttons">
+      <Button on:click={saveResult} on:keydown>Salvesta tulemus</Button>
+      <Button style="secondary" on:click={goBack} on:keydown>Tagasi</Button>
+      <Button on:click={startAnswering} on:keydown>Alusta vastamist</Button>
     </div>
+  </div>
 </section>
-
+  
 <style>
     section.container {
         display: flex;

@@ -34,6 +34,7 @@
         decisionName = store.decisionName;
     });
 
+
     type DesicionData = {
         desicion_name: string;
     };
@@ -73,6 +74,7 @@
         </form>
     </div>
 </section>
+
 
 <style>
     section.container {

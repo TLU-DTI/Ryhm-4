@@ -1,63 +1,134 @@
 <script lang="ts">
   import Button from "$lib/components/Button.svelte";
   import { goto } from "$app/navigation";
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import { get } from 'svelte/store';
   import { page } from "$app/stores";
-  import { criteriaStore, updateChoiceComparisons } from '../../../../../store/criteriaStore';
-
-  let criteriaIndex: number;
-  let criteria;
-  let choices;
-  let comparisons = [];
+  import { criteriaStore, updateChoiceComparisons, calculateFinalResults } from '../../../../../store/criteriaStore';
+  import { sat_user_id } from '../../../../../store.js';
+  
+  let criteriaIndex: number = 0;
+  let criteria: string = '';
+  let choices: string[] = [];
+  let comparisons: number[][] = [];
+  let user_id = get(sat_user_id); // Get user_id directly from the store
+  let premium_decision_id;
 
   function initializeData() {
     const store = get(criteriaStore);
-    criteria = store.criteria[criteriaIndex];
-    choices = store.choices;
+    console.log('criteriaStore data on initializeData:', store);
 
-    // Initialize comparisons matrix if not already done
-    comparisons = store.choicesComparisons[criteriaIndex] || Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
-  }
+    // Set user_id and premium_decision_id if they are not set
+    if (!store.user_id) {
+      store.user_id = user_id;
+    }
+    if (!store.premium_decision_id) {
+      store.premium_decision_id = premium_decision_id;
+    } else {
+      premium_decision_id = store.premium_decision_id;
+    }
 
-  $: {
-    const params = get(page).params;
-    const newCriteriaIndex = parseInt(params.criteriaIndex, 10);
-    if (criteriaIndex !== newCriteriaIndex) {
-      criteriaIndex = newCriteriaIndex;
-      initializeData();
+    console.log('premium_decision_id(valiku vordlus):', premium_decision_id);
+
+    if (criteriaIndex >= 0 && criteriaIndex < store.criteria.length) {
+      criteria = store.criteria[criteriaIndex];
+      choices = store.choices;
+
+      // Initialize comparisons matrix if not already done
+      comparisons = store.choicesComparisons[criteriaIndex]
+        ? JSON.parse(JSON.stringify(store.choicesComparisons[criteriaIndex]))
+        : Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
+
+      console.log('Initialized comparisons:', comparisons);
+    } else {
+      console.warn('Invalid criteriaIndex:', criteriaIndex);
     }
   }
 
-  function handleComparisonChange(i, j, value) {
+  afterUpdate(() => {
+    const params = get(page).params;
+    const newCriteriaIndex = parseInt(params.criteriaIndex, 10);
+    if (criteriaIndex !== newCriteriaIndex) {
+      console.log('afterUpdate: criteriaIndex updated to', newCriteriaIndex);
+      criteriaIndex = newCriteriaIndex;
+      initializeData();
+    }
+  });
+
+  function handleComparisonChange(i: number, j: number, value: number) {
+    console.log(`Updating comparison: criteriaIndex=${criteriaIndex}, i=${i}, j=${j}, value=${value}`);
+    comparisons[i][j] = value;
+    comparisons[j][i] = 6 - value;  // Assuming symmetrical comparison
     updateChoiceComparisons(criteriaIndex, i, j, value);
   }
 
-  function handleNext() {
+  async function handleNext() {
     // Store comparisons in criteriaStore
     criteriaStore.update(store => {
-      store.choicesComparisons[criteriaIndex] = comparisons;
+      store.choicesComparisons[criteriaIndex] = JSON.parse(JSON.stringify(comparisons));
+      console.log('Updated criteriaStore with comparisons:', store.choicesComparisons);
+      console.log('Criteria index', criteriaIndex);
       return store;
     });
 
     // Navigate to the next criteria or finish
     const store = get(criteriaStore);
     if (criteriaIndex < store.criteria.length - 1) {
-      goto(`/tasuline-ot-valikud/valiku-vordlus/${criteriaIndex + 1}`);
+      const nextCriteriaIndex = criteriaIndex + 1;  // Calculate next criteriaIndex before navigation
+      goto(`/tasuline-ot-valikud/valiku-vordlus/${nextCriteriaIndex}`);
     } else {
-      goto('/tulemused/tulemus'); // Assuming a results page
+      await calculateFinalResults();
+      const updatedStore = get(criteriaStore); // Ensure store is updated before using it
+      if (updatedStore.criteria && updatedStore.choices) {
+        await saveResultsToDatabase(updatedStore);
+        goto('/tulemused/tulemus');
+      } else {
+        console.error('Criteria or choices are not defined');
+      }
+    }
+  }
+
+  async function saveResultsToDatabase(store) {
+    const results = {
+      criteriaWeights: store.criteriaWeights,
+      choiceWeights: store.choiceWeights,
+      choicesComparisons: store.choicesComparisons
+    };
+
+    const dataToInsert = {
+      premium_decision_id: store.premium_decision_id,
+      results,
+      user_id: store.user_id
+    };
+
+    console.log('Saving results to database:', dataToInsert);
+
+    try {
+      const { data, error } = await supabase
+        .from('premium_decision_results')
+        .insert([dataToInsert]);
+
+      if (error) {
+        throw new Error(error.message);
+      } else {
+        console.log('Results saved successfully:', data);
+      }
+    } catch (error) {
+      console.error('Error saving results:', error);
     }
   }
 
   onMount(() => {
     const params = get(page).params;
     criteriaIndex = parseInt(params.criteriaIndex, 10);
+    console.log('onMount: criteriaIndex set to', criteriaIndex);
     initializeData();
+    console.log('criteriaStore data on onMount:', get(criteriaStore));
   });
 </script>
 
 <section class="container">
-  <h2>Võrdle valikuid, kui kriteerium on: <br> {criteria}</h2>
+  <h2>Võrdle valikuid, kui kriteerium on:<br> {criteria}</h2>
 
   {#if choices && choices.length > 0}
     {#each choices as choiceA, i}
