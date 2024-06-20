@@ -60,7 +60,6 @@
             }
 
             if (userGroupData) {
-                console.error('Sa oled juba selle grupi liige!');
                 throw new Error('Sa oled juba selle grupi liige!');
                 return;
             }

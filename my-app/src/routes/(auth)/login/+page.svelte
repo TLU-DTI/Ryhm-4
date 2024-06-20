@@ -46,7 +46,7 @@
 				.single();
 
 			if (error || !user) {
-				throw new Error('Invalid email or password');
+				throw new Error('Kehtetu e-posti aadress või parool!');
 			}
 
 			// Compare the provided password with the stored hashed password
@@ -55,16 +55,16 @@
 
 
 			if (!passwordMatch) {
-				throw new Error('Invalid email or password');
+				throw new Error('Kehtetu e-posti aadress või parool!');
 			}
 
 			sat_user_id.set(user.id);
 			sat_username.set(user.name);
 			sat_premium.set(user.premium);
-			console.log('Login successful. The user: ' + user.id + ' logged in.');
 			window.location.href = "/";//Muuda seda!
 		} catch (error) {
 			console.error('Error:', error);
+			alert(error);
 		}
 	}
 </script>
