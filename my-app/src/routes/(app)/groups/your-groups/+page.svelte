@@ -197,7 +197,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 130px;
+        padding: 120px;
     }
     .rectangle {
         display: flex;

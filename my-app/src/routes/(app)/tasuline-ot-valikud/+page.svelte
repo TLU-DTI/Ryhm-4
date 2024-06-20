@@ -18,7 +18,7 @@
         premiumDecisionStore.update(store => {
             return { ...store, decisionName };
         });
-        goto("/tasuline-ot-valikud/otsusemudel");
+        goto("/");
     }
 </script>
 

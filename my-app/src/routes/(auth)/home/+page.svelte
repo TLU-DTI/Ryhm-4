@@ -6,7 +6,7 @@
 
 <section class="container">
 	<div class="header">
-		<div class="about"><button on:click={() => goto("/about")} on:keydown>Meie Kohta</button></div>
+		<div class="about"><button on:click={() => goto("/about")} on:keydown>Meist</button></div>
 		<div class="vertical-border"></div>
 		<div class="login-text"><button on:click={() => goto("/login")} on:keydown>Logi sisse</button></div>
 		<div class="vertical-border"></div>
@@ -181,5 +181,13 @@
 
     button:hover {
         background-color: #a8e0a4; 
+    }
+
+    .login-text{
+        margin-left: -6px;
+    }
+
+    .register-text{
+        margin-left: -10px;
     }
 </style>

@@ -23,7 +23,7 @@
                 Forced choice mudel
             </Button>
             <Button size="mini">
-                <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
+                <span use:tooltip= {"Otsustusmudel, kus kasutajad hindavad alternatiive, valides igas võrdluses ühe eelistatuima valiku. Näiteks, kui kriteeriumiks on kasutusmugavus, siis kumb on mugavam, kas iPhone või Samsung? Samsung või Huawei, Huawei või iPhone jne. Alternatiiv, mis kogub kõige rohkem eelistusi, osutub valituks."}>?</span>
             </Button>
         </div>
         

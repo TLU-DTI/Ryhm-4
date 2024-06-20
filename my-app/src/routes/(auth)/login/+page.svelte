@@ -61,7 +61,7 @@
 			sat_user_id.set(user.id);
 			sat_username.set(user.name);
 			sat_premium.set(user.premium);
-			window.location.href = "/";//Muuda seda!
+			window.location.href = "/";
 		} catch (error) {
 			console.error('Error:', error);
 			alert(error);
@@ -72,7 +72,7 @@
 
 <section class="container">
 	<div class="rectangle-left"> 
-		<h1>Võta juhtimine enda kätte – <br><i>Decision Maker</i>.<br> Sinu teejuht paremate valikuteni!</h1>
+		<h1><i>Võta juhtimine enda kätte – Valiku Võlur.<br> Sinu teejuht paremate valikuteni!</i></h1>
 	</div>
 	
 	<div class="rectangle-right">
@@ -113,7 +113,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		padding: 180px;
+		padding: 170px;
 	}
 
 	h1 {
