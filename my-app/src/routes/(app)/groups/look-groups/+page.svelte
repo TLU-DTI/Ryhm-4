@@ -197,7 +197,7 @@
     async function groupdesicion(groupId: number) {
         try {
             sat_group_id.set(groupId);
-            location.href = "/groups/desicion-name";
+            location.href = "/groups/desicion-name"
 
         } catch (error) {
             console.error('Error making a group desicion:', error);
@@ -289,20 +289,20 @@
                         <div class="box-content">
                             {#each info.decisions as decision}
                             <div class="member-row">
-                                    <span><button class="name">{decision.choice_name}</button></span> <!--TEKST VAJA TEHA KLIKITAVAKS-->
-                                    <div class="icons-container">
-                                        <!-- <button on:click={() => groupdesicion(info.group_ID)} class="icon-button">
-                                            <img src="../src/lib/images/new-group.png" alt="Decisions">
-                                        </button> -->
-                                        <button on:click={() => groupdesicion(info.group_ID)} class="icon-button">
-                                            <img src={results} alt="Results">
-                                        </button>
-                                        {#if info.leader}
-                                        <button on:click={() => removeDesicion(info.group_ID, decision.id)} class="icon-button">
-                                            <img src={trash} alt="Delete decision">
-                                        </button>
-                                        {/if}   
-                                    </div>
+                                <span><button class="name">{decision.choice_name}</button></span> <!--TEKST VAJA TEHA KLIKITAVAKS-->
+                                <div class="icons-container">
+                                    <!-- <button on:click={() => groupdesicion(info.group_ID)} class="icon-button">
+                                        <img src="../src/lib/images/new-group.png" alt="Decisions">
+                                    </button> -->
+                                    <button on:click={() => goto("/tulemused/mitte-kattesaadav")} class="icon-button">
+                                        <img src={results} alt="Results">
+                                    </button>
+                                    {#if info.leader}
+                                    <button on:click={() => removeDesicion(info.group_ID, decision.id)} class="icon-button">
+                                        <img src={trash} alt="Delete decision">
+                                    </button>
+                                    {/if}   
+                                </div>
                             </div>        
                             {/each}
                         </div>

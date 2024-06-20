@@ -52,7 +52,7 @@
                 <img src={resultsIcon} alt="Results icon" width="100px"/>
             </div>
             <div class="action-area">    
-                <Button on:click={() => goto("/tulemused")} on:keydown>Vaata tulemusi</Button> 
+                <Button on:click={() => goto("/tulemused/mitte-kattesaadav")} on:keydown>Vaata tulemusi</Button> 
             </div>
         </div>
 

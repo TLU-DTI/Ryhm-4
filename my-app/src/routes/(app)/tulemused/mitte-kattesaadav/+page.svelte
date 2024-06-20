@@ -1,24 +1,24 @@
 <script>
-	import '$lib/auth_style.css';
+	import '$lib/styles.css';
 	import Button from "$lib/components/Button.svelte";
-    import cancel from '$lib/images/kinnitatud.svg';
+    import kinnitatud from '$lib/images/cancel.svg';
+    import { goto } from "$app/navigation";
 </script>
 
 <section>
 	<div class="container">
 		<div class="rectangle-up"> 
-			<img src={cancel} alt="Õnnestus!" width="200" height="200">
+			<img src={kinnitatud} alt="Õnnestus!" width="200" height="200">
 		</div>
 
 		<div class="rectangle-down"> 
 
 			<div class="success">
-				<p>Kasutaja loomine õnnestus!</p>
+				<p>See funktsionaalsus ei ole hetkel kättesaadav!</p>
 			</div>
 
-
 			<div class="continue">
-				<Button>Jätka rakenduses</Button>
+				<Button type="button" on:click={() => goto("/")} on:keydown>Avalehele</Button>
 			</div>
 
 		</div>
