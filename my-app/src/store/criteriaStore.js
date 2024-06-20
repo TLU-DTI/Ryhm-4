@@ -57,6 +57,33 @@ export function calculateChoiceWeights(store) {
     }
 }
 
+export function calculateFinalResults() {
+    criteriaStore.update(store => {
+        let finalScores = Array(store.choices.length).fill(0);
+
+        store.criteria.forEach((criterion, cIndex) => {
+            const weight = store.criteriaWeights[cIndex] / 100;
+            const comparisons = store.choicesComparisons[cIndex];
+            if (comparisons) {
+                let localScores = Array(store.choices.length).fill(0);
+                for (let i = 0; i < comparisons.length; i++) {
+                    for (let j = 0; j < comparisons[i].length; j++) {
+                        if (comparisons[i][j] !== null) {
+                            localScores[i] += comparisons[i][j];
+                        }
+                    }
+                }
+                const totalLocalScore = localScores.reduce((sum, score) => sum + score, 0);
+                localScores = localScores.map(score => (score / totalLocalScore) * weight);
+                finalScores = finalScores.map((score, i) => score + localScores[i]);
+            }
+        });
+
+        store.finalResults = finalScores.map(score => score * 100); // Convert to percentage
+        return store;
+    });
+}
+
 criteriaStore.subscribe(store => {
     if (store.criteria.length && !store.criteriaWeights.length) {
         store.criteriaWeights = Array(store.criteria.length).fill(100); // Initialize weights to 100%

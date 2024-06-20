@@ -1,12 +1,12 @@
 <script lang="ts">
   import Button from "$lib/components/Button.svelte";
   import { goto } from "$app/navigation";
-  import { onMount, beforeUpdate } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import { get } from 'svelte/store';
   import { page } from "$app/stores";
-  import { criteriaStore, updateChoiceComparisons } from '../../../../../store/criteriaStore';
+  import { criteriaStore, updateChoiceComparisons, calculateFinalResults } from '../../../../../store/criteriaStore';
 
-  let criteriaIndex: number;
+  let criteriaIndex: number = 0;
   let criteria: string = '';
   let choices: string[] = [];
   let comparisons: number[][] = [];
@@ -29,11 +29,11 @@
     }
   }
 
-  beforeUpdate(() => {
+  afterUpdate(() => {
     const params = get(page).params;
     const newCriteriaIndex = parseInt(params.criteriaIndex, 10);
     if (criteriaIndex !== newCriteriaIndex) {
-      console.log('beforeUpdate: criteriaIndex updated to', newCriteriaIndex);
+      console.log('afterUpdate: criteriaIndex updated to', newCriteriaIndex);
       criteriaIndex = newCriteriaIndex;
       initializeData();
     }
@@ -58,9 +58,10 @@
     // Navigate to the next criteria or finish
     const store = get(criteriaStore);
     if (criteriaIndex < store.criteria.length - 1) {
-      criteriaIndex += 1;  // Update criteriaIndex before navigation
-      goto(`/tasuline-ot-valikud/valiku-vordlus/${criteriaIndex}`);
+      const nextCriteriaIndex = criteriaIndex + 1;  // Calculate next criteriaIndex before navigation
+      goto(`/tasuline-ot-valikud/valiku-vordlus/${nextCriteriaIndex}`);
     } else {
+      calculateFinalResults();
       goto('/tulemused/tulemus'); // Assuming a results page
     }
   }
