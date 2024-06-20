@@ -43,7 +43,9 @@ export function calculateChoiceWeights(store) {
             if (comparisons) {
                 for (let i = 0; i < comparisons.length; i++) {
                     for (let j = 0; j < comparisons[i].length; j++) {
-                        choiceScores[i] += comparisons[i][j] * weight;
+                        if (comparisons[i][j] !== null) {
+                            choiceScores[i] += comparisons[i][j] * weight;
+                        }
                     }
                 }
             }

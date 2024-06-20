@@ -7,8 +7,8 @@
   import { criteriaStore, updateChoiceComparisons } from '../../../../../store/criteriaStore';
 
   let criteriaIndex: number;
-  let criteria: string;
-  let choices: string[];
+  let criteria: string = '';
+  let choices: string[] = [];
   let comparisons: number[][] = [];
 
   function initializeData() {
@@ -19,7 +19,10 @@
       choices = store.choices;
 
       // Initialize comparisons matrix if not already done
-      comparisons = store.choicesComparisons[criteriaIndex] || Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
+      comparisons = store.choicesComparisons[criteriaIndex] 
+        ? JSON.parse(JSON.stringify(store.choicesComparisons[criteriaIndex]))
+        : Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
+      
       console.log('Initialized comparisons:', comparisons);
     } else {
       console.warn('Invalid criteriaIndex:', criteriaIndex);
@@ -38,21 +41,25 @@
 
   function handleComparisonChange(i: number, j: number, value: number) {
     console.log(`Updating comparison: criteriaIndex=${criteriaIndex}, i=${i}, j=${j}, value=${value}`);
+    comparisons[i][j] = value;
+    comparisons[j][i] = 6 - value;  // Assuming symmetrical comparison
     updateChoiceComparisons(criteriaIndex, i, j, value);
   }
 
   function handleNext() {
     // Store comparisons in criteriaStore
     criteriaStore.update(store => {
-      store.choicesComparisons[criteriaIndex] = comparisons;
+      store.choicesComparisons[criteriaIndex] = JSON.parse(JSON.stringify(comparisons));
       console.log('Updated criteriaStore with comparisons:', store.choicesComparisons);
+      console.log('Criteria index', criteriaIndex);
       return store;
     });
 
     // Navigate to the next criteria or finish
     const store = get(criteriaStore);
     if (criteriaIndex < store.criteria.length - 1) {
-      goto(`/tasuline-ot-valikud/valiku-vordlus/${criteriaIndex + 1}`);
+      criteriaIndex += 1;  // Update criteriaIndex before navigation
+      goto(`/tasuline-ot-valikud/valiku-vordlus/${criteriaIndex}`);
     } else {
       goto('/tulemused/tulemus'); // Assuming a results page
     }
@@ -68,7 +75,7 @@
 </script>
 
 <section class="container">
-  <h2>Võrdle valikuid, kui kriteerium on: <br> {criteria}</h2>
+  <h2>Võrdle valikuid, kui kriteerium on:<br> {criteria}</h2>
 
   {#if choices && choices.length > 0}
     {#each choices as choiceA, i}
