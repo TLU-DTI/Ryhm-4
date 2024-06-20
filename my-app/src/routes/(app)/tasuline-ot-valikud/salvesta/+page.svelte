@@ -1,7 +1,7 @@
 <script>
     import Button from "$lib/components/Button.svelte";
-    import { tooltip } from "$lib/script/tooltip.js";
     import { goto } from "$app/navigation";
+    import { get } from "svelte/store";
 </script>
 
 <section class="container">
