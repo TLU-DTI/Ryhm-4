@@ -2,7 +2,7 @@
 	import '$lib/auth_style.css';
 	import { goto } from "$app/navigation";
 	import logo from '$lib/images/DMlogo.svg';
-	</script>
+</script>
 
 <section class="container">
 	<div class="header">
@@ -33,10 +33,10 @@
 
 <style>
 	* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    overflow: hidden; 
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overflow: hidden; 
     }
 
     .container {
@@ -69,7 +69,6 @@
     }
 
     .header {
-
         background-color: #C4F1C0;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
         width: 100%;
@@ -168,19 +167,19 @@
     }
 
 	button {
-    background-color: #C4F1C0;
-    font-family: 'Merriweather', serif;
-	justify-content: center;
-    color: #000;
-    font-size: 20px;
-    border: none;
-    padding: 10px 20px; 
-    cursor: pointer; 
-    transition: background-color 0.3s; 
-	margin-left: 10px;
+        background-color: #C4F1C0;
+        font-family: 'Merriweather', serif;
+        justify-content: center;
+        color: #000;
+        font-size: 20px;
+        border: none;
+        padding: 10px 20px; 
+        cursor: pointer; 
+        transition: background-color 0.3s; 
+        margin-left: 10px;
     }
 
     button:hover {
-    background-color: #a8e0a4; 
+        background-color: #a8e0a4; 
     }
 </style>
