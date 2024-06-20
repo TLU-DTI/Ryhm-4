@@ -22,7 +22,7 @@
         sat_user_id.subscribe(value => {
             currentUserId = value;
             if (currentUserId == null) {
-                window.location.href = "/login";
+                window.location.href = "/home";
             } else {
                 loading = false;  // Set loading to false if user is authenticated
             }
