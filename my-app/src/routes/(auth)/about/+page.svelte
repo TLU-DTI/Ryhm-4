@@ -2,10 +2,13 @@
 	import '$lib/auth_style.css';
 	import { goto } from "$app/navigation";
 	import meie from "$lib/images/meie.jpg";
+	import logo from '$lib/images/DMlogo.svg';
 </script>
 
 <section class="container">
 	<div class="header">
+		<div class="logo"><button on:click={() => goto("/home")} on:keydown> <img src={logo} class="logo-img" alt="logo"></button>
+		</div>
 		<div class="vertical-border"></div>
 		<div class="login-text"><button on:click={() => goto("/login")} on:keydown>Logi sisse</button></div>
 		<div class="vertical-border"></div>
@@ -62,7 +65,7 @@
 		width: 100%;
 		height: 90px;
 		display: grid;
-		grid-template-columns: 100fr max-content 1fr max-content 1fr;
+		grid-template-columns: 10fr max-content 1fr max-content 1fr;
 		justify-content: flex-end;
 		align-items: center;
 		position: fixed;
@@ -71,32 +74,36 @@
 		z-index: 2;
 		overflow: hidden;
 		border-right: 4px solid #035114;
-}
+	}
 
-.vertical-border {
-height: 100%;
-width: 0;
-border-left: 4px solid #035114;
-}
+	.vertical-border {
+		height: 100%;
+		width: 0;
+		border-left: 4px solid #035114;
+	}
 
-button {
-background-color: #C4F1C0;
-font-family: 'Merriweather', serif;
+	button {
+		background-color: #C4F1C0;
+		font-family: 'Merriweather', serif;
 		justify-content: center;
-color: #000;
-font-size: 20px;
-border: none;
-padding: 10px 20px; 
-cursor: pointer; 
-transition: background-color 0.3s; 
+		color: #000;
+		font-size: 20px;
+		border: none;
+		padding: 10px 20px; 
+		cursor: pointer; 
+		transition: background-color 0.3s; 
 		margin-left: 10px;
-}
+	}
 
-button:hover {
-background-color: #a8e0a4; 
-}
-.meie-img {
-	padding: 10px;
+	button:hover {
+		background-color: #a8e0a4; 
+	}
+
+.logo-img:hover{
+		background-color: #a8e0a4;
+	}
+	.meie-img {
+		padding: 10px;
 		width: 600px; 
 		height: auto;
 	}
@@ -108,4 +115,15 @@ background-color: #a8e0a4;
 	.login-text{
 		padding-right: 15px;
 	}
+
+	.logo img.logo-img {
+    transform: translateX(-50%);
+    width: 100px;
+		height: 80px;
+	}
+
+	.logo-img{
+		padding-left: 100px;
+	}
+
 </style>
