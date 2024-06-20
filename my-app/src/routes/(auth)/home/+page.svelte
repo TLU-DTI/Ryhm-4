@@ -64,7 +64,7 @@
     .nimi h1 {
         color: #000;
         margin: 0;
-        font-size: 100px;
+        font-size: 60px;
         font-weight: 700;
     }
 
@@ -112,7 +112,7 @@
         color: #000;
         text-align: center;
         position: absolute;
-        top: 60%; 
+        top: 55%; 
         left: 50%; 
         transform: translate(-50%, -50%); 
         text-align: center; 
@@ -120,7 +120,7 @@
     }
 
     .moto p{
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .ellipse2 {
