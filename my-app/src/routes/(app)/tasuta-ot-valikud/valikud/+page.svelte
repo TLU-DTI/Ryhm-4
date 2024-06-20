@@ -9,6 +9,21 @@
     import { useForm, validators, required } from 'svelte-use-form';
     import { onMount } from 'svelte';
 
+    function checkAuth() {
+        sat_user_id.subscribe(value => {
+            currentUserId = value;
+            if ($sat_user_id == null) {
+                window.location.href = "/login";
+            } else {
+                loading = false;
+            }
+        });
+    }
+
+    onMount(() => {
+        checkAuth();
+    });
+
     // Define types for inputs and criteria
     interface InputItem {
         id: number;
@@ -44,6 +59,9 @@
         }
     };
 
+    // Subscribe to inputs changes and update sat_objects store
+    $: sat_objects.set(inputs.map(input => input.value));
+
     async function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
@@ -53,8 +71,7 @@
         try {
             // Add your form submission logic here
             console.log('Form submitted', Object.fromEntries(formData));
-            // Optionally redirect to another page
-            // goto('/some-other-page');
+            window.location.href = "/tasuta-ot-valikud/kriteeriumid";
         } catch (error) {
             console.error('Error:', error);
         }
@@ -62,22 +79,6 @@
 
     let loading = true;
     let currentUserId: number | null;
-
-
-    function checkAuth() {
-        sat_user_id.subscribe(value => {
-            currentUserId = value;
-            if ($sat_user_id == null) {
-                window.location.href = "/login";
-            } else {
-                loading = false;
-            }
-        });
-    }
-
-    onMount(() => {
-        checkAuth();
-    });
 </script>
 
 <svelte:head>
@@ -177,5 +178,4 @@
         flex-direction: row;
         justify-content: space-between;
     }
-
 </style>
