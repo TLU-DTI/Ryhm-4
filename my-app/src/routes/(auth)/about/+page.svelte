@@ -41,9 +41,10 @@
 <style>
 	.container {
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		height: 100vh; 
+		gap: 20px;
 	}
 
 	.rectangle {
@@ -55,16 +56,12 @@
 		width: 100vh; 
 		height: auto; 
 		background: white; 
-		border-top-right-radius: 38px; 
-		border-bottom-right-radius: 38px;
 		box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-		padding-top: 300px; 
 	}
 
 	.rectangle h1 {
-		font-size: 80px;
+		font-size: 70px;
 		font-weight: 700;
-		padding-top: 300px;
 	}
 
 	.header {
@@ -76,8 +73,6 @@
 		grid-template-columns: 10fr max-content 1fr max-content 1fr;
 		justify-content: flex-end;
 		align-items: center;
-		position: fixed;
-		top: 0;
 		border-bottom: 4px solid #035114;
 		z-index: 2;
 		overflow: hidden;
@@ -101,10 +96,6 @@
 		cursor: pointer; 
 		transition: background-color 0.3s; 
 		margin-left: 10px;
-	}
-
-	button:hover {
-		background-color: #a8e0a4; 
 	}
 
 	.logo-img:hover{
