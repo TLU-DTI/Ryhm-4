@@ -32,7 +32,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 180px;
+        padding: 170px;
     }
 
     .rectangle-up {

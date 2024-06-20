@@ -41,7 +41,7 @@
             id: 3,
             label: 'Tulemused',
             icon: resultsIcon,
-            route: '/tulemused'
+            route: '/tulemused/mitte-kattesaadav'
         },
         {
             id: 4,
@@ -51,7 +51,7 @@
         },
         {
             id: 5,
-            label: 'Osta tasuline',
+            label: 'Osta tasuline versioon',
             icon: premiumIcon,
             route: '/premium'
         },
