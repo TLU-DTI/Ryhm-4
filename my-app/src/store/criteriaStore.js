@@ -1,4 +1,6 @@
+// my-app\src\store\criteriaStore.js
 import { writable } from 'svelte/store';
+import { supabase } from '$lib/supabaseClient';
 
 export const criteriaStore = writable({
     criteria: [],
@@ -6,6 +8,7 @@ export const criteriaStore = writable({
     criteriaWeights: [],
     choiceWeights: [],
     user_id: null,
+    premium_decisions_id: null,
     scores: [],
     percentages: [],
     choicesComparisons: []  // Store comparisons for each criterion
@@ -57,8 +60,13 @@ export function calculateChoiceWeights(store) {
     }
 }
 
-export function calculateFinalResults() {
-    criteriaStore.update(store => {
+export async function calculateFinalResults() {
+    criteriaStore.update(async store => {
+        if (!store.criteria || !store.choices) {
+            console.error('Missing criteria or choices');
+            return store;
+        }
+
         let finalScores = Array(store.choices.length).fill(0);
 
         store.criteria.forEach((criterion, cIndex) => {
@@ -80,6 +88,33 @@ export function calculateFinalResults() {
         });
 
         store.finalResults = finalScores.map(score => score * 100); // Convert to percentage
+
+        // Ensure premium_decision_id and user_id are set
+        if (!store.premium_decision_id || !store.user_id) {
+            console.error('Missing premium_decision_id or user_id');
+            return store;
+        }
+
+        // Save results to database
+        const { data, error } = await supabase
+          .from('premium_decision_results')
+          .insert([
+            {
+              premium_decision_id: store.premium_decision_id,
+              results: {
+                criteriaWeights: store.criteriaWeights,
+                choiceWeights: store.finalResults
+              },
+              user_id: store.user_id
+            }
+          ]);
+
+        if (error) {
+          console.error('Error saving results:', error);
+        } else {
+          console.log('Results saved:', data);
+        }
+
         return store;
     });
 }

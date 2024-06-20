@@ -1,69 +1,69 @@
 <script lang="ts">
-    import Button from "$lib/components/Button.svelte";
-    import { goto } from "$app/navigation";
-    import { page } from "$app/stores";
-    import { onMount } from 'svelte';
-    import { supabase } from '$lib/supabaseClient';
-    import { get } from 'svelte/store';
-  
-    let code = null;
-    let valikud = [];
-    let kriteeriumid = [];
-    let decisionId;
-  
-    onMount(async () => {
-      const params = get(page).params;
-      decisionId = params.id;
-  
-      const { data, error } = await supabase
-        .from('premium_decision_results')
-        .select('results')
-        .eq('premium_decision_id', decisionId)
-        .single();
-  
-      if (data) {
-        const results = data.results;
-        valikud = results.choiceWeights.map((weight, index) => ({ title: `Valik ${index + 1}`, per: weight }));
-        kriteeriumid = results.criteriaWeights.map((weight, index) => ({ title: `kriteerium ${index + 1}`, per: weight }));
-      }
-  
-      if (error) {
-        console.error('Error fetching results:', error);
-      }
-    });
-  </script>
-  
-  <section class="container">
-    <div class="icontainer">
-      <div class="header">
-        <h2>Otsusemudeli nimi:</h2>
+  import Button from "$lib/components/Button.svelte";
+  import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
+  import { onMount } from 'svelte';
+  import { supabase } from '$lib/supabaseClient';
+  import { get } from 'svelte/store';
+
+  let code = null;
+  let valikud = [];
+  let kriteeriumid = [];
+  let decisionId;
+
+  onMount(async () => {
+    const params = get(page).params;
+    decisionId = params.id;
+
+    const { data, error } = await supabase
+      .from('premium_decision_results')
+      .select('results')
+      .eq('premium_decision_id', decisionId)
+      .single();
+
+    if (data) {
+      const results = data.results;
+      valikud = results.choiceWeights.map((weight, index) => ({ title: `Valik ${index + 1}`, per: weight }));
+      kriteeriumid = results.criteriaWeights.map((weight, index) => ({ title: `kriteerium ${index + 1}`, per: weight }));
+    }
+
+    if (error) {
+      console.error('Error fetching results:', error);
+    }
+  });
+</script>
+
+<section class="container">
+  <div class="icontainer">
+    <div class="header">
+      <h2>Otsusemudeli nimi:</h2>
+    </div>
+    <div class="box">
+      <div class="kritnimi">
+        <h2>Kriteeriumite osakaal:</h2>
+        {#each kriteeriumid as kriteerium }
+          <div class="text" style="--percentage: {kriteerium.per}%">
+            <p>{kriteerium.title}</p>
+            <div class="percentage"><p>{kriteerium.per}%</p></div>
+          </div>
+        {/each}
       </div>
-      <div class="box">
-        <div class="kritnimi">
-          <h2>Kriteeriumite osakaal:</h2>
-          {#each kriteeriumid as kriteerium }
-            <div class="text" style="--percentage: {kriteerium.per}%">
-              <p>{kriteerium.title}</p>
-              <div class="percentage"><p>{kriteerium.per}%</p></div>
-            </div>
-          {/each}
-        </div>
-        <div class="tulemused">
-          <h2>Tulemused:</h2>
-          {#each valikud as valik }
-            <div class="tulem" style="--percentage: {valik.per}%">
-              <p>{valik.title}</p>
-              <div class="percent"><p>{valik.per}%</p></div>
-            </div>
-          {/each}
-        </div>
-      </div>
-      <br>
-      <div class="buttons">
-        <Button size="large" on:click={() => goto("/tulemused")} on:keydown>Lõpeta</Button>
+      <div class="tulemused">
+        <h2>Tulemused:</h2>
+        {#each valikud as valik }
+          <div class="tulem" style="--percentage: {valik.per}%">
+            <p>{valik.title}</p>
+            <div class="percent"><p>{valik.per}%</p></div>
+          </div>
+        {/each}
       </div>
     </div>
-  </section>
+    <br>
+    <div class="buttons">
+      <Button size="large" on:click={() => goto("/tulemused")} on:keydown>Lõpeta</Button>
+    </div>
+  </div>
+</section>
 
 <style>
     .buttons {

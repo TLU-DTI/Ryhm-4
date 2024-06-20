@@ -10,16 +10,27 @@
   let criteria: string = '';
   let choices: string[] = [];
   let comparisons: number[][] = [];
+  let user_id: number;
+  let premium_decision_id: number;
 
   function initializeData() {
     const store = get(criteriaStore);
     console.log('criteriaStore data on initializeData:', store);
+
+    // Set user_id and premium_decision_id if they are not set
+    if (!store.user_id) {
+      store.user_id = user_id;
+    }
+    if (!store.premium_decision_id) {
+      store.premium_decision_id = premium_decision_id;
+    }
+
     if (criteriaIndex >= 0 && criteriaIndex < store.criteria.length) {
       criteria = store.criteria[criteriaIndex];
       choices = store.choices;
 
       // Initialize comparisons matrix if not already done
-      comparisons = store.choicesComparisons[criteriaIndex] 
+      comparisons = store.choicesComparisons[criteriaIndex]
         ? JSON.parse(JSON.stringify(store.choicesComparisons[criteriaIndex]))
         : Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
       
@@ -61,14 +72,17 @@
       const nextCriteriaIndex = criteriaIndex + 1;  // Calculate next criteriaIndex before navigation
       goto(`/tasuline-ot-valikud/valiku-vordlus/${nextCriteriaIndex}`);
     } else {
-      calculateFinalResults();
-      goto('/tulemused/tulemus'); // Assuming a results page
+      calculateFinalResults().then(() => {
+        goto('/tulemused/tulemus'); // Assuming a results page
+      });
     }
   }
 
   onMount(() => {
     const params = get(page).params;
     criteriaIndex = parseInt(params.criteriaIndex, 10);
+    user_id = parseInt(params.user_id, 10); // Assuming user_id is passed as a param
+    premium_decision_id = parseInt(params.premium_decision_id, 10); // Assuming premium_decision_id is passed as a param
     console.log('onMount: criteriaIndex set to', criteriaIndex);
     initializeData();
     console.log('criteriaStore data on onMount:', get(criteriaStore));
