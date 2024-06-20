@@ -119,6 +119,53 @@
         place-items: center;
     }
     
+    .kritnimi .text {
+        background-color: white;
+    }
+
+    .kritnimi h2, .tulemused h2 {
+        text-align: center;
+        font-size: 25px;
+        margin-top: 10px;
+    }
+
+    .kritnimi .text, .tulemused .tulem {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        border-radius: 30px;
+        width: 90%;
+        padding: 0 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        height: 50px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .kritnimi .percentage, .tulemused .percent {
+        margin-left: 70px;
+        z-index: 1;
+    }
+
+    .kritnimi, .tulemused {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 30px;
+        background-color: #F2F1E7;
+        border-width: 1px;
+        width: 400px;
+        height: 360px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .kritnimi .text p, .tulemused .tulem p {
+        margin: 0;
+        text-align: center;
+        font-size: 20px;
+        z-index: 1;
+    }
 
     .tulem{
         background-color: white;
@@ -135,6 +182,23 @@
         z-index: 0;
         animation: fillAnimation 4s ease forwards;
     }
+
+    .text{
+        background-color:white;
+    }
+
+    .text::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0;
+        background-color: #C4F1C0;
+        z-index: 0;
+        animation: fillAnimation 4s ease forwards;
+    }
+
     @keyframes fillAnimation {
         from {
             width: 0;

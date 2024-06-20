@@ -61,7 +61,6 @@
 
     function showResults() {
         const mostClickedObject = getMostClickedObject();
-        alert(`Most chosen object: ${mostClickedObject}`);
     }
 
     function getMostClickedObject() {
@@ -108,8 +107,7 @@
 <section class="container">
     {#if currentIndex < decisions.length * combinations(objects.length, 2)}
         <div class="button-container">
-            <h2>Which option do you prefer for: {decisions[decisionIndex]}</h2>
-           
+            <h2>Millist valikut sa eelistad, kui kriteeriumiks on: {decisions[decisionIndex]}</h2>     
             <div class="all-container">
                 <div class="obj-button">
                     {#if currentObjects.length > 0}

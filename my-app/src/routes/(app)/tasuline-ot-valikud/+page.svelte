@@ -66,7 +66,7 @@
             </div>
             <br>
             <div class="buttons">
-                <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi
+                <Button style="secondary" on:click={(event) => { event.preventDefault(); goto("/"); }} on:keydown>Tagasi
                 </Button>
                 <Button type="submit" on:keydown>Jätka</Button>
             </div>
