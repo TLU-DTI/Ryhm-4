@@ -12,7 +12,7 @@
         <div class="buttons">
             <Button style="secondary" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteerium")} on:keydown size="large">Tagasi</Button>
             <Button size="large">Salvesta otsuste tegija ja vasta hiljem</Button>
-            <Button on:click={() => goto("/tasuline-ot-valikud/otsustaja?code=1")} on:keydown size="large">Jätka</Button>
+            <Button on:click={() => goto("/tasuline-ot-valikud/kriteeriumi-vordlus")} on:keydown size="large">Jätka</Button>
         </div>
     </div>
 </section>

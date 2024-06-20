@@ -1,12 +1,12 @@
 <script lang="ts">
   import Button from "$lib/components/Button.svelte";
   import { goto } from "$app/navigation";
-  import { onMount, beforeUpdate } from 'svelte';
+  import { onMount } from 'svelte';
   import { get } from 'svelte/store';
   import { page } from "$app/stores";
-  import { criteriaStore } from '../../../../../store/criteriaStore';
+  import { criteriaStore, updateChoiceComparisons } from '../../../../../store/criteriaStore';
 
-  let criteriaIndex;
+  let criteriaIndex: number;
   let criteria;
   let choices;
   let comparisons = [];
@@ -18,13 +18,8 @@
 
     // Initialize comparisons matrix if not already done
     comparisons = store.choicesComparisons[criteriaIndex] || Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
-    console.log('initializeData: criteriaIndex', criteriaIndex);
-    console.log('initializeData: criteria', criteria);
-    console.log('initializeData: choices', choices);
-    console.log('initializeData: comparisons', comparisons);
   }
 
-  // Reactive statement to watch for URL parameter changes
   $: {
     const params = get(page).params;
     const newCriteriaIndex = parseInt(params.criteriaIndex, 10);
@@ -34,26 +29,14 @@
     }
   }
 
-  beforeUpdate(() => {
-    const params = get(page).params;
-    const newCriteriaIndex = parseInt(params.criteriaIndex, 10);
-    if (criteriaIndex !== newCriteriaIndex) {
-      criteriaIndex = newCriteriaIndex;
-      initializeData();
-    }
-  });
-
-  function updateComparison(i, j, value) {
-    comparisons[i][j] = value;
-    comparisons[j][i] = 1 / value; // inverse value for the other pair
-    console.log('updateComparison: comparisons', comparisons);
+  function handleComparisonChange(i, j, value) {
+    updateChoiceComparisons(criteriaIndex, i, j, value);
   }
 
   function handleNext() {
     // Store comparisons in criteriaStore
     criteriaStore.update(store => {
       store.choicesComparisons[criteriaIndex] = comparisons;
-      console.log('handleNext: updated store', store);
       return store;
     });
 
@@ -62,43 +45,46 @@
     if (criteriaIndex < store.criteria.length - 1) {
       goto(`/tasuline-ot-valikud/valiku-vordlus/${criteriaIndex + 1}`);
     } else {
-      goto('/tasuline-ot-valikud/results'); // Assuming a results page
+      goto('/tulemused/tulemus'); // Assuming a results page
     }
   }
 
   onMount(() => {
+    const params = get(page).params;
+    criteriaIndex = parseInt(params.criteriaIndex, 10);
     initializeData();
   });
 </script>
 
 <section class="container">
-  <h2>Pairwise Comparison for Criteria: {criteria}</h2>
+  <h2>Võrdle valikuid, kui kriteerium on: <br> {criteria}</h2>
 
   {#if choices && choices.length > 0}
     {#each choices as choiceA, i}
       {#each choices as choiceB, j}
         {#if i > j}
           <div class="comparison">
-            <span>{choiceA}</span>
+            <p>{choiceA}</p>
             <form class="likert-form">
               {#each Array(5) as _, k}
                 <input
+                  class="valimine"
                   type="radio"
                   name="comparison-{i}-{j}"
                   value="{5 - k}"
-                  on:change={() => updateComparison(i, j, 5 - k)}
+                  on:change={() => handleComparisonChange(i, j, 5 - k)}
                   checked={comparisons[i][j] === 5 - k}
-                >
+                />
               {/each}
             </form>
-            <span>{choiceB}</span>
+            <p class="valik2">{choiceB}</p>
           </div>
         {/if}
       {/each}
     {/each}
   {/if}
 
-  <button on:click={handleNext}>Next</button>
+  <Button on:click={handleNext}>Edasi</Button>
 </section>
 
 <style>
@@ -110,10 +96,16 @@
   }
 
   .comparison {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    text-align: end;
+    width: 500px;
+    align-self: center;
+  }
+
+  .valik2 {
+    text-align: start;
   }
 
   .likert-form {
@@ -135,9 +127,5 @@
     height: auto;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     align-content: center;
-  }
-
-  h2 {
-    font-size: 30px;
   }
 </style>

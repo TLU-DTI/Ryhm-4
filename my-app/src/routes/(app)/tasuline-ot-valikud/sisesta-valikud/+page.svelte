@@ -35,7 +35,7 @@
         premiumDecisionStore.update(store => {
             return { ...store, choices };
         });
-        goto("/tasuline-ot-valikud/finished");
+        goto("/tasuline-ot-valikud/salvesta");
     }
 </script>
 
@@ -58,7 +58,7 @@
                 <Button size="mini" on:click={addInput}>+</Button>
             </div>
             <div class="lisaval">
-                <p><span use:tooltip={getTooltipContent()}>Vaata lisatud valikuid</span></p>
+                <p><span use:tooltip={getTooltipContent()}>Vaata lisatud kriteeriumeid</span></p>
             </div>            
         </div>
         <br>

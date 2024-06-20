@@ -234,7 +234,7 @@
         <div class="head">
             <div class="logo"> 
                 <img src={logo} alt="logo"width="50px" height="50px"/>
-                <p>Desicion Maker</p>
+                <p>Valiku Võlur</p>
             </div>
             
             <div class="close-button {isOpen ? 'open' : 'closed'}" on:click={toggleMenu} on:keydown>

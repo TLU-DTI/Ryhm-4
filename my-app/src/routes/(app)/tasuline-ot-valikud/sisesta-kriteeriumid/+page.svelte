@@ -27,7 +27,7 @@
         premiumDecisionStore.update(store => {
             return { ...store, criteria };
         });
-        goto("/tasuline-ot-valikud/valikud");
+        goto("/tasuline-ot-valikud/sisesta-valikud");
     }
 </script>
 

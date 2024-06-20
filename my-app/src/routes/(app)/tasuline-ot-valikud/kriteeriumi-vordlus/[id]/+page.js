@@ -17,22 +17,23 @@ export const load = async ({ fetch, params }) => {
     const data = await response.json();
     console.log('API Response:', data);  // Debug log
 
-    const criteriaMatrix = Array(data.criteria.length).fill(null).map(() => Array(data.criteria.length).fill(0));
-    const choicesComparisons = Array(data.criteria.length)
-      .fill(null)
-      .map(() =>
-        Array(data.choices.length)
-          .fill(null)
-          .map(() => Array(data.choices.length).fill(null))
-      );
+    const criteriaWeights = Array(data.criteria.length).fill(100); // Default to 100%
 
     criteriaStore.set({ 
       ...data, 
-      criteriaMatrix,
-      choicesComparisons
+      criteriaWeights,
+      choiceWeights: [],
+      choicesComparisons: Array(data.criteria.length)
+        .fill(null)
+        .map(() =>
+          Array(data.choices.length)
+            .fill(null)
+            .map(() => Array(data.choices.length).fill(0))
+        )
     });
 
     return { props: data };
+
   } catch (error) {
     console.error('Error in load function:', error);
     return { error: 'Error fetching data' };
