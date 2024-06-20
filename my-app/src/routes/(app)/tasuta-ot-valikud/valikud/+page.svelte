@@ -92,7 +92,7 @@
             <h2>Sisesta objektid, mille vahel soovid valida:</h2>
             {#each inputs as input (input.id)}
                 <div class="input-group">
-                    <p>valik:</p>
+                    <p>Valik:</p>
                     <Input name={`input_${input.id}`} placeholder="Lisa uus valik" bind:value={input.value}></Input>  
                     {#if inputs.length > 2}
                         <Button size="mini" type="button" on:click={removeInput}>-</Button>
