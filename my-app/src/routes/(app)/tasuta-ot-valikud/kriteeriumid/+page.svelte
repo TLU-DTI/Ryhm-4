@@ -1,41 +1,119 @@
-<script>
+<script lang="ts">
     import Button from "$lib/components/Button.svelte";
-    import { page } from "$app/stores";
+    import Input from "$lib/components/Input.svelte";
+    import { tooltip } from "$lib/script/tooltip.js";
     import { goto } from "$app/navigation";
-    let code = $page.url.searchParams.get("code");
+    import { get } from "svelte/store";
+    import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
+    import { sat_decision_name, sat_decisions, sat_objects, sat_user_id, sat_click_counts } from '../../../../store.js';
+    import { useForm, validators, required } from 'svelte-use-form';
+    import { onMount } from 'svelte';
+
+    function checkAuth() {
+        sat_click_counts.set({});
+        sat_user_id.subscribe(value => {
+            currentUserId = value;
+            if ($sat_user_id == null) {
+                window.location.href = "/login";
+            } else {
+                loading = false;
+            }
+        });
+    }
+
+    onMount(() => {
+        checkAuth();
+    });
+
+    // Define types for inputs and criteria
+    interface InputItem {
+        id: number;
+        value: string;
+    }
+
+    interface CriteriaItem {
+        title: string;
+    }
+
+    let kriteeriumid: CriteriaItem[] = get(premiumDecisionStore).criteria.map((criteria: string) => ({ title: criteria }));
+
+    // Initialize inputs with values from the store
+    let inputs: InputItem[] = get(premiumDecisionStore).choices.map((choice: string, index: number) => ({ id: index + 1, value: choice }));
+
+    const form = useForm();
+
+    function getTooltipContent() {
+        return kriteeriumid.map(criteria => criteria.title).join(", ");
+    }
+    
+    if (inputs.length === 0) {
+        inputs = [{ id: 1, value: '' }, { id: 2, value: '' }];
+    }
+
+    const addInput = () => {
+        inputs = [...inputs, { id: inputs.length + 1, value: '' }];
+    };
+
+    const removeInput = () => {
+        if (inputs.length > 2) {
+            inputs = inputs.slice(0, -1); 
+        }
+    };
+
+    // Subscribe to inputs changes and update sat_decisions store
+    $: sat_decisions.set(inputs.map(input => input.value));
+
+    async function handleSubmit(event: SubmitEvent) {
+        event.preventDefault();
+        const formData = new FormData(event.target as HTMLFormElement);
+        inputs.forEach(input => {
+            formData.append(`input_${input.id}`, input.value);
+        });
+        try {
+            // Add your form submission logic here
+            console.log('Form submitted', Object.fromEntries(formData));
+            window.location.href = "/tasuta-ot-valikud/otsustamine";
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    let loading = true;
+    let currentUserId: number | null;
 </script>
 
+<svelte:head>
+    <title>Otsuse Valikud Tasuta</title>
+    <meta name="description" content="Svelte demo app" />
+</svelte:head>
+
 <section class="container">
-    <div class="button-container">
-        <h2>Millist valikut sa eelistad, kui kriteeriumiks on:</h2>
-        <div class="all-container">
-            <div class="container2">
-                {#if code === "0"}
-                    <div class="text"><h3>Mugavus</h3> </div>
-                {:else}
-                    {#if code === "1"}
-                        <div class="text"><h3>Värv</h3></div>
+    {#if !loading}
+        <form class="input-container" use:form on:submit={handleSubmit}>
+            <h2>Sisesta kriteeriumid, mille vahel soovid valida:</h2>
+            {#each inputs as input (input.id)}
+                <div class="input-group">
+                    <p>Kriteerium:</p>
+                    <Input name={`input_${input.id}`} placeholder="Lisa uus kriteerium" bind:value={input.value}></Input>  
+                    {#if inputs.length > 2}
+                        <Button size="mini" type="button" on:click={removeInput}>-</Button>
                     {/if}
-                    {#if code === "2"}
-                        <div class="text"><h3> Hind</h3></div>
-                    {/if}
-                    {#if code === ""}
-                        <div class="error-alert"><h3>Error!</h3> </div>
-                    {/if}
-                {/if}
+                </div>
+                <br>
+            {/each}
+            <div class="valkri">
+                <div class="lisavalik">
+                    <p>Lisa veel valikuid</p>
+                    <Button size="mini" type="button" on:click={addInput}>+</Button>
+                </div>         
             </div>
             <br>
-            <div class="obj-button">
-                <Button>1. Valik</Button>
-                <Button>2. Valik</Button>
-            </div>
-        </div>
-
             <div class="buttons">
-                <Button style="secondary" on:click={() => goto("/tasuta-ot-valikud/valikud")} on:keydown>Tagasi</Button>
-                <Button on:click={() => goto("/")} on:keydown>Jätka</Button>
+                <Button style="secondary" type="button" on:click={() => goto("/tasuline-ot-valikud/sisesta-kriteeriumid")} on:keydown>Tagasi</Button>
+                <Button type="submit" disabled={!$form.valid}>Jätka</Button>
             </div>
-    </div>
+        </form>
+    {/if}
 </section>
 
 <style>
@@ -46,71 +124,59 @@
         flex: 0.7;
     }
 
-    .button-container {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .input-container {
         background-color: white;
         border-radius: 20px;
-        padding: 40px;
+        padding: 50px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
-    }
-
-    .buttons{
-        width: 100%;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-    }       
-
-    .container2 {
-        width: 180px;
-        height: 56px;
-        background: #F2F1E7;
-        border-radius: 40px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-left: 100px;
-        display: flex;
-        margin-bottom: 20px;
-        font-weight: 800;
+        padding-bottom: 10px;
+        height: auto;
+        gap: 8px;
     }
-    .obj-button{
-        width: 100%;
-        margin-top: 40px;
-        margin-bottom: 60px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
+
+    .input-group {
+        display: flex; /* sõna valik ja sisestusvälja jaoks */
+        align-items: center; /* vertikaalne joondamine */
         gap: 20px;
     }
 
-    .error-alert {
-        text-align: center;
-        color: black;
-        font-size: 30px;
-        }
+    .input-group p {
+        margin-right: 10px; /* lisab ruumi sõna valik ja sisestusvälja vahele */
+        font-size: medium;
+    }
 
-    .all-container{
-        width: 400px;
-        height: 300px;
-        padding: 20px;
-        padding-bottom: 10px;
-        margin-bottom: 30px;
-        background: white;
-        border-radius: 40px;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    .buttons {
+        margin-top: 40px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
     }
-    h3{
-        font-size: 26px;
+
+    .input-container p {
         text-align: center;
-        font-weight: 200;
+        margin-right: 10px;
+        font-size: 20px;
     }
-    h2{
+
+    .lisavalik {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+    }
+
+    h2 {
         font-size: 30px;
+    }
+
+    .lisavalik p {
+        font-size: 15px;
+    }
+
+    .valkri{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
 </style>
