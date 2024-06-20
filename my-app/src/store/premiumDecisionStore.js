@@ -5,7 +5,7 @@ const initialState = {
     decisionName: '',
     modelType: null,
     choices: [],
-    criteria: [],
+    criteria: []
 };
 
 // Create a writable store
@@ -18,5 +18,5 @@ function resetStore() {
 
 export const premiumDecisionStore = {
     ...store,
-    resetStore,
+    resetStore
 };

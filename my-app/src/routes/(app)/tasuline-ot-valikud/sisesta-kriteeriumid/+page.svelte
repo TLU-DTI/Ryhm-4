@@ -5,7 +5,6 @@
     import { get } from "svelte/store";
     import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
 
-    // Initialize inputs with values from the store
     let inputs = get(premiumDecisionStore).criteria.map((criterion, index) => ({ id: index + 1, value: criterion }));
     
     if (inputs.length === 0) {
@@ -25,7 +24,8 @@
     function saveCriteria() {
         const criteria = inputs.map(input => input.value).filter(value => value.trim() !== '');
         premiumDecisionStore.update(store => {
-            return { ...store, criteria };
+            store.criteria = criteria;
+            return store;
         });
         goto("/tasuline-ot-valikud/sisesta-valikud");
     }
@@ -33,11 +33,11 @@
 
 <section class="container">
     <div class="input-container">
-        <h2>Sisesta kriteeriumid, mida võrrelda:</h2>
+        <h2>Sisesta kriteeriumid mida võrrelda:</h2>
         {#each inputs as input (input.id)}
             <div class="input-group">
                 <p>kriteerium:</p>
-                <Input placeholder="Lisa uus kriteerium" bind:value={input.value}></Input>  
+                <Input placeholder="Lisa uus kriteerium" bind:value={input.value}></Input>  
                 {#if inputs.length > 2}
                     <Button size="mini" on:click={removeInput}>-</Button>
                 {/if}
@@ -48,7 +48,7 @@
             <div class="lisakriteerium">
                 <p>Lisa veel kriteeriume</p>
                 <Button size="mini" on:click={addInput}>+</Button>
-            </div>            
+            </div>
         </div>
         <br>
         <div class="buttons">
@@ -57,6 +57,7 @@
         </div>
     </div>
 </section>
+
 
 <style>
     section.container {

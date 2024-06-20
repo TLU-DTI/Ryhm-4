@@ -16,7 +16,8 @@
 
     function savedecisionName() {
         premiumDecisionStore.update(store => {
-            return { ...store, decisionName };
+            store.decisionName = decisionName;
+            return store;
         });
         goto("/tasuline-ot-valikud/otsusemudel");
     }
@@ -31,13 +32,13 @@
             </div>
             <br>
             <div class="buttons">
-                <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi
-                </Button>
+                <Button style="secondary" on:click={() => goto("/")} on:keydown>Tagasi</Button>
                 <Button type="submit" on:keydown>Jätka</Button>
             </div>
         </form>
     </div>
 </section>
+
 
 <style>
     section.container {

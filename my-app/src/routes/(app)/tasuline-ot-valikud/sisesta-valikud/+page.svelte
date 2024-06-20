@@ -8,12 +8,10 @@
 
     let kriteeriumid = get(premiumDecisionStore).criteria.map(criteria => ({ title: criteria }));
 
-
-    // Initialize inputs with values from the store
     let inputs = get(premiumDecisionStore).choices.map((choice, index) => ({ id: index + 1, value: choice }));
 
     function getTooltipContent() {
-        return kriteeriumid.map(criteria => criteria.title).join(", ");
+        return kriteeriumid.map(criteria => criteria.title).join(" ");
     }
     
     if (inputs.length === 0) {
@@ -33,7 +31,8 @@
     function saveChoices() {
         const choices = inputs.map(input => input.value).filter(value => value.trim() !== '');
         premiumDecisionStore.update(store => {
-            return { ...store, choices };
+            store.choices = choices;
+            return store;
         });
         goto("/tasuline-ot-valikud/salvesta");
     }
@@ -41,11 +40,11 @@
 
 <section class="container">
     <div class="input-container">
-        <h2>Sisesta objektid, mille vahel soovid valida:</h2>
+        <h2>Sisesta objektid mille vahel soovid valida:</h2>
         {#each inputs as input (input.id)}
             <div class="input-group">
                 <p>valik:</p>
-                <Input placeholder="Lisa uus valik" bind:value={input.value}></Input>  
+                <Input placeholder="Lisa uus valik" bind:value={input.value}></Input>  
                 {#if inputs.length > 2}
                     <Button size="mini" on:click={removeInput}>-</Button>
                 {/if}
@@ -59,7 +58,7 @@
             </div>
             <div class="lisaval">
                 <p><span use:tooltip={getTooltipContent()}>Vaata lisatud kriteeriumeid</span></p>
-            </div>            
+            </div>
         </div>
         <br>
         <div class="buttons">
@@ -68,6 +67,7 @@
         </div>
     </div>
 </section>
+
 
 <style>
     section.container {

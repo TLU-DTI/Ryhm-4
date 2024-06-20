@@ -6,69 +6,69 @@
   import { page } from "$app/stores";
   import { criteriaStore, updateCriterionWeight } from '../../../../../store/criteriaStore';
 
-  let code: number | null = null;
+  let code = null;
   let criteria = [];
   let criteriaWeights = [];
   let choiceWeights = [];
 
   const unsubscribe = criteriaStore.subscribe(value => {
-    criteria = value.criteria || [];
-    criteriaWeights = value.criteriaWeights || [];
-    choiceWeights = value.choiceWeights || [];
+      criteria = value.criteria || [];
+      criteriaWeights = value.criteriaWeights || [];
+      choiceWeights = value.choiceWeights || [];
   });
 
   onMount(() => {
-    const urlCode = get(page).url.searchParams.get("code");
-    if (urlCode) {
-      code = parseInt(urlCode, 10);
-    }
-    // Initialize store if necessary
-    const store = get(criteriaStore);
-    if (!store.criteriaWeights.length && store.criteria.length) {
-      criteriaStore.update(store => {
-        store.criteriaWeights = Array(store.criteria.length).fill(100);
-        return store;
-      });
-    }
+      const urlCode = get(page).url.searchParams.get("code");
+      if (urlCode) {
+          code = parseInt(urlCode, 10);
+      }
+      const store = get(criteriaStore);
+      if (!store.criteriaWeights.length && store.criteria.length) {
+          criteriaStore.update(store => {
+              store.criteriaWeights = Array(store.criteria.length).fill(100);
+              return store;
+          });
+      }
   });
 
   function handleWeightChange(index, event) {
-    const value = parseFloat(event.target.value);
-    updateCriterionWeight(index, value);
+      const value = parseFloat(event.target.value);
+      updateCriterionWeight(index, value);
   }
 </script>
 
 <section class="container">
   <div class="button-container">
-    <h2>Anna kriteeriumitele osakaal:</h2>
+      <h2>Anna kriteeriumitele osakaal:</h2>
 
-    {#each criteria as criterion, index}
-      <div class="criteria-weight">
-        <label>{criterion}</label>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          bind:value={criteriaWeights[index]}
-          on:input={event => handleWeightChange(index, event)}
-        />
-        <span>{criteriaWeights[index]?.toFixed(0)}%</span>
-      </div>
-    {/each}
-
-    <div class="results">
-      <h2>Choice Weights:</h2>
-      {#each choiceWeights as weight, index}
-        <p>Choice {index + 1}: {weight.toFixed(0)}%</p>
+      {#each criteria as criterion, index}
+          <div class="criteria-weight">
+              <label>{criterion}</label>
+              <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  bind:value={criteriaWeights[index]}
+                  on:input={event => handleWeightChange(index, event)}
+              />
+              <span>{criteriaWeights[index]?.toFixed(0)}%</span>
+          </div>
       {/each}
-    </div>
 
-    <div class="buttons">
-      <Button style="secondary" on:click={() => goto("/")}>Tagasi</Button>
-      <Button on:click={() => goto("/tasuline-ot-valikud/valiku-vordlus/0")}>Jätka</Button>
-    </div>
+      <div class="results">
+          <h2>Choice Weights:</h2>
+          {#each choiceWeights as weight, index}
+              <p>Choice {index + 1}: {weight.toFixed(0)}%</p>
+          {/each}
+      </div>
+
+      <div class="buttons">
+          <Button style="secondary" on:click={() => goto("/")}>Tagasi</Button>
+          <Button on:click={() => goto("/tasuline-ot-valikud/valiku-vordlus/0")}>Jätka</Button>
+      </div>
   </div>
 </section>
+
 
 <style>
   section.container {

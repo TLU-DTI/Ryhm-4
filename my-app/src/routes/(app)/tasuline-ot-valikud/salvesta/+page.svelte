@@ -13,19 +13,14 @@
         userId = value;
     });
 
-    console.log('Retrieved userId:', userId);
-
     async function saveToDatabase() {
         const dataToInsert = {
             choice_name: premiumDecisionData.decisionName,
             model_type: premiumDecisionData.modelType,
             choices: premiumDecisionData.choices,
             criteria: premiumDecisionData.criteria,
-            user_id: userId,
+            user_id: userId
         };
-
-        // Log the data being sent to the database
-        console.log('Data being sent to the database:', dataToInsert);
 
         try {
             const { error } = await supabase
@@ -35,8 +30,6 @@
             if (error) {
                 throw new Error(error.message);
             } else {
-                console.log('Data saved successfully');
-                // Reset the project store
                 premiumDecisionStore.resetStore();
             }
         } catch (error) {
@@ -67,6 +60,7 @@
         </div>
     </div>
 </section>
+
 
 <style>
     section.container {

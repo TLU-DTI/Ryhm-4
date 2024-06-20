@@ -4,7 +4,21 @@
     import { page } from "$app/stores";
     import { onMount } from 'svelte';
     import { get } from 'svelte/store';
-    let code: number | null = null
+
+    let code = null;
+    let valikud = [
+        { title: "Valik 1", lk: 1, per: 67.4 },
+        { title: "valik 2", lk: 1, per: 15.2 },
+        { title: "valik 3", lk: 1, per: 10.9 },
+        { title: "valik 4", lk: 1, per: 6.6 }
+    ];
+
+    let kriteeriumid = [
+        { title: "kriteerium1", lk: 1, per: 40.0 },
+        { title: "kriteerium2", lk: 1, per: 10.0 },
+        { title: "kriteerium3", lk: 1, per: 20.0 },
+        { title: "kriteerium4", lk: 1, per: 30.0 }
+    ];
 
     onMount(() => {
         const urlCode = get(page).url.searchParams.get("code");
@@ -12,20 +26,6 @@
             code = parseInt(urlCode, 10);
         }
     });
-
-    let valikud: { title: string, lk: number, per: number}[] = [
-        { title: "Valik 1",lk: 1, per: 67.4},
-        { title: "valik 2",lk: 1, per: 15.2},
-        { title: "valik 3",lk: 1, per: 10.9},
-        { title: "valik 4" ,lk: 1, per: 6.6}
-    ];
-
-    let kriteeriumid: { title: string, lk: number, per: number }[] = [
-        { title: "kriteerium1", lk: 1, per: 40.0},
-        { title: "kriteerium2", lk: 1, per: 10.0},
-        { title: "kriteerium3", lk: 1, per: 20.0},
-        { title: "kriteerium4", lk: 1, per: 30.0}
-    ];
 </script>
 
 <section class="container">
@@ -36,17 +36,17 @@
         <div class="box">
             <div class="kritnimi">
                 <h2>Kriteeriumite osakaal:</h2>
-                {#each kriteeriumid as kriteerium }
+                {#each kriteeriumid as kriteerium}
                     {#if code === kriteerium.lk}
-                        <div class="text" style="--percentage: {kriteerium.per}%" ><p>{kriteerium.title}</p> 
-                             <div class="percentage"><p>{kriteerium.per}%</p></div>
+                        <div class="text" style="--percentage: {kriteerium.per}%"><p>{kriteerium.title}</p>
+                            <div class="percentage"><p>{kriteerium.per}%</p></div>
                         </div>
                     {/if}
                 {/each}
             </div>
             <div class="tulemused">
                 <h2>Tulemused:</h2>
-                {#each valikud as valik }
+                {#each valikud as valik}
                     {#if code === valik.lk}
                         <div class="tulem" style="--percentage: {valik.per}%">
                             <p>{valik.title}</p>
