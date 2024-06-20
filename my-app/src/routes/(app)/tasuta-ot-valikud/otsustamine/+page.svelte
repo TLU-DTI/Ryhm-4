@@ -1,7 +1,6 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import { page } from "$app/stores";
-    import { goto } from "$app/navigation";
     import { sat_decision_name, sat_decisions, sat_objects, sat_user_id } from '../../../../store.js';
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
@@ -28,7 +27,6 @@
     let objects: string[] = [];
     let clickCounts: { [key: string]: number } = {};
     let currentIndex = 0;
-    let currentObjects: string[] = [];
 
     sat_objects.subscribe(value => {
         objects = Array.isArray(value) ? value : [];
@@ -43,18 +41,10 @@
         decisions = Array.isArray(value) ? value : [];
     });
 
-    function shuffleArray(array: any[]) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
     function handleClick(object: string) {
         clickCounts[object]++;
         currentIndex++;
-        if (currentIndex < decisions.length * (objects.length / 2)) {
+        if (currentIndex < decisions.length * combinations(objects.length, 2)) {
             refreshPage();
         } else {
             showResults();
@@ -69,7 +59,7 @@
 
     function showResults() {
         const mostClickedObject = getMostClickedObject();
-        alert(`Kõige enam valitud objekt: ${mostClickedObject}`);
+        alert(`Most chosen object: ${mostClickedObject}`);
     }
 
     function getMostClickedObject() {
@@ -84,22 +74,39 @@
         return mostClickedObject;
     }
 
+    function combinations(n: number, r: number) {
+        return factorial(n) / (factorial(r) * factorial(n - r));
+    }
+    function factorial(num: number): number {
+        if (num <= 1) return 1;
+        return num * factorial(num - 1);
+    }
+
     // Retrieve current index from the URL
     const indexParam = $page.url.searchParams.get("index");
     currentIndex = indexParam !== null ? parseInt(indexParam) : 0;
 
+    let totalPairs = combinations(objects.length, 2);
+    let decisionIndex = Math.floor(currentIndex / totalPairs);
+    let pairIndex = currentIndex % totalPairs;
+    let currentObjects: string[] = [];
+
     if (objects.length >= 2) {
-        const totalPairs = Math.floor(objects.length / 2);
-        const decisionIndex = Math.floor(currentIndex / totalPairs);
-        const shuffledObjects = shuffleArray([...objects]);
-        currentObjects = shuffledObjects.slice(0, 2);
+        let pairs: string[][] = [];
+        for (let i = 0; i < objects.length - 1; i++) {
+            for (let j = i + 1; j < objects.length; j++) {
+                pairs.push([objects[i], objects[j]]);
+            }
+        }
+        currentObjects = pairs[pairIndex];
     }
 </script>
 
 <section class="container">
-    {#if currentIndex < decisions.length * objects.length}
+    {#if currentIndex < decisions.length * combinations(objects.length, 2)}
         <div class="button-container">
-            <h2>Millist valikut sa eelistad, kui kriteeriumiks on: {decisions[Math.floor(currentIndex / Math.floor(objects.length / 2))]}</h2>
+            <h2>Kõige enam valitud objekt: {decisions[decisionIndex]}</h2>
+           
             <div class="all-container">
                 <div class="obj-button">
                     {#if currentObjects.length > 0}
@@ -113,7 +120,7 @@
         </div>
     {:else}
         <div class="result">
-            <h3>Kõige enam valitud objekt: {getMostClickedObject()}</h3>
+            <h3>Kõige enam valitud objekt:  {getMostClickedObject()}</h3>
         </div>
     {/if}
 </section>
@@ -134,29 +141,7 @@
         background-color: white;
         border-radius: 20px;
         padding: 40px;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* varjuefekt */
-    }
-
-    .buttons {
-        width: 100%;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .container2 {
-        width: 180px;
-        height: 56px;
-        background: #F2F1E7;
-        border-radius: 40px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-left: 100px;
-        margin-bottom: 20px;
-        font-weight: 800;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* shadow effect */
     }
 
     .obj-button {
@@ -167,12 +152,6 @@
         flex-direction: row;
         justify-content: center;
         gap: 20px;
-    }
-
-    .error-alert {
-        text-align: center;
-        color: black;
-        font-size: 30px;
     }
 
     .all-container {
