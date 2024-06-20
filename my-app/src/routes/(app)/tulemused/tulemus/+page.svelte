@@ -1,38 +1,68 @@
 <script lang="ts">
   import Button from "$lib/components/Button.svelte";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
   import { onMount } from 'svelte';
   import { supabase } from '$lib/supabaseClient';
+  import { page } from '$app/stores';
   import { get } from 'svelte/store';
 
-  let code = null;
-  let valikud = [];
-  let kriteeriumid = [];
-  let decisionId;
+  let code: number | null = null;
+  let results = null;
+  let premium_decision_id;
+  let criteriaNames = [];
+  let choiceNames = [];
 
   onMount(async () => {
-    const params = get(page).params;
-    decisionId = params.id;
-
-    const { data, error } = await supabase
-      .from('premium_decision_results')
-      .select('results')
-      .eq('premium_decision_id', decisionId)
-      .single();
-
-    if (data) {
-      const results = data.results;
-      valikud = results.choiceWeights.map((weight, index) => ({ title: `Valik ${index + 1}`, per: weight }));
-      kriteeriumid = results.criteriaWeights.map((weight, index) => ({ title: `kriteerium ${index + 1}`, per: weight }));
+    const urlCode = get(page).url.searchParams.get("code");
+    if (urlCode) {
+      code = parseInt(urlCode, 10);
     }
 
-    if (error) {
-      console.error('Error fetching results:', error);
+    premium_decision_id = sessionStorage.getItem('premium_decision_id');
+    if (premium_decision_id) {
+      await fetchResults(premium_decision_id);
     }
   });
-</script>
 
+  async function fetchResults(premium_decision_id) {
+    try {
+      // Fetch results from premium_decision_results table
+      const { data: resultsData, error: resultsError } = await supabase
+        .from('premium_decision_results')
+        .select('*')
+        .eq('premium_decision_id', premium_decision_id)
+        .single();
+
+      if (resultsError) {
+        throw new Error(resultsError.message);
+      }
+
+      // Fetch names from premium_decisions table
+      const { data: decisionData, error: decisionError } = await supabase
+        .from('premium_decisions')
+        .select('criteria, choices')
+        .eq('id', premium_decision_id)
+        .single();
+
+      if (decisionError) {
+        throw new Error(decisionError.message);
+      }
+
+      // Use toFixed to format weights with no decimal places
+      resultsData.results.criteriaWeights = resultsData.results.criteriaWeights.map(weight => Number(weight.toFixed(0)));
+      resultsData.results.choiceWeights = resultsData.results.choiceWeights.map(weight => Number(weight.toFixed(0)));
+      
+      results = resultsData.results;
+      criteriaNames = decisionData.criteria;
+      choiceNames = decisionData.choices;
+
+      console.log('Fetched results:', results);
+      console.log('Fetched decision data:', decisionData);
+    } catch (error) {
+      console.error('Error fetching results:', error);
+    }
+  }
+</script>
 <section class="container">
   <div class="icontainer">
     <div class="header">
@@ -41,21 +71,25 @@
     <div class="box">
       <div class="kritnimi">
         <h2>Kriteeriumite osakaal:</h2>
-        {#each kriteeriumid as kriteerium }
-          <div class="text" style="--percentage: {kriteerium.per}%">
-            <p>{kriteerium.title}</p>
-            <div class="percentage"><p>{kriteerium.per}%</p></div>
-          </div>
-        {/each}
+        {#if results}
+          {#each results.criteriaWeights as weight, index}
+            <div class="text" style="--percentage: {weight}%">
+              <p>{criteriaNames[index]}</p>
+              <div class="percentage"><p>{weight}%</p></div>
+            </div>
+          {/each}
+        {/if}
       </div>
       <div class="tulemused">
         <h2>Tulemused:</h2>
-        {#each valikud as valik }
-          <div class="tulem" style="--percentage: {valik.per}%">
-            <p>{valik.title}</p>
-            <div class="percent"><p>{valik.per}%</p></div>
-          </div>
-        {/each}
+        {#if results}
+          {#each results.choiceWeights as weight, index}
+            <div class="tulem" style="--percentage: {weight}%">
+              <p>{choiceNames[index]}</p>
+              <div class="percent"><p>{weight}%</p></div>
+            </div>
+          {/each}
+        {/if}
       </div>
     </div>
     <br>
@@ -153,7 +187,7 @@
         z-index: 1;
     }
 
-    .tulem{
+    .tulem {
         background-color: white;
     }
 
@@ -169,11 +203,11 @@
         animation: fillAnimation 4s ease forwards;
     }
 
-    .text{
-        background-color:white;
+    .text {
+        background-color: white;
     }
 
-    .text::before{
+    .text::before {
         content: '';
         position: absolute;
         top: 0;

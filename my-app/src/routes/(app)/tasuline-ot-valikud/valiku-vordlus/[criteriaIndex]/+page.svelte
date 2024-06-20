@@ -5,13 +5,14 @@
   import { get } from 'svelte/store';
   import { page } from "$app/stores";
   import { criteriaStore, updateChoiceComparisons, calculateFinalResults } from '../../../../../store/criteriaStore';
-
+  import { sat_user_id } from '../../../../../store.js';
+  
   let criteriaIndex: number = 0;
   let criteria: string = '';
   let choices: string[] = [];
   let comparisons: number[][] = [];
-  let user_id: number;
-  let premium_decision_id: number;
+  let user_id = get(sat_user_id); // Get user_id directly from the store
+  let premium_decision_id;
 
   function initializeData() {
     const store = get(criteriaStore);
@@ -23,7 +24,11 @@
     }
     if (!store.premium_decision_id) {
       store.premium_decision_id = premium_decision_id;
+    } else {
+      premium_decision_id = store.premium_decision_id;
     }
+
+    console.log('premium_decision_id(valiku vordlus):', premium_decision_id);
 
     if (criteriaIndex >= 0 && criteriaIndex < store.criteria.length) {
       criteria = store.criteria[criteriaIndex];
@@ -33,7 +38,7 @@
       comparisons = store.choicesComparisons[criteriaIndex]
         ? JSON.parse(JSON.stringify(store.choicesComparisons[criteriaIndex]))
         : Array(choices.length).fill(null).map(() => Array(choices.length).fill(null));
-      
+
       console.log('Initialized comparisons:', comparisons);
     } else {
       console.warn('Invalid criteriaIndex:', criteriaIndex);
@@ -57,7 +62,7 @@
     updateChoiceComparisons(criteriaIndex, i, j, value);
   }
 
-  function handleNext() {
+  async function handleNext() {
     // Store comparisons in criteriaStore
     criteriaStore.update(store => {
       store.choicesComparisons[criteriaIndex] = JSON.parse(JSON.stringify(comparisons));
@@ -72,17 +77,50 @@
       const nextCriteriaIndex = criteriaIndex + 1;  // Calculate next criteriaIndex before navigation
       goto(`/tasuline-ot-valikud/valiku-vordlus/${nextCriteriaIndex}`);
     } else {
-      calculateFinalResults().then(() => {
-        goto('/tulemused/tulemus'); // Assuming a results page
-      });
+      await calculateFinalResults();
+      const updatedStore = get(criteriaStore); // Ensure store is updated before using it
+      if (updatedStore.criteria && updatedStore.choices) {
+        await saveResultsToDatabase(updatedStore);
+        goto('/tulemused/tulemus');
+      } else {
+        console.error('Criteria or choices are not defined');
+      }
+    }
+  }
+
+  async function saveResultsToDatabase(store) {
+    const results = {
+      criteriaWeights: store.criteriaWeights,
+      choiceWeights: store.choiceWeights,
+      choicesComparisons: store.choicesComparisons
+    };
+
+    const dataToInsert = {
+      premium_decision_id: store.premium_decision_id,
+      results,
+      user_id: store.user_id
+    };
+
+    console.log('Saving results to database:', dataToInsert);
+
+    try {
+      const { data, error } = await supabase
+        .from('premium_decision_results')
+        .insert([dataToInsert]);
+
+      if (error) {
+        throw new Error(error.message);
+      } else {
+        console.log('Results saved successfully:', data);
+      }
+    } catch (error) {
+      console.error('Error saving results:', error);
     }
   }
 
   onMount(() => {
     const params = get(page).params;
     criteriaIndex = parseInt(params.criteriaIndex, 10);
-    user_id = parseInt(params.user_id, 10); // Assuming user_id is passed as a param
-    premium_decision_id = parseInt(params.premium_decision_id, 10); // Assuming premium_decision_id is passed as a param
     console.log('onMount: criteriaIndex set to', criteriaIndex);
     initializeData();
     console.log('criteriaStore data on onMount:', get(criteriaStore));

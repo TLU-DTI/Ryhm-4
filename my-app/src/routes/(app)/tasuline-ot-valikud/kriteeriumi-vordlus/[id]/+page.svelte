@@ -10,32 +10,54 @@
   let criteria = [];
   let criteriaWeights = [];
   let choiceWeights = [];
+  let premium_decision_id;
 
-  const unsubscribe = criteriaStore.subscribe(value => {
-      criteria = value.criteria || [];
-      criteriaWeights = value.criteriaWeights || [];
-      choiceWeights = value.choiceWeights || [];
+  criteriaStore.subscribe(value => {
+    criteria = value.criteria || [];
+    criteriaWeights = value.criteriaWeights || [];
+    choiceWeights = value.choiceWeights || [];
+    console.log('Subscribed criteriaStore:', value);
   });
 
   onMount(() => {
-      const urlCode = get(page).url.searchParams.get("code");
-      if (urlCode) {
-          code = parseInt(urlCode, 10);
-      }
-      const store = get(criteriaStore);
-      if (!store.criteriaWeights.length && store.criteria.length) {
-          criteriaStore.update(store => {
-              store.criteriaWeights = Array(store.criteria.length).fill(100);
-              return store;
-          });
-      }
+    const urlCode = get(page).url.searchParams.get("code");
+    if (urlCode) {
+      code = parseInt(urlCode, 10);
+    }
+
+    // Retrieve premium_decision_id from session storage
+    const storedPremiumDecisionId = sessionStorage.getItem('premium_decision_id');
+    if (storedPremiumDecisionId) {
+      premium_decision_id = parseInt(storedPremiumDecisionId, 10);
+      criteriaStore.update(store => {
+        store.premium_decision_id = premium_decision_id;
+        return store;
+      });
+    }
+
+    const store = get(criteriaStore);
+    console.log('onMount criteriaStore:', store);
+    if (!store.criteriaWeights.length && store.criteria.length) {
+      criteriaStore.update(store => {
+        store.criteriaWeights = Array(store.criteria.length).fill(100);
+        return store;
+      });
+    }
+
+    // Check if premium_decision_id is undefined
+    if (!premium_decision_id) {
+      console.error('premium_decision_id is undefined in kriteeriumi-vordlus page');
+    } else {
+      console.log('premium_decision_id in kriteeriumi-vordlus page:', premium_decision_id);
+    }
   });
 
   function handleWeightChange(index, event) {
-      const value = parseFloat(event.target.value);
-      updateCriterionWeight(index, value);
+    const value = parseFloat(event.target.value);
+    updateCriterionWeight(index, value);
   }
 </script>
+
 
 <section class="container">
   <div class="button-container">
