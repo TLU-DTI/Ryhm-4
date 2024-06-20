@@ -44,24 +44,17 @@
 
     {#each criteria as criterion, index}
       <div class="criteria-weight">
-        <label>{criterion}</label>
-        <input
+        <p>{criterion}</p>
+        <input class="slider"
           type="range"
           min="0"
           max="100"
           bind:value={criteriaWeights[index]}
           on:input={event => handleWeightChange(index, event)}
         />
-        <span>{criteriaWeights[index]?.toFixed(2)}%</span>
+        <p class="protsent">{criteriaWeights[index]?.toFixed(0)}%</p>
       </div>
     {/each}
-
-    <div class="results">
-      <h2>Choice Weights:</h2>
-      {#each choiceWeights as weight, index}
-        <p>Choice {index + 1}: {weight.toFixed(2)}%</p>
-      {/each}
-    </div>
 
     <div class="buttons">
       <Button style="secondary" on:click={() => goto("/")}>Tagasi</Button>
@@ -92,31 +85,16 @@
   }
 
   .criteria-weight {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .criteria-title {
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .form {
     display: grid;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 70%;
-    place-self: center;
-    border-radius: 20px;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    text-align: end;
+    width: 500px;
+    align-self: center;
   }
 
-  .results {
-    margin-top: 40px;
+  .protsent {
+    text-align: start;
   }
 
   .buttons {
@@ -125,7 +103,4 @@
     justify-content: space-between;
   }
 
-  h2 {
-    font-size: 30px;
-  }
 </style>

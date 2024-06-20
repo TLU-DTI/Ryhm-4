@@ -57,17 +57,18 @@
 </script>
 
 <section class="container">
-  <h2>Võrdle valikuid, kui kriteerium on: {criteria}</h2>
+  <h2>Võrdle valikuid, kui kriteerium on: <br> {criteria}</h2>
 
   {#if choices && choices.length > 0}
     {#each choices as choiceA, i}
       {#each choices as choiceB, j}
         {#if i > j}
           <div class="comparison">
-            <span>{choiceA}</span>
+            <p>{choiceA}</p>
             <form class="likert-form">
               {#each Array(5) as _, k}
                 <input
+                  class="valimine"
                   type="radio"
                   name="comparison-{i}-{j}"
                   value="{5 - k}"
@@ -76,14 +77,14 @@
                 />
               {/each}
             </form>
-            <span>{choiceB}</span>
+            <p class="valik2">{choiceB}</p>
           </div>
         {/if}
       {/each}
     {/each}
   {/if}
 
-  <button on:click={handleNext}>Edasi</button>
+  <Button on:click={handleNext}>Edasi</Button>
 </section>
 
 <style>
@@ -95,10 +96,16 @@
   }
 
   .comparison {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    text-align: end;
+    width: 500px;
+    align-self: center;
+  }
+
+  .valik2 {
+    text-align: start;
   }
 
   .likert-form {
@@ -120,9 +127,5 @@
     height: auto;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     align-content: center;
-  }
-
-  h2 {
-    font-size: 30px;
   }
 </style>
