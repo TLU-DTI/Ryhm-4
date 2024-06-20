@@ -1,9 +1,9 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import { page } from "$app/stores";
-    import { sat_decision_name, sat_decisions, sat_objects, sat_user_id } from '../../../../store.js';
+    import { sat_decision_name, sat_decisions, sat_objects, sat_user_id, sat_click_counts } from '../../../../store.js';
     import { onMount } from 'svelte';
-    import { writable } from 'svelte/store';
+    import { get } from 'svelte/store';
 
     let loading = true;
     let currentUserId: number | null;
@@ -25,7 +25,7 @@
 
     let decisions: string[] = [];
     let objects: string[] = [];
-    let clickCounts: { [key: string]: number } = {};
+    let clickCounts: { [key: string]: number } = get(sat_click_counts);
     let currentIndex = 0;
 
     sat_objects.subscribe(value => {
@@ -43,11 +43,13 @@
 
     function handleClick(object: string) {
         clickCounts[object]++;
+        sat_click_counts.set(clickCounts); // Update the store
         currentIndex++;
         if (currentIndex < decisions.length * combinations(objects.length, 2)) {
             refreshPage();
         } else {
             showResults();
+            window.location.href = "/tasuta-ot-valikud/tulemused";
         }
     }
 
@@ -74,9 +76,10 @@
         return mostClickedObject;
     }
 
-    function combinations(n: number, r: number) {
+    function combinations(n: number, r: number): number {
         return factorial(n) / (factorial(r) * factorial(n - r));
     }
+
     function factorial(num: number): number {
         if (num <= 1) return 1;
         return num * factorial(num - 1);
@@ -105,7 +108,7 @@
 <section class="container">
     {#if currentIndex < decisions.length * combinations(objects.length, 2)}
         <div class="button-container">
-            <h2>Kõige enam valitud objekt: {decisions[decisionIndex]}</h2>
+            <h2>Which option do you prefer for: {decisions[decisionIndex]}</h2>
            
             <div class="all-container">
                 <div class="obj-button">
@@ -117,10 +120,6 @@
                     {/if}
                 </div>
             </div>
-        </div>
-    {:else}
-        <div class="result">
-            <h3>Kõige enam valitud objekt:  {getMostClickedObject()}</h3>
         </div>
     {/if}
 </section>
@@ -164,20 +163,6 @@
         border-radius: 40px;
         box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     }
-
-    .result {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    h3 {
-        font-size: 26px;
-        text-align: center;
-        font-weight: 200;
-    }
-
     h2 {
         font-size: 30px;
     }

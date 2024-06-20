@@ -5,11 +5,12 @@
     import { goto } from "$app/navigation";
     import { get } from "svelte/store";
     import { premiumDecisionStore } from '../../../../store/premiumDecisionStore';
-    import { sat_decision_name, sat_decisions, sat_objects, sat_user_id } from '../../../../store.js';
+    import { sat_decision_name, sat_decisions, sat_objects, sat_user_id, sat_click_counts } from '../../../../store.js';
     import { useForm, validators, required } from 'svelte-use-form';
     import { onMount } from 'svelte';
 
     function checkAuth() {
+        sat_click_counts.set({});
         sat_user_id.subscribe(value => {
             currentUserId = value;
             if ($sat_user_id == null) {

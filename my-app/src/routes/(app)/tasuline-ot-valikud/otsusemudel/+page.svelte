@@ -13,13 +13,17 @@
         });
         goto("/tasuline-ot-valikud/sisesta-kriteeriumid");
     }
+
+    function goToFC(){
+        goto("/tasuta-ot-valikud/valikud");
+    }
 </script>
 
 <section class="container">
     <div class="input-container">
         <h2>Vali otsuse mudel:</h2>
         <div class="mudel">
-            <Button style="secondary" size="large" on:click={() => { modelType = 3; saveModelType(); }}>
+            <Button style="secondary" size="large" on:click={() => { modelType = 1; goToFC(); }}>
                 Forced choice mudel
             </Button>
             <Button size="mini">

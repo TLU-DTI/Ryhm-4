@@ -57,6 +57,14 @@ function getStoredObjects() {
     return [];
 }
 
+function getStoredClickCounts() {
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_click_counts');
+        return storedValue !== null ? JSON.parse(storedValue) : {};
+    }
+    return {};
+}
+
 // Initialize the store with the value from sessionStorage if it exists
 const initialUserId = getStoredUserId();
 const initialUsername  = getStoredUsername();
@@ -65,6 +73,7 @@ const initialGroupId  = getStoredGroupId();
 const initialDecisionName = getStoredDecisionName();
 const initialDecisions = getStoredDecisions();
 const initialObjects = getStoredObjects();
+const initialClickCounts = getStoredClickCounts();
 
 // Create writable stores and set their initial values
 export const sat_user_id = writable(initialUserId);
@@ -74,6 +83,7 @@ export const sat_group_id = writable(initialGroupId);
 export const sat_decision_name = writable(initialDecisionName);
 export const sat_decisions = writable(initialDecisions);
 export const sat_objects = writable(initialObjects);
+export const sat_click_counts = writable(initialClickCounts);
 
 // Subscribe to the stores to update sessionStorage whenever the values change
 sat_user_id.subscribe(value => {
@@ -143,5 +153,11 @@ sat_objects.subscribe(value => {
         } else {
             sessionStorage.setItem('sat_objects', JSON.stringify(value));
         }
+    }
+});
+
+sat_click_counts.subscribe(value => {
+    if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem('sat_click_counts', JSON.stringify(value));
     }
 });
