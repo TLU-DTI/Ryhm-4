@@ -3,65 +3,67 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import { onMount } from 'svelte';
+    import { supabase } from '$lib/supabaseClient';
     import { get } from 'svelte/store';
-
+  
     let code = null;
-    let valikud = [
-        { title: "Valik 1", lk: 1, per: 67.4 },
-        { title: "valik 2", lk: 1, per: 15.2 },
-        { title: "valik 3", lk: 1, per: 10.9 },
-        { title: "valik 4", lk: 1, per: 6.6 }
-    ];
-
-    let kriteeriumid = [
-        { title: "kriteerium1", lk: 1, per: 40.0 },
-        { title: "kriteerium2", lk: 1, per: 10.0 },
-        { title: "kriteerium3", lk: 1, per: 20.0 },
-        { title: "kriteerium4", lk: 1, per: 30.0 }
-    ];
-
-    onMount(() => {
-        const urlCode = get(page).url.searchParams.get("code");
-        if (urlCode) {
-            code = parseInt(urlCode, 10);
-        }
+    let valikud = [];
+    let kriteeriumid = [];
+    let decisionId;
+  
+    onMount(async () => {
+      const params = get(page).params;
+      decisionId = params.id;
+  
+      const { data, error } = await supabase
+        .from('premium_decision_results')
+        .select('results')
+        .eq('premium_decision_id', decisionId)
+        .single();
+  
+      if (data) {
+        const results = data.results;
+        valikud = results.choiceWeights.map((weight, index) => ({ title: `Valik ${index + 1}`, per: weight }));
+        kriteeriumid = results.criteriaWeights.map((weight, index) => ({ title: `kriteerium ${index + 1}`, per: weight }));
+      }
+  
+      if (error) {
+        console.error('Error fetching results:', error);
+      }
     });
-</script>
-
-<section class="container">
+  </script>
+  
+  <section class="container">
     <div class="icontainer">
-        <div class="header">
-            <h2>Otsusemudeli nimi:</h2>
-        </div>
-        <div class="box">
-            <div class="kritnimi">
-                <h2>Kriteeriumite osakaal:</h2>
-                {#each kriteeriumid as kriteerium}
-                    {#if code === kriteerium.lk}
-                        <div class="text" style="--percentage: {kriteerium.per}%"><p>{kriteerium.title}</p>
-                            <div class="percentage"><p>{kriteerium.per}%</p></div>
-                        </div>
-                    {/if}
-                {/each}
+      <div class="header">
+        <h2>Otsusemudeli nimi:</h2>
+      </div>
+      <div class="box">
+        <div class="kritnimi">
+          <h2>Kriteeriumite osakaal:</h2>
+          {#each kriteeriumid as kriteerium }
+            <div class="text" style="--percentage: {kriteerium.per}%">
+              <p>{kriteerium.title}</p>
+              <div class="percentage"><p>{kriteerium.per}%</p></div>
             </div>
-            <div class="tulemused">
-                <h2>Tulemused:</h2>
-                {#each valikud as valik}
-                    {#if code === valik.lk}
-                        <div class="tulem" style="--percentage: {valik.per}%">
-                            <p>{valik.title}</p>
-                            <div class="percent"><p>{valik.per}%</p></div>
-                        </div>
-                    {/if}
-                {/each}
+          {/each}
+        </div>
+        <div class="tulemused">
+          <h2>Tulemused:</h2>
+          {#each valikud as valik }
+            <div class="tulem" style="--percentage: {valik.per}%">
+              <p>{valik.title}</p>
+              <div class="percent"><p>{valik.per}%</p></div>
             </div>
+          {/each}
         </div>
-        <br>
-        <div class="buttons">
-            <Button size="large" on:click={() => goto("/tulemused")} on:keydown>Lõpeta</Button>
-        </div>
+      </div>
+      <br>
+      <div class="buttons">
+        <Button size="large" on:click={() => goto("/tulemused")} on:keydown>Lõpeta</Button>
+      </div>
     </div>
-</section>
+  </section>
 
 <style>
     .buttons {
