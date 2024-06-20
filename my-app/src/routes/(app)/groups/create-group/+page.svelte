@@ -1,8 +1,8 @@
 <script lang="ts">
     import '$lib/styles.css';
     import { supabase } from '$lib/supabaseClient';
+    import Button from "$lib/components/Button.svelte";
     import Input from "$lib/components/Input.svelte";
-	import Button from "$lib/components/Button.svelte";
     import { useForm, validators, HintGroup, Hint, required } from "svelte-use-form";
     import { sat_user_id, sat_premium, sat_group_id } from '../../../../store.js';
     import { onMount } from 'svelte';
@@ -82,8 +82,6 @@
 
         data.group_code = groupCode;
 
-
-
         try {
             const { data: groupData, error: groupError } = await supabase
                 .from('groups')
@@ -101,9 +99,6 @@
             }
 
             sat_group_id.set(groupData.id);
-
-            
-
             const groupId = groupData.id;
 
             const { error: userGroupError } = await supabase

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-// Utility function to get the value from sessionStorage and convert it to a number
+// Utility function to get the value from sessionStorage
 function getStoredUserId() {
     if (typeof sessionStorage !== 'undefined') {
         const storedValue = sessionStorage.getItem('sat_user_id');
@@ -33,19 +33,59 @@ function getStoredPremium() {
     return null;
 }
 
+function getStoredDecisionName() {
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_decision_name');
+        return storedValue !== null ? String(storedValue) : null;
+    }
+    return null;
+}
+
+function getStoredDecisions() {
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_decisions');
+        return storedValue !== null ? JSON.parse(storedValue) : [];
+    }
+    return [];
+}
+
+function getStoredObjects() {
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_objects');
+        return storedValue !== null ? JSON.parse(storedValue) : [];
+    }
+    return [];
+}
+
+function getStoredClickCounts() {
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_click_counts');
+        return storedValue !== null ? JSON.parse(storedValue) : {};
+    }
+    return {};
+}
+
 // Initialize the store with the value from sessionStorage if it exists
 const initialUserId = getStoredUserId();
 const initialUsername  = getStoredUsername();
 const initialPremium  = getStoredPremium();
 const initialGroupId  = getStoredGroupId();
+const initialDecisionName = getStoredDecisionName();
+const initialDecisions = getStoredDecisions();
+const initialObjects = getStoredObjects();
+const initialClickCounts = getStoredClickCounts();
 
-// Create a writable store and set its initial value
+// Create writable stores and set their initial values
 export const sat_user_id = writable(initialUserId);
-export const sat_username = writable(initialUsername );
-export const sat_premium = writable(initialPremium );
-export const sat_group_id = writable(initialGroupId );
+export const sat_username = writable(initialUsername);
+export const sat_premium = writable(initialPremium);
+export const sat_group_id = writable(initialGroupId);
+export const sat_decision_name = writable(initialDecisionName);
+export const sat_decisions = writable(initialDecisions);
+export const sat_objects = writable(initialObjects);
+export const sat_click_counts = writable(initialClickCounts);
 
-// Subscribe to the store to update sessionStorage whenever the value changes
+// Subscribe to the stores to update sessionStorage whenever the values change
 sat_user_id.subscribe(value => {
     if (typeof sessionStorage !== 'undefined') {
         if (value === null) {
@@ -83,5 +123,41 @@ sat_premium.subscribe(value => {
         } else {
             sessionStorage.setItem('sat_premium', String(value));
         }
+    }
+});
+
+sat_decision_name.subscribe(value => {
+    if (typeof sessionStorage !== 'undefined') {
+        if (value === null) {
+            sessionStorage.removeItem('sat_decision_name');
+        } else {
+            sessionStorage.setItem('sat_decision_name', String(value));
+        }
+    }
+});
+
+sat_decisions.subscribe(value => {
+    if (typeof sessionStorage !== 'undefined') {
+        if (value.length === 0) {
+            sessionStorage.removeItem('sat_decisions');
+        } else {
+            sessionStorage.setItem('sat_decisions', JSON.stringify(value));
+        }
+    }
+});
+
+sat_objects.subscribe(value => {
+    if (typeof sessionStorage !== 'undefined') {
+        if (value.length === 0) {
+            sessionStorage.removeItem('sat_objects');
+        } else {
+            sessionStorage.setItem('sat_objects', JSON.stringify(value));
+        }
+    }
+});
+
+sat_click_counts.subscribe(value => {
+    if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem('sat_click_counts', JSON.stringify(value));
     }
 });
