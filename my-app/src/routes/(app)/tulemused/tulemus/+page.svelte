@@ -94,7 +94,7 @@
     </div>
     <br>
     <div class="buttons">
-      <Button size="large" on:click={() => goto("/tulemused")} on:keydown>Lõpeta</Button>
+      <Button size="large" on:click={() => goto("/")} on:keydown>Lõpeta</Button>
     </div>
   </div>
 </section>

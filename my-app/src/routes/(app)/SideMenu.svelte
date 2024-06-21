@@ -59,7 +59,7 @@
             id: 6,
             label: 'Logi välja',
             icon: logoutIcon,
-            route: '/login'
+            route: '/home'
         }
     ];
 
@@ -115,7 +115,7 @@
         sat_username.set(null);
         sat_premium.set(null);
         // Redirect to the login page
-        window.location.href = '/login';
+        window.location.href = '/home';
     }
 
     onMount(() => {
