@@ -33,6 +33,10 @@
 				Valiku Võlur kasutab erinevaid meetodeid ja algoritme, et pakkuda kasutajatele personaliseeritud soovitusi ja lahendusi. Rakendus analüüsib kasutaja sisestatud andmeid ja eelistusi, et pakkuda optimaalseid valikuvõimalusi.
 				<br><br>
 				Meie eesmärk on rakendada oma teadmisi ja oskusi, et lahendada reaalseid probleeme ning panustada innovatsiooni ja arengusse nii tehnoloogia kui ka meedia valdkonnas. Oleme põnevil oma tuleviku ees ja ootame, et saaksime oma teadmisi ja loomingulisust rakendada erinevates projektides ja algatustes.
+				<br><br>
+				Tooteomanikuks ja kontseptuaalseks disaineriks on Tallinna Ülikooli õppejõud Martin Sillaots.
+				<br><br>
+				Rakenduse loomist toetas <a href=https://edtechtalents.eu>EdTech Talents EL projekt.</a>
 			</p>
 		</div>
 	</div>
@@ -124,5 +128,9 @@
 
 	.logo-img{
 		padding-left: 100px;
+	}
+
+	a {
+		color: #000;
 	}
 </style>
