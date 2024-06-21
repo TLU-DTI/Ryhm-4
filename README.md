@@ -8,7 +8,7 @@ Lühikirjeldus:
 
 Lõime rakenduse, mis arvutab välja parima valiku, kasutades otsustusmudeleid: Forced Choice ja Analytical Hierarchy Process. Üks mudelitest on tasuta (Forced Choice) ja teine on tasuline (Analytical Hierarchy Process). Tasulise konto ostmise korral on võimalik kasutajal luua ka grupid. Seejärel arvutab süsteem kas  kogu grupile või üksikisikule vastuse.
 
-Rakendus on tehtud DTI instituudi informaatika tudengite suvepraktika raames.
+Rakendus on tehtud Tallinna Ülikooli DTI informaatika tudengite suvepraktika raames.
 
 
 
