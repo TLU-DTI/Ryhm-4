@@ -17,6 +17,14 @@ function getStoredGroupId() {
     return null;
 }
 
+function getStoredDecisionId() {
+    if (typeof sessionStorage !== 'undefined') {
+        const storedValue = sessionStorage.getItem('sat_decision_id');
+        return storedValue !== null ? Number(storedValue) : null;
+    }
+    return null;
+}
+
 function getStoredUsername() {
     if (typeof sessionStorage !== 'undefined') {
         const storedValue = sessionStorage.getItem('sat_username');
@@ -70,6 +78,7 @@ const initialUserId = getStoredUserId();
 const initialUsername  = getStoredUsername();
 const initialPremium  = getStoredPremium();
 const initialGroupId  = getStoredGroupId();
+const initialDecisionId = getStoredDecisionId();
 const initialDecisionName = getStoredDecisionName();
 const initialDecisions = getStoredDecisions();
 const initialObjects = getStoredObjects();
@@ -80,6 +89,7 @@ export const sat_user_id = writable(initialUserId);
 export const sat_username = writable(initialUsername);
 export const sat_premium = writable(initialPremium);
 export const sat_group_id = writable(initialGroupId);
+export const sat_decision_id = writable(initialDecisionId);
 export const sat_decision_name = writable(initialDecisionName);
 export const sat_decisions = writable(initialDecisions);
 export const sat_objects = writable(initialObjects);
@@ -102,6 +112,16 @@ sat_group_id.subscribe(value => {
             sessionStorage.removeItem('sat_group_id');
         } else {
             sessionStorage.setItem('sat_group_id', String(value));
+        }
+    }
+});
+
+sat_decision_id.subscribe(value => {
+    if (typeof sessionStorage !== 'undefined') {
+        if (value === null) {
+            sessionStorage.removeItem('sat_decision_id');
+        } else {
+            sessionStorage.setItem('sat_decision_id', String(value));
         }
     }
 });

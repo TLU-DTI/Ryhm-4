@@ -41,7 +41,7 @@
             id: 3,
             label: 'Tulemused',
             icon: resultsIcon,
-            route: '/tulemused/mitte-kattesaadav'
+            route: '/tulemused/tulemuste-loend'
         },
         {
             id: 4,

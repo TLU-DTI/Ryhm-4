@@ -5,7 +5,7 @@
     import { page } from "$app/stores";
     import { onMount } from 'svelte';
     import { get } from 'svelte/store';
-    import { sat_decision_name, sat_decisions, sat_objects, sat_user_id, sat_click_counts } from '../../../../store.js';
+    import { sat_decision_name, sat_decision_id, sat_group_id, sat_decisions, sat_objects, sat_user_id, sat_click_counts } from '../../../../store.js';
 
     let loading = true;
     let currentUserId: number | null;
@@ -64,19 +64,54 @@
 
     async function saveToDatabase(mostPickedObject: string) {
     try {
-        const { data, error } = await supabase
-            .from('results_groups') // Your new table name
-            .insert([
-                {most_picked_object: mostPickedObject }
-            ]);
+        // First, check if the entry already exists
+        const { data: existingEntry, error: selectError } = await supabase
+            .from('results_groups')
+            .select('*')
+            .eq('user_ID', $sat_user_id)
+            .eq('decision_ID', $sat_decision_id)
+            .eq('group_ID', $sat_group_id)
+            .single();
 
-        if (error) {
-            throw error;
+        if (selectError && selectError.code !== 'PGRST116') { // PGRST116 means no row found
+            throw selectError;
         }
 
-        console.log('Most picked object successfully saved to database:', data);
+        if (existingEntry) {
+            // If an entry exists, update it
+            const { data: updatedData, error: updateError } = await supabase
+                .from('results_groups')
+                .update({ most_picked_object: mostPickedObject })
+                .eq('user_ID', $sat_user_id)
+                .eq('decision_ID', $sat_decision_id)
+                .eq('group_ID', $sat_group_id);
+
+            if (updateError) {
+                throw updateError;
+            }
+
+            console.log('Most picked object successfully updated in database:', updatedData);
+        } else {
+            // If no entry exists, insert a new one
+            const { data: insertedData, error: insertError } = await supabase
+                .from('results_groups')
+                .insert([
+                    {
+                        user_ID: $sat_user_id,
+                        decision_ID: $sat_decision_id,
+                        group_ID: $sat_group_id,
+                        most_picked_object: mostPickedObject
+                    }
+                ]);
+
+            if (insertError) {
+                throw insertError;
+            }
+
+            console.log('Most picked object successfully inserted into database:', insertedData);
+        }
     } catch (error) {
-        console.error('Error saving most picked object to database:', error);
+        console.error('Error saving or updating most picked object in database:', error);
     }
 }
 

@@ -2,7 +2,7 @@
     import { supabase } from '$lib/supabaseClient';
     import { onMount } from 'svelte';
     import { writable, get } from 'svelte/store';
-    import { sat_user_id, sat_premium, sat_group_id, sat_decisions, sat_objects, sat_click_counts, sat_decision_name } from '../../../../store.js';
+    import { sat_user_id, sat_premium, sat_decision_id, sat_group_id, sat_decisions, sat_objects, sat_click_counts, sat_decision_name } from '../../../../store.js';
     import Button from "$lib/components/Button.svelte";
     import { goto } from "$app/navigation";
     import trash from '$lib/images/trash.svg';
@@ -30,7 +30,7 @@
         group_code: string;
         leader: boolean;
         members: Array<{ user_ID: number, user_name: string, is_current_user: boolean, is_leader: boolean }>;
-        decisions: Array<{ id: number, choice_name: string }>;
+        decisions: Array<{ id: number, choice_name: string, model_type:number }>;
     }
 
     const groupInfo = writable<GroupInfo[]>([]);
@@ -76,7 +76,7 @@
                     const { data: decisions, error: decisionsError } = await supabase
                         .from('premium_decisions_groups')
                         .select(`
-                            premium_decisions (id, choice_name)
+                            premium_decisions (id, choice_name, model_type)
                         `)
                         .eq('group_ID', info.group_ID);
 
@@ -97,7 +97,8 @@
                         })),
                         decisions: (decisions || []).map((decision: any) => ({
                             id: decision.premium_decisions.id,
-                            choice_name: decision.premium_decisions.choice_name
+                            choice_name: decision.premium_decisions.choice_name,
+                            model_type: decision.premium_decisions.model_type
                         }))
                     };
                 }));
@@ -225,6 +226,7 @@
 
             // Handle different model types
             if (model_type === 1) { // FC Model
+                sat_decision_id.set(decisionId);
                 sat_decision_name.set(choice_name);
                 sat_click_counts.set({});
                 sat_objects.set(choices); // Assuming choices are comma-separated
@@ -233,24 +235,11 @@
                 // Navigate to the otsustamine page
                 goto("/groups/otsustamine");
             } else if (model_type === 3) { // AHP Model
-                // Handle AHP logic here
+                // AHP seadistamine
             } else {
                 console.error('Error: model_type ' + model_type + ' not recognized.');
                 return;
             }
-
-            // Store decision open event in `decision_results`
-            const { data: insertData, error: insertError } = await supabase
-                .from('results_groups')
-                .insert([
-                    { user_ID: userId, decision_ID: decisionId, group_ID: groupId }
-                ]);
-
-            if (insertError) {
-                throw insertError;
-            }
-
-            console.log('Decision open event logged:', insertData);
         }
     } catch (error) {
         console.error('Error opening a group decision:', error);
@@ -258,9 +247,48 @@
     }
 }
 
-
-    async function removeDesicion(groupId: number, decisionId: number) {
+async function openResults(groupId: number, decisionId: number) {
     try {
+        // Fetch the decision data from `premium_decisions`
+        const { data: decisionData, error: decisionError } = await supabase
+            .from('premium_decisions')
+            .select('choices, criteria, choice_name, model_type')
+            .eq('id', decisionId)
+            .single();
+
+        if (decisionError) {
+            throw new Error(decisionError.message);
+        }
+        if (decisionData) {
+            const { choices, criteria, choice_name, model_type } = decisionData;
+
+            sat_decision_name.set(choice_name);
+        }
+
+        sat_decision_id.set(decisionId);
+        sat_group_id.set(groupId);
+        goto("/groups/results");
+
+    } catch (error) {
+        console.error('Error opening a group result:', error);
+        alert('Error opening a group result: ' + error);
+    }
+}
+
+
+async function removeDesicion(groupId: number, decisionId: number) {
+    try {
+        // First, delete all entries in the `results_groups` table associated with the decision
+        const { data: deleteResultsData, error: deleteResultsError } = await supabase
+            .from('results_groups')
+            .delete()
+            .eq('decision_ID', decisionId);
+
+        if (deleteResultsError) {
+            throw new Error(deleteResultsError.message);
+        }
+
+        // Then, delete the decision from `premium_decisions_groups`
         const { data: deleteGroupDecisionData, error: deleteGroupDecisionError } = await supabase
             .from('premium_decisions_groups')
             .delete()
@@ -271,6 +299,7 @@
             throw new Error(deleteGroupDecisionError.message);
         }
 
+        // Finally, delete the decision from `premium_decisions`
         const { data: deleteDecisionData, error: deleteDecisionError } = await supabase
             .from('premium_decisions')
             .delete()
@@ -288,7 +317,7 @@
         console.error('Error removing decision:', error);
         alert('Error removing decision: ' + error);
     }
-    }
+}
 
     function copyToClipboard(group_code: string) {
         if (group_code) {
@@ -344,22 +373,23 @@
                         <div class="box-content">
                             {#each info.decisions as decision}
                             <div class="member-row">
-                                <span><button on:click={() => openDecision(info.group_ID, decision.id)} class="name">{decision.choice_name}</button></span> <!--TEKST VAJA TEHA KLIKITAVAKS-->
+                                <span>
+                                    <button on:click={() => openDecision(info.group_ID, decision.id)} class="name">
+                                        {decision.choice_name} {decision.model_type === 1 ? '(FC)' : decision.model_type === 3 ? '(AHP)' : ''}
+                                    </button>
+                                </span>
                                 <div class="icons-container">
-                                    <!-- <button on:click={() => groupdesicion(info.group_ID)} class="icon-button">
-                                        <img src="../src/lib/images/new-group.png" alt="Decisions">
-                                    </button> -->
-                                    <button on:click={() => goto("/tulemused/mitte-kattesaadav")} class="icon-button">
+                                    <button on:click={() => openResults(info.group_ID, decision.id)} class="icon-button">
                                         <img src={results} alt="Results">
                                     </button>
                                     {#if info.leader}
-                                    <button on:click={() => removeDesicion(info.group_ID, decision.id)} class="icon-button">
-                                        <img src={trash} alt="Delete decision">
-                                    </button>
-                                    {/if}   
+                                        <button on:click={() => removeDesicion(info.group_ID, decision.id)} class="icon-button">
+                                            <img src={trash} alt="Delete decision">
+                                        </button>
+                                    {/if}
                                 </div>
-                            </div>        
-                            {/each}
+                            </div>
+                        {/each}
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,8 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte";
     import { page } from "$app/stores";
-    import { sat_decision_name, sat_decisions, sat_objects, sat_user_id, sat_click_counts } from '../../../../store.js';
+    import { supabase } from '$lib/supabaseClient';
+    import { sat_decision_name, sat_decision_id, sat_decisions, sat_objects, sat_user_id, sat_click_counts } from '../../../../store.js';
     import { onMount } from 'svelte';
     import { get } from 'svelte/store';
 
@@ -48,8 +49,8 @@
         if (currentIndex < decisions.length * combinations(objects.length, 2)) {
             refreshPage();
         } else {
+            saveResultsToDatabase();
             showResults();
-            window.location.href = "/tasuta-ot-valikud/tulemused";
         }
     }
 
@@ -84,6 +85,89 @@
         return num * factorial(num - 1);
     }
 
+    async function saveResultsToDatabase() {
+    try {
+        const clickCountsStr = JSON.stringify(clickCounts); // Convert clickCounts to JSON string
+
+        // Convert objects and decisions arrays to PostgreSQL array format
+        const objectsArray = objects;
+        const decisionsArray = decisions;
+
+        // First, save the decision to 'premium_decisions' table and retrieve the decision ID
+        const { data: decisionData, error: decisionError } = await supabase
+            .from('premium_decisions')
+            .insert([
+                {
+                    user_id: $sat_user_id,
+                    choice_name: $sat_decision_name,
+                    model_type: 1, // Model type 1 for FC
+                    choices: objectsArray, // Pass the array directly
+                    criteria: decisionsArray // Pass the array directly
+                }
+            ])
+            .select('id')
+            .single(); // Retrieve the ID of the inserted row
+
+        if (decisionError) {
+            throw decisionError;
+        }
+
+        const decisionId = decisionData.id; // Get the decision ID from the inserted data
+
+        // Then, save results to 'results' table using the decision ID from 'premium_decisions'
+        const { data: existingEntry, error: selectError } = await supabase
+            .from('results')
+            .select('*')
+            .eq('user_ID', $sat_user_id)
+            .eq('decision_ID', decisionId) // Use the new decision ID
+            .single();
+
+        if (selectError && selectError.code !== 'PGRST116') { // PGRST116 means no row found
+            throw selectError;
+        }
+
+        if (existingEntry) {
+            // Update existing entry
+            const { data: updatedData, error: updateError } = await supabase
+                .from('results')
+                .update({ click_counts: clickCountsStr, objects: JSON.stringify(objects) })
+                .eq('user_ID', $sat_user_id)
+                .eq('decision_ID', decisionId); // Use the new decision ID
+
+            if (updateError) {
+                throw updateError;
+            }
+
+            console.log('Results successfully updated in database:', updatedData);
+        } else {
+            // Insert new entry
+            const { data: insertedData, error: insertError } = await supabase
+                .from('results')
+                .insert([
+                    {
+                        user_ID: $sat_user_id,
+                        decision_ID: decisionId, // Use the new decision ID
+                        click_counts: clickCountsStr,
+                        objects: JSON.stringify(objects)
+                    }
+                ]);
+
+            if (insertError) {
+                throw insertError;
+            }
+
+            console.log('Results successfully inserted into database:', insertedData);
+            window.location.href = "/tasuta-ot-valikud/tulemused";
+        }
+
+    } catch (error) {
+        console.error('Error saving results to database:', error);
+    }
+}
+
+
+
+
     // Retrieve current index from the URL
     const indexParam = $page.url.searchParams.get("index");
     currentIndex = indexParam !== null ? parseInt(indexParam) : 0;
@@ -103,6 +187,7 @@
         currentObjects = pairs[pairIndex];
     }
 </script>
+
 
 <section class="container">
     {#if currentIndex < decisions.length * combinations(objects.length, 2)}
