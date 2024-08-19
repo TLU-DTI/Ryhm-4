@@ -2,7 +2,7 @@
     import { supabase } from '$lib/supabaseClient';
     import { onMount } from 'svelte';
     import { writable, get } from 'svelte/store';
-    import { sat_user_id, sat_premium, sat_group_id } from '../../../../store.js';
+    import { sat_user_id, sat_premium, sat_group_id, sat_decisions, sat_objects, sat_click_counts, sat_decision_name } from '../../../../store.js';
     import Button from "$lib/components/Button.svelte";
     import { goto } from "$app/navigation";
     import trash from '$lib/images/trash.svg';
@@ -204,6 +204,61 @@
             alert('Error making a group desicion: ' + error);
         }
     }
+
+    async function openDecision(groupId: number, decisionId: number) {
+    try {
+        // Fetch the decision data from `premium_decisions`
+        const { data: decisionData, error: decisionError } = await supabase
+            .from('premium_decisions')
+            .select('choices, criteria, choice_name, model_type')
+            .eq('id', decisionId)
+            .single();
+
+        if (decisionError) {
+            throw new Error(decisionError.message);
+        }
+
+        if (decisionData) {
+            // Destructure the fetched data
+            const { choices, criteria, choice_name, model_type } = decisionData;
+            const userId = get(sat_user_id);
+
+            // Handle different model types
+            if (model_type === 1) { // FC Model
+                sat_decision_name.set(choice_name);
+                sat_click_counts.set({});
+                sat_objects.set(choices); // Assuming choices are comma-separated
+                sat_decisions.set(criteria); // Assuming criteria are comma-separated
+
+                // Navigate to the otsustamine page
+                goto("/groups/otsustamine");
+            } else if (model_type === 3) { // AHP Model
+                // Handle AHP logic here
+            } else {
+                console.error('Error: model_type ' + model_type + ' not recognized.');
+                return;
+            }
+
+            // Store decision open event in `decision_results`
+            const { data: insertData, error: insertError } = await supabase
+                .from('results_groups')
+                .insert([
+                    { user_ID: userId, decision_ID: decisionId, group_ID: groupId }
+                ]);
+
+            if (insertError) {
+                throw insertError;
+            }
+
+            console.log('Decision open event logged:', insertData);
+        }
+    } catch (error) {
+        console.error('Error opening a group decision:', error);
+        alert('Error opening a group decision: ' + error);
+    }
+}
+
+
     async function removeDesicion(groupId: number, decisionId: number) {
     try {
         const { data: deleteGroupDecisionData, error: deleteGroupDecisionError } = await supabase
@@ -289,7 +344,7 @@
                         <div class="box-content">
                             {#each info.decisions as decision}
                             <div class="member-row">
-                                <span><button class="name">{decision.choice_name}</button></span> <!--TEKST VAJA TEHA KLIKITAVAKS-->
+                                <span><button on:click={() => openDecision(info.group_ID, decision.id)} class="name">{decision.choice_name}</button></span> <!--TEKST VAJA TEHA KLIKITAVAKS-->
                                 <div class="icons-container">
                                     <!-- <button on:click={() => groupdesicion(info.group_ID)} class="icon-button">
                                         <img src="../src/lib/images/new-group.png" alt="Decisions">

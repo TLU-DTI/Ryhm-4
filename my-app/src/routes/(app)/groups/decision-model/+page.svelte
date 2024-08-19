@@ -17,8 +17,18 @@
 
 <section class="container">
     <div class="input-container">
+
+
         <h2>Vali otsuse mudel:</h2>
-        <br>
+        <div class="AHP">
+            <Button style="secondary" size="large" on:click={() => { modelType = 1; saveModelType(); }}>
+                Forced choice mudel
+            </Button>
+            <Button size="mini">
+                <span use:tooltip= {"Otsustusmudel, kus kasutajad hindavad alternatiive, valides igas võrdluses ühe eelistatuima valiku. Näiteks, kui kriteeriumiks on kasutusmugavus, siis kumb on mugavam, kas iPhone või Samsung? Samsung või Huawei, Huawei või iPhone jne. Alternatiiv, mis kogub kõige rohkem eelistusi, osutub valituks."}>?</span>
+            </Button>
+        </div>
+        
         <div class="AHP">
             <Button style="secondary" size="large" on:click={() => { modelType = 3; saveModelType(); }}>
                 Analüütiline hierarhia mudel
@@ -27,6 +37,8 @@
                 <span use:tooltip= {"Otsustusmudel, kus kasutajad võrdlevad alternatiive iga kriteeriumi alusel paarikaupa. Näiteks kui kriteeriumiks on hind, siis kumb on odavam, kas Ford või BMW? BMW või Audi, Audi või Ford jne.  Kõige rohkem punkte kogunud kandidaat osutub valituks."}>?</span>
             </Button>
         </div>
+
+
         <div class="buttons">
             <Button style="secondary" on:click={() => goto("/groups/desicion-name")} on:keydown>Tagasi</Button>
             <Button on:click={saveModelType} on:keydown>Jätka</Button>
