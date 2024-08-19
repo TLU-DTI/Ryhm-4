@@ -1,4 +1,3 @@
-
 <script lang="ts">
     import '$lib/styles.css';
     import { goto } from "$app/navigation";
