@@ -26,7 +26,7 @@
 			<p>
 				Meie oleme Tallinna Ülikooli Digitehnoloogiate Instituudi informaatika esimese aasta tudengid. <br> <br>Meie õpingud ja huvid ulatuvad tarkvaraarendusest digitaalsete meedialahendusteni, ning oleme valmis jagama oma teekonda ja eesmärke.
 				<br><br>
-				Jarl Koha on pühendunud tarkvaraarenduse suunale. Elika Laur, Õnnela Link, Albert Berkman ja Gertrud Roos on kõik spetsialiseerunud digitaalsele meediale.
+				Jarl Koha on pühendunud tarkvaraarenduse suunale. Elika Laur, Õnnela Link, Anna Berkman ja Gertrud Roos on kõik spetsialiseerunud digitaalsele meediale.
 				<br><br>
 				Meil on hea meel tutvustada meie rakendust nimega Valiku Võlur, mis on loodud selleks, et aidata kasutajatel teha innovatiivseid ja teadlikke otsuseid. Valiku Võlur on mõeldud neile, kes soovivad oma valikuid optimeerida ja leida parimaid lahendusi keerulistes olukordades.
 				<br><br>

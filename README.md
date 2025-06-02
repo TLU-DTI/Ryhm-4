@@ -236,7 +236,7 @@ Viide Litsentsile - https://github.com/TLU-DTI/Ryhm-4/blob/main/LITSENTS
 
 ## Autorid
 
-Albert Berkman
+Anna Berkman
 Elika Laur
 Jarl Koha
 Õnnela Link
